@@ -1,4 +1,6 @@
-package net.capellari.julien.threed.math
+package net.capellari.julien.threed
+
+import net.capellari.julien.threed.math.*
 
 class Point3: XYZ, Point<Three> {
     // Constructeurs
@@ -10,9 +12,9 @@ class Point3: XYZ, Point<Three> {
     override operator fun unaryPlus()  = Point3(x, y, z)
     override operator fun unaryMinus() = Point3(-x, -y, -z)
 
-    override operator fun minus(pt: Point<Three>) = Vec3(x - pt[0], y - pt[1], z - pt[2])
+    override operator fun plus(v: Vector<Three>) = Point3(x + v[0], y + v[1], z + v[2])
 
-    override operator fun plus(v: Vector<Three>)  = Point3(x + v[0], y + v[1], z + v[2])
+    override operator fun minus(pt: Point<Three>) = Vec3(x - pt[0], y - pt[1], z - pt[2])
     override operator fun minus(v: Vector<Three>) = Point3(x - v[0], y - v[1], z - v[2])
 
     // Méthodes

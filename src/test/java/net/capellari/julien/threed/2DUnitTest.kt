@@ -1,11 +1,9 @@
 package net.capellari.julien.threed
 
-import net.capellari.julien.threed.math.Point2
-import net.capellari.julien.threed.math.Vec2
 import org.junit.Test
 import org.junit.Assert.*
 
-class TwoDUnitTest {
+class `2DUnitTest` {
     // Tests
     @Test fun unary_point() {
         val pt = Point2(5f, 3f)
@@ -41,7 +39,12 @@ class TwoDUnitTest {
 
         assertEquals(Point2(-5f, -3f), pt - v)
         assertEquals(Point2(5f, 3f), v - pt)
-        assertEquals(Vec2(2f, 4f), Point2(8f, 5f) - Point2(6f, 1f))
+        assertEquals(
+            Vec2(2f, 4f), Point2(
+                8f,
+                5f
+            ) - Point2(6f, 1f)
+        )
 
         pt -= v
         assertEquals(Point2(-5f, -3f), pt)

@@ -1,6 +1,16 @@
 package net.capellari.julien.threed.math
 
+import kotlin.math.sqrt
+
 interface Vector<Deg : Degres>: Coords<Deg> {
+    // Propriétés
+    val norm: Float get() {
+        var n = 0f
+        for (v in this) n += v*v
+
+        return sqrt(n)
+    }
+
     // Opérateurs
     operator fun unaryPlus():  Vector<Deg>
     operator fun unaryMinus(): Vector<Deg>

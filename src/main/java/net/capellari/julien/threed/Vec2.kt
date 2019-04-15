@@ -1,14 +1,15 @@
-package net.capellari.julien.threed.math
+package net.capellari.julien.threed
 
+import net.capellari.julien.threed.math.Point
+import net.capellari.julien.threed.math.Two
+import net.capellari.julien.threed.math.Vector
+import net.capellari.julien.threed.math.XY
 import kotlin.math.sqrt
 
 class Vec2: XY, Vector<Two> {
     // Constructeurs
     constructor(): super()
     constructor(x: Float, y: Float): super(x, y)
-
-    // Propriétés
-    val norm get() = sqrt(x * x + y * y)
 
     // Opérateurs
     override operator fun unaryPlus()  = Vec2(x, y)

@@ -1,5 +1,6 @@
-package net.capellari.julien.threed.math
+package net.capellari.julien.threed
 
+import net.capellari.julien.threed.math.*
 import kotlin.math.sqrt
 
 class Vec3: XYZ, Vector<Three> {
@@ -7,9 +8,6 @@ class Vec3: XYZ, Vector<Three> {
     constructor(): super()
     constructor(xy: XY, z: Float): super(xy, z)
     constructor(x: Float, y: Float, z: Float): super(x, y, z)
-
-    // Propriétés
-    val norm get() = sqrt(x * x + y * y + z * z)
 
     // Opérateurs
     override operator fun unaryPlus()  = Vec3(x, y, z)
