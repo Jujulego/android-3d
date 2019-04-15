@@ -1,4 +1,4 @@
-package net.capellari.julien.threed.math.coords
+package net.capellari.julien.threed.math.bases
 
 import net.capellari.julien.threed.math.Coords
 import net.capellari.julien.threed.math.Degres
@@ -6,8 +6,8 @@ import net.capellari.julien.threed.math.Degres
 abstract class FloatCoords<Deg: Degres>(d: Deg) :
     Coords<Deg> {
     // Attributs
-    override val degres = d.value
-    protected val data = FloatArray(d.value) { 0f }
+    final override val degres = d.value
+    protected val data = FloatArray(degres) { 0f }
 
     // Opérateurs
     override fun get(i: Int) = data[i]
