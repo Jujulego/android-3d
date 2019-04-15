@@ -12,4 +12,5 @@ sealed class Degres(val value: Int) {
 }
 
 // Valeurs
-object Two: Degres(2)
+object Two:   Degres(2)
+object Three: Degres(3)

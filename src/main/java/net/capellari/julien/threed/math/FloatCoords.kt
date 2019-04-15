@@ -13,7 +13,7 @@ abstract class FloatCoords<Deg: Degres>(d: Deg) : Coords<Deg> {
 
     // Méthodes
     override fun equals(other: Any?): Boolean {
-        if (other is XY && degres == other.degres) {
+        if (other is FloatCoords<*> && degres == other.degres) {
             for (i in 0 until degres) {
                 if (this[i] != other[i]) return false
             }

@@ -8,8 +8,6 @@ open class XY(): FloatCoords<Two>(Two) {
     var y get() = data[1]
         set(value) { data[1] = value }
 
-    override val degres: Int = 2
-
     // Constructeurs
     constructor(x: Float, y: Float): this() {
         this.x = x
