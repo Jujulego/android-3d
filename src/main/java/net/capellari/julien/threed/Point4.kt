@@ -1,6 +1,9 @@
 package net.capellari.julien.threed
 
 import net.capellari.julien.threed.math.*
+import net.capellari.julien.threed.math.coords.XY
+import net.capellari.julien.threed.math.coords.XYZ
+import net.capellari.julien.threed.math.coords.XYZA
 
 class Point4: XYZA, Point<Four> {
     // Constructeurs

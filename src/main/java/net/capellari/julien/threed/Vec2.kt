@@ -3,8 +3,7 @@ package net.capellari.julien.threed
 import net.capellari.julien.threed.math.Point
 import net.capellari.julien.threed.math.Two
 import net.capellari.julien.threed.math.Vector
-import net.capellari.julien.threed.math.XY
-import kotlin.math.sqrt
+import net.capellari.julien.threed.math.coords.XY
 
 class Vec2: XY, Vector<Two> {
     // Constructeurs

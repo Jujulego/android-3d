@@ -1,7 +1,8 @@
 package net.capellari.julien.threed
 
 import net.capellari.julien.threed.math.*
-import kotlin.math.sqrt
+import net.capellari.julien.threed.math.coords.XY
+import net.capellari.julien.threed.math.coords.XYZ
 
 class Vec3: XYZ, Vector<Three> {
     // Constructeurs
