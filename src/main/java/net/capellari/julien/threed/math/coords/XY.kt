@@ -1,7 +1,7 @@
 package net.capellari.julien.threed.math.coords
 
-import net.capellari.julien.threed.math.FloatCoords
 import net.capellari.julien.threed.math.Two
+import net.capellari.julien.threed.math.bases.FloatCoords
 
 open class XY(): FloatCoords<Two>(Two) {
     // Propriétés

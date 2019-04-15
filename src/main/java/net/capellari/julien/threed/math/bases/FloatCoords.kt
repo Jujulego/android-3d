@@ -1,6 +1,10 @@
-package net.capellari.julien.threed.math
+package net.capellari.julien.threed.math.coords
 
-abstract class FloatCoords<Deg: Degres>(d: Deg) : Coords<Deg> {
+import net.capellari.julien.threed.math.Coords
+import net.capellari.julien.threed.math.Degres
+
+abstract class FloatCoords<Deg: Degres>(d: Deg) :
+    Coords<Deg> {
     // Attributs
     override val degres = d.value
     protected val data = FloatArray(d.value) { 0f }

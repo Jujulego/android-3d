@@ -1,7 +1,7 @@
 package net.capellari.julien.threed.math.coords
 
-import net.capellari.julien.threed.math.FloatCoords
 import net.capellari.julien.threed.math.Four
+import net.capellari.julien.threed.math.bases.FloatCoords
 
 open class XYZA(): FloatCoords<Four>(Four) {
     // Propriétés
