@@ -10,7 +10,7 @@ interface SquareMatrix<Deg: Degres>: Matrix<Deg,Deg> {
         for (l in 0 until size.lig) {
             val lig = newVector()
             for (c in 0 until size.col) {
-                lig[c] = this.lig(l) scalar mat.col(c)
+                lig[c] = this.lig(l) * mat.col(c)
             }
 
             this.lig(l, lig)

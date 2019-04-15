@@ -12,19 +12,8 @@ class Vec4: XYZA, Vector<Four> {
     constructor(xy: XY, z: Float, a: Float): super(xy, z, a)
     constructor(x: Float, y: Float, z: Float, a: Float): super(x, y, z, a)
 
-    // Opérateurs
-    override operator fun unaryPlus()  = Vec4(x, y, z, a)
-    override operator fun unaryMinus() = Vec4(-x, -y, -z, -a)
-
-    override operator fun plus(v: Vector<Four>) = Vec4(  x +  v[0], y +  v[1], z +  v[2], a +  v[3])
-    override operator fun plus(pt: Point<Four>) = Point4(x + pt[0], y + pt[1], z + pt[2], a + pt[3])
-
-    override operator fun minus(v: Vector<Four>) = Vec4(  x -  v[0], y -  v[1], z -  v[2], a -  v[3])
-    override operator fun minus(pt: Point<Four>) = Point4(x - pt[0], y - pt[1], z - pt[2], a - pt[3])
-
-    override operator fun times(k: Float) = Vec4(x * k, y * k, z * k, a * k)
-    override operator fun div(k: Float)   = Vec4(x / k, y / k, z / k, a / k)
-
     // Méthodes
+    override fun newPoint() = Point4()
+    override fun newVector() = Vec4()
     override fun toString() = "Vec($x, $y, $z, $a)"
 }

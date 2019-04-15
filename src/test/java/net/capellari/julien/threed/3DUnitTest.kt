@@ -82,8 +82,8 @@ class `3DUnitTest` {
         val v1 = Vec3(1f, 0f, 0f)
         val v2 = Vec3(0f, 1f, 0f)
 
-        assertEquals(0f, v1 scalar v2)
-        assertEquals(1f, v1 scalar v1)
+        assertEquals(0f, v1 * v2)
+        assertEquals(1f, v1 * v1)
     }
     @Test fun vect() {
         val v1 = Vec3(0f, 1f, 0f)

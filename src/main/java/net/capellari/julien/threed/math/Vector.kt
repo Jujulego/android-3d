@@ -12,38 +12,67 @@ interface Vector<Deg : Degres>: Coords<Deg> {
     }
 
     // Opérateurs
-    operator fun unaryPlus():  Vector<Deg>
-    operator fun unaryMinus(): Vector<Deg>
+    operator fun unaryPlus():  Vector<Deg> = copy(this)
+    operator fun unaryMinus(): Vector<Deg> {
+        val res = newVector()
+        for (i in 0 until degres) {
+            res[i] = -this[i]
+        }
 
-    operator fun plus(pt: Point<Deg>): Point<Deg>
-    operator fun plus(v: Vector<Deg>): Vector<Deg>
+        return res
+    }
+
+    operator fun plus(pt: Point<Deg>): Point<Deg> = pt.plus(this)
+    operator fun plus(v: Vector<Deg>): Vector<Deg> {
+        val res = copy(this); res += v
+        return res
+    }
     operator fun plusAssign(v: Vector<Deg>) {
         for (i in 0 until degres) this[i] += v[i]
     }
 
-    operator fun minus(pt: Point<Deg>): Point<Deg>
-    operator fun minus(v: Vector<Deg>): Vector<Deg>
+    operator fun minus(pt: Point<Deg>): Point<Deg> = (-pt).minus(-this)
+    operator fun minus(v: Vector<Deg>): Vector<Deg> {
+        val res = copy(this); res -= v
+        return res
+    }
     operator fun minusAssign(v: Vector<Deg>) {
         for (i in 0 until degres) this[i] -= v[i]
     }
 
-    operator fun times(k: Float): Vector<Deg>
-    operator fun timesAssign(k: Float) {
-        for (i in 0 until degres) this[i] *= k
-    }
-
-    operator fun div(k: Float): Vector<Deg>
-    operator fun divAssign(k: Float) {
-        for (i in 0 until degres) this[i] /= k
-    }
-
-    // Infixes
-    infix fun scalar(v: Vector<Deg>): Float {
+    operator fun times(v: Vector<Deg>): Float {
         var r = 0f
         for (i in 0 until degres) {
             r += this[i] * v[i]
         }
 
         return r
+    }
+    operator fun times(k: Float): Vector<Deg> {
+        val res = copy(this); res *= k
+        return res
+    }
+    operator fun timesAssign(k: Float) {
+        for (i in 0 until degres) this[i] *= k
+    }
+
+    operator fun div(k: Float): Vector<Deg> {
+        val res = copy(this); res /= k
+        return res
+    }
+    operator fun divAssign(k: Float) {
+        for (i in 0 until degres) this[i] /= k
+    }
+
+    // Méthodes
+    fun newPoint(): Point<Deg>
+    fun newVector(): Vector<Deg>
+    fun copy(v: Vector<Deg>): Vector<Deg> {
+        val res = newVector()
+        for (i in 0 until degres) {
+            res[i] = v[i]
+        }
+
+        return res
     }
 }
