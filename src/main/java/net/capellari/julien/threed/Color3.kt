@@ -7,6 +7,8 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
+import net.capellari.julien.threed.math.Coords
+import net.capellari.julien.threed.math.Three
 import net.capellari.julien.threed.math.coords.RGB
 
 class Color3 : RGB {
@@ -19,4 +21,7 @@ class Color3 : RGB {
 
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(color: Color): this(color.toArgb())
+
+    // Méthodes
+    override fun newCoords() = Color3()
 }

@@ -2,7 +2,7 @@ package net.capellari.julien.threed.math
 
 interface Point<Deg : Degres>: Coords<Deg> {
     // Opérateurs
-    operator fun unaryPlus():  Point<Deg> = copy(this)
+    operator fun unaryPlus():  Point<Deg> = copy()
     operator fun unaryMinus(): Point<Deg> {
         val res = newPoint()
         for (i in 0 until degres) {
@@ -13,7 +13,7 @@ interface Point<Deg : Degres>: Coords<Deg> {
     }
 
     operator fun plus(v: Vector<Deg>): Point<Deg> {
-        val res = copy(this); res += v
+        val res = copy(); res += v
         return res
     }
     operator fun plusAssign(v: Vector<Deg>) {
@@ -29,7 +29,7 @@ interface Point<Deg : Degres>: Coords<Deg> {
         return res
     }
     operator fun minus(v: Vector<Deg>): Point<Deg> {
-        val res = copy(this); res -= v
+        val res = copy(); res -= v
         return res
     }
     operator fun minusAssign(v: Vector<Deg>) {
@@ -39,12 +39,7 @@ interface Point<Deg : Degres>: Coords<Deg> {
     // Méthodes
     fun newPoint(): Point<Deg>
     fun newVector(): Vector<Deg>
-    fun copy(pt: Point<Deg>): Point<Deg> {
-        val res = newPoint()
-        for (i in 0 until degres) {
-            res[i] = pt[i]
-        }
 
-        return res
-    }
+    override fun newCoords() = newPoint()
+    override fun copy() = super.copy() as Point<Deg>
 }

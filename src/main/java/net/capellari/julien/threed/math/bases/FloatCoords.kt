@@ -3,11 +3,11 @@ package net.capellari.julien.threed.math.bases
 import net.capellari.julien.threed.math.Coords
 import net.capellari.julien.threed.math.Degres
 
-abstract class FloatCoords<Deg: Degres>(d: Deg) :
-    Coords<Deg> {
+abstract class FloatCoords<Deg: Degres>(d: Deg): Coords<Deg> {
     // Attributs
     final override val degres = d.value
-    protected val data = FloatArray(degres) { 0f }
+    var data = FloatArray(degres) { 0f }
+        private set
 
     // Opérateurs
     override fun get(i: Int) = data[i]
@@ -18,11 +18,7 @@ abstract class FloatCoords<Deg: Degres>(d: Deg) :
     // Méthodes
     override fun equals(other: Any?): Boolean {
         if (other is FloatCoords<*> && degres == other.degres) {
-            for (i in 0 until degres) {
-                if (this[i] != other[i]) return false
-            }
-
-            return true
+            return other.data.contentEquals(data)
         }
 
         return false

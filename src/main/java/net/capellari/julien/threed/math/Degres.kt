@@ -23,4 +23,20 @@ class MatSize<D1: Degres, D2: Degres>(d1: D1, d2: D2) {
     val lig = d2.value
 
     val size = d1.value * d2.value
+
+    // Méthodes
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other is MatSize<*,*>) {
+            return other.col == col && other.lig == lig
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        var result = col
+        result = 31 * result + lig
+        return result
+    }
 }

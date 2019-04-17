@@ -22,4 +22,7 @@ class Color4 : RGBA {
 
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(color: Color): this(color.toArgb())
+
+    // Méthodes
+    override fun newCoords() = Color4()
 }

@@ -3,7 +3,7 @@ package net.capellari.julien.threed.math.coords
 import net.capellari.julien.threed.math.Three
 import net.capellari.julien.threed.math.bases.FloatCoords
 
-open class RGB(): FloatCoords<Three>(Three) {
+abstract class RGB(): FloatCoords<Three>(Three) {
     // Propriétés
     var r get() = data[0]
         set(value) { data[0] = value }
