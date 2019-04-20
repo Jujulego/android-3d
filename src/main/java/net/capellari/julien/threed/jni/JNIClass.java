@@ -1,6 +1,6 @@
 package net.capellari.julien.threed.jni;
 
-abstract class JNIClass {
+public abstract class JNIClass {
     // Initialisation classe
     static {
         System.loadLibrary("android3d");
@@ -19,4 +19,8 @@ abstract class JNIClass {
     // Méthodes
     private native boolean acquire();
     public native void dispose();
+
+    public long getNativeHandle() {
+        return nativeHandle;
+    }
 }

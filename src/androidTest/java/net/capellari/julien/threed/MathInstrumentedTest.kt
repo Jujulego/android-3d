@@ -8,6 +8,13 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MathInstrumentedTest {
     // Tests
+    @Test fun native_i2() {
+        val pt = Point2i(5, 1)
+
+        assertEquals(5, pt.x)
+        assertEquals(1, pt.y)
+    }
+
     @Test fun times_mat_mat() {
         val m1 = Mat4(
              1f,  2f,  3f,  4f,

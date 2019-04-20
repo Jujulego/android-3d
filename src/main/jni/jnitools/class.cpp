@@ -16,7 +16,7 @@
 using namespace jni;
 
 // Stockage des pointeurs
-std::atomic<unsigned long> next_handle = 1UL;
+std::atomic<unsigned long> next_handle = 0UL;
 std::map<unsigned long, std::weak_ptr<JNIClass>> pointers;
 std::map<unsigned long, std::shared_ptr<JNIClass>> used_pointers;
 
@@ -46,16 +46,42 @@ void dispose(unsigned long handle) {
 }
 
 // Classe
-JNIClass::JNIClass() {
-    handle = register_jni(weak_from_this());
-}
-
 JNIClass::~JNIClass() {
     pointers.erase(handle);
 }
 
-unsigned long JNIClass::get_handle() {
-    return handle;
+void JNIClass::register_jni(bool acq) {
+    handle = ::register_jni(weak_from_this());
+
+    if (acq) {
+        acquire();
+    }
+}
+
+void JNIClass::acquire() {
+    assert(handle != 0);
+    assert(::acquire(handle));
+}
+
+void JNIClass::dispose() {
+    if (handle) {
+        ::dispose(handle);
+        handle = 0UL;
+    }
+}
+
+jlong JNIClass::get_jhandle() {
+    return static_cast<jlong>(handle);
+}
+
+// Outils
+std::shared_ptr<JNIClass> jni::_fromHandle(jlong handle) {
+    std::map<unsigned long,std::shared_ptr<JNIClass>>::iterator it;
+
+    it = used_pointers.find(static_cast<unsigned long>(handle));
+    if (it == used_pointers.end()) return std::shared_ptr<JNIClass>();
+
+    return it->second;
 }
 
 // Méthodes natives

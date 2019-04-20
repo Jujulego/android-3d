@@ -3,24 +3,32 @@
 //
 #pragma once
 
+#include <jni.h>
 #include <memory>
 
 namespace jni {
     // Classes
-    class JNIClass: std::enable_shared_from_this<JNIClass> {
+    class JNIClass: public std::enable_shared_from_this<JNIClass> {
     private:
         // Attributs
-        unsigned long handle;
+        unsigned long handle = 0UL;
 
     public:
-        // Constructeur
-        JNIClass();
-
         // Destructeur
-        ~JNIClass();
+        virtual ~JNIClass();
 
         // Méthodes
-        unsigned long get_handle();
+        void register_jni(bool acq = false);
+        void acquire();
+        void dispose();
+
+        jlong get_jhandle();
     };
+
+    // Outils
+    std::shared_ptr<JNIClass> _fromHandle(jlong handle);
+    template<class C> std::shared_ptr<C> fromHandle(jlong handle) {
+        return std::dynamic_pointer_cast<C>(_fromHandle(handle));
+    }
 }
 

@@ -27,8 +27,13 @@ include_directories(src/main/jni)
 #include_directories(libs/include)
 
 add_library(android3d SHARED
+        # - jnitools
         src/main/jni/jnitools/class.cpp
         src/main/jni/jnitools/convert.cpp
+
+        # - math
+        src/main/jni/math/outils.cpp
+        src/main/jni/math/point.cpp
 )
 
 target_link_libraries(android3d ${log-lib}) # assimp)
