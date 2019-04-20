@@ -1,14 +1,16 @@
 //
-// Created by julie on 17/04/2019.
+// Created by julie on 20/04/2019.
 //
 
-#include "jnitools.h"
+#include "class.h"
 
 #include <atomic>
 #include <jni.h>
 #include <map>
 #include <memory>
-#include <string>
+
+#include "field.h"
+#include "outils.h"
 
 // Namespace
 using namespace jni;
@@ -59,46 +61,16 @@ unsigned long JNIClass::get_handle() {
 // Méthodes natives
 extern "C" JNIEXPORT
 jboolean JNICALL Java_net_capellari_julien_threed_jni_JNIClass_acquire(JNIEnv *env, jobject jthis) {
-    field<long> jfld = findField<long>(env, jthis, "nativeHandle", "J");
-    unsigned long handle = reinterpret_cast<unsigned long>(jfld.get());
+    field<jlong> jfld = findField<jlong>(env, jthis, "nativeHandle", "J");
+    auto handle = static_cast<unsigned long>(jfld.get());
 
     return jboolean(acquire(handle));
 }
 
 extern "C" JNIEXPORT
 void JNICALL Java_net_capellari_julien_threed_jni_JNIClass_dispose(JNIEnv *env, jobject jthis) {
-    field<long> jfld = findField<long>(env, jthis, "nativeHandle", "J");
-    unsigned long handle = reinterpret_cast<unsigned long>(jfld.get());
+    field<jlong> jfld = findField<jlong>(env, jthis, "nativeHandle", "J");
+    auto handle = static_cast<unsigned long>(jfld.get());
 
     dispose(handle);
-}
-
-// Outils
-template<> std::string jni::fromJava<std::string>(JNIEnv* env, jobject jobj) {
-    if (!jobj) return "";
-
-    char const* str = env->GetStringUTFChars((jstring) jobj, nullptr);
-    std::string ret(str);
-
-    env->ReleaseStringUTFChars((jstring) jobj, str);
-
-    return ret;
-}
-template<> localref<jobject> jni::toJava(JNIEnv *env, const std::string &obj) {
-    return localref(env, env->NewStringUTF(obj.data()));
-}
-
-localref<jclass> jni::findClass(JNIEnv *env, jobject jobj) {
-    return localref(env, env->GetObjectClass(jobj));
-}
-localref<jclass> jni::findClass(JNIEnv *env, std::string const& nom) {
-    return localref(env, env->FindClass(nom.data()));
-}
-
-jfieldID jni::findField(JNIEnv* env, jclass jcls, std::string const &nom, std::string const &type) {
-    return env->GetFieldID(jcls, nom.data(), type.data());
-}
-
-jmethodID jni::findMethod(JNIEnv* env, jclass jcls, std::string const &nom, std::string const &sig) {
-    return env->GetMethodID(jcls, nom.data(), sig.data());
 }
