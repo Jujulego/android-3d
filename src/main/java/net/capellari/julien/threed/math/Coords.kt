@@ -1,23 +1,10 @@
 package net.capellari.julien.threed.math
 
-interface Coords<Deg: Degres>: Iterable<Float> {
-    // Propriétés
-    val degres: Int
-
+interface Coords<T: Number, D: Dimension> {
     // Opérateurs
-    operator fun get(i: Int): Float
-    operator fun set(i: Int, v: Float)
+    operator fun get(i: Int): T
+    operator fun set(i: Int, v: T)
 
-    // Méthodes
-    override fun equals(other: Any?): Boolean
-
-    fun newCoords(): Coords<Deg>
-    fun copy(): Coords<Deg> {
-        val res = newCoords()
-        for (i in 0 until degres) {
-            res[i] = this[i]
-        }
-
-        return res
-    }
+    operator fun unaryPlus(): Coords<T,D>
+    operator fun unaryMinus(): Coords<T,D>
 }

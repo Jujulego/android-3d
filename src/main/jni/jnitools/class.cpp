@@ -75,6 +75,11 @@ jlong JNIClass::get_jhandle() {
 }
 
 // Outils
+unsigned long jni::getHandle(JNIEnv* env, jobject jobj) {
+    field<jlong> jfld = findField<jlong>(env, jobj, "nativeHandle", "J");
+    return static_cast<unsigned long>(jfld.get());
+}
+
 std::shared_ptr<JNIClass> jni::_fromHandle(jlong handle) {
     std::map<unsigned long,std::shared_ptr<JNIClass>>::iterator it;
 
@@ -87,16 +92,10 @@ std::shared_ptr<JNIClass> jni::_fromHandle(jlong handle) {
 // Méthodes natives
 extern "C" JNIEXPORT
 jboolean JNICALL Java_net_capellari_julien_threed_jni_JNIClass_acquire(JNIEnv *env, jobject jthis) {
-    field<jlong> jfld = findField<jlong>(env, jthis, "nativeHandle", "J");
-    auto handle = static_cast<unsigned long>(jfld.get());
-
-    return jboolean(acquire(handle));
+    return jboolean(acquire(getHandle(env, jthis)));
 }
 
 extern "C" JNIEXPORT
 void JNICALL Java_net_capellari_julien_threed_jni_JNIClass_dispose(JNIEnv *env, jobject jthis) {
-    field<jlong> jfld = findField<jlong>(env, jthis, "nativeHandle", "J");
-    auto handle = static_cast<unsigned long>(jfld.get());
-
-    dispose(handle);
+    dispose(getHandle(env, jthis));
 }

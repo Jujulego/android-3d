@@ -6,6 +6,8 @@
 #include <jni.h>
 #include <memory>
 
+#include "convert.h"
+
 namespace jni {
     // Classes
     class JNIClass: public std::enable_shared_from_this<JNIClass> {
@@ -26,9 +28,15 @@ namespace jni {
     };
 
     // Outils
+    unsigned long getHandle(JNIEnv* env, jobject jobj);
+
     std::shared_ptr<JNIClass> _fromHandle(jlong handle);
     template<class C> std::shared_ptr<C> fromHandle(jlong handle) {
         return std::dynamic_pointer_cast<C>(_fromHandle(handle));
+    }
+
+    template<class R> std::shared_ptr<R> fromJava(JNIEnv* env, jobject jobj) {
+        return fromHandle<R>(getHandle(env, jobj));
     }
 }
 
