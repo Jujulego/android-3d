@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PointInstrumentedTest {
     // Tests
-    @Test fun native_i2() {
+    @Test fun native_2i() {
         val pt = Point2i(5, 1)
 
         // equal
@@ -26,13 +26,13 @@ class PointInstrumentedTest {
         pt.y = 4
         assertEquals(Point2i(7, 4), pt)
     }
-    @Test fun unary_i2() {
+    @Test fun unary_2i() {
         val pt = Point2i(5, 1)
 
         assertEquals(Point2i( 5,  1), +pt)
         assertEquals(Point2i(-5, -1), -pt)
     }
-    @Test fun plus_i2() {
+    @Test fun plus_2i() {
         val pt = Point2i(5, 1)
 
         // plus
@@ -42,7 +42,7 @@ class PointInstrumentedTest {
         pt += Point2i(5, 9)
         assertEquals(Point2i(10, 10), pt)
     }
-    @Test fun minus_i2() {
+    @Test fun minus_2i() {
         val pt = Point2i(5, 1)
 
         // minus
@@ -53,7 +53,7 @@ class PointInstrumentedTest {
         assertEquals(Point2i(0, -8), pt)
     }
 
-    @Test fun native_f2() {
+    @Test fun native_2f() {
         val pt = Point2f(5f, 1f)
 
         // equal
@@ -71,13 +71,13 @@ class PointInstrumentedTest {
         pt.y = 4f
         assertEquals(Point2f(7f, 4f), pt)
     }
-    @Test fun unary_f2() {
+    @Test fun unary_2f() {
         val pt = Point2f(5f, 1f)
 
         assertEquals(Point2f( 5f,  1f), +pt)
         assertEquals(Point2f(-5f, -1f), -pt)
     }
-    @Test fun plus_f2() {
+    @Test fun plus_2f() {
         val pt = Point2f(5f, 1f)
 
         // plus
@@ -87,7 +87,7 @@ class PointInstrumentedTest {
         pt += Point2f(5f, 9f)
         assertEquals(Point2f(10f, 10f), pt)
     }
-    @Test fun minus_f2() {
+    @Test fun minus_2f() {
         val pt = Point2f(5f, 1f)
 
         // minus

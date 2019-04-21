@@ -34,6 +34,7 @@ add_library(android3d SHARED
         # - math
         src/main/jni/math/outils.cpp
         src/main/jni/math/point.cpp
+        src/main/jni/math/vector.cpp
 )
 
 target_link_libraries(android3d ${log-lib}) # assimp)
