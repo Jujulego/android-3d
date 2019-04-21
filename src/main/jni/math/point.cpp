@@ -2,6 +2,7 @@
 // Created by julien on 20/04/2019.
 //
 #include "point.h"
+#include "vector.h"
 
 using namespace math;
 

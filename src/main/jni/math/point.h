@@ -7,6 +7,7 @@
 #include <array>
 
 #include "coords.h"
+
 #include "jnitools.h"
 
 namespace math {
@@ -65,26 +66,14 @@ namespace math {
             return r;
         }
 
-        Coords& operator += (Coords const& c) {
+        Coords<I,DEG,false> operator - (Coords const& pt) const {
+            Coords<I,DEG,false> r;
+
             for (size_t i = 0; i < DEG; ++i) {
-                m_data[i] += c[i];
+                r[i] = m_data[i] - pt[i];
             }
 
-            return *this;
-        }
-        Coords& operator -= (Coords const& c) {
-            for (size_t i = 0; i < DEG; ++i) {
-                m_data[i] -= c[i];
-            }
-
-            return *this;
-        }
-
-        Coords operator + (Coords const& pt) const {
-            Coords r(*this); r += pt; return r;
-        }
-        Coords operator - (Coords const& pt) const {
-            Coords r(*this); r -= pt; return r;
+            return r;
         }
 
         // Méthodes
@@ -112,11 +101,4 @@ namespace math {
 
 // Macros JNI
 #define POINT_JNI(cls, type, ...)           \
-    COORD_CREATE(  cls, type, __VA_ARGS__)  \
-    COORD_GETCOORD(cls, type)               \
-    COORD_SETCOORD(cls, type)               \
-    COORD_EQUAL(   cls, type)               \
-    COORD_UPLUS(   cls, type)               \
-    COORD_APLUS(   cls, type)               \
-    COORD_UMINUS(  cls, type)               \
-    COORD_AMINUS(  cls, type)
+    COORD_JNI(cls, type, __VA_ARGS__)

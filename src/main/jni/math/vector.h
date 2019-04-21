@@ -112,11 +112,4 @@ namespace math {
 
 // Macros JNI
 #define VECTOR_JNI(cls, type, ...)          \
-    COORD_CREATE(  cls, type, __VA_ARGS__)  \
-    COORD_GETCOORD(cls, type)               \
-    COORD_SETCOORD(cls, type)               \
-    COORD_EQUAL(   cls, type)               \
-    COORD_UPLUS(   cls, type)               \
-    COORD_APLUS(   cls, type)               \
-    COORD_UMINUS(  cls, type)               \
-    COORD_AMINUS(  cls, type)
+    COORD_JNI(cls, type, __VA_ARGS__)

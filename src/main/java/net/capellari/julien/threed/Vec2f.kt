@@ -16,7 +16,7 @@ class Vec2f: JNIClass, Vector<Float,D2> {
     var y by coordY()
 
     // Constructeurs
-    private constructor(handle: Long): super(handle)
+    internal constructor(handle: Long): super(handle)
 
     constructor(): this(create())
     constructor(x: Float, y: Float): this(create(x, y))
@@ -25,31 +25,17 @@ class Vec2f: JNIClass, Vector<Float,D2> {
     override operator fun get(i: Int)         = getCoord(i)
     override operator fun set(i: Int, v: Float) = setCoord(i, v)
 
-    override fun unaryPlus()  = Vec2f(plus())
-    override fun unaryMinus() = Vec2f(minus())
+    override fun unaryPlus()  = Vec2f(+x, +y)
+    override fun unaryMinus() = Vec2f(-x, -y)
 
-    override fun plus(v: Vector<Float, D2>): Vec2f {
-        val r = Vec2f(x, y); r += v
-        return r
-    }
+    override fun plus(v: Vector<Float, D2>)  = Vec2f(x + v[0], y + v[1])
+    override fun minus(v: Vector<Float, D2>) = Vec2f(x - v[0], y - v[1])
+
     override fun plusAssign(v: Vector<Float, D2>) {
-        if (v is Vec2f) {
-            return plusA(v)
-        }
-
         x += v[0]
         y += v[1]
     }
-
-    override fun minus(v: Vector<Float, D2>): Vec2f {
-        val r = Vec2f(x, y); r -= v
-        return r
-    }
     override fun minusAssign(v: Vector<Float, D2>) {
-        if (v is Vec2f) {
-            return minusA(v)
-        }
-
         x -= v[0]
         y -= v[1]
     }
@@ -76,10 +62,4 @@ class Vec2f: JNIClass, Vector<Float,D2> {
     private external fun setCoord(i: Int, v: Float)
 
     private external fun equal(other: Vec2f): Boolean
-
-    private external fun plus(): Long
-    private external fun plusA(other: Vec2f)
-
-    private external fun minus(): Long
-    private external fun minusA(other: Vec2f)
 }

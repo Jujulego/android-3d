@@ -19,7 +19,7 @@ class Point2i: JNIClass, Point<Int,D2> {
     var y by coordY()
 
     // Constructeurs
-    private constructor(handle: Long): super(handle)
+    internal constructor(handle: Long): super(handle)
 
     constructor(): this(create())
     constructor(x: Int, y: Int): this(create(x, y))
@@ -28,34 +28,10 @@ class Point2i: JNIClass, Point<Int,D2> {
     override operator fun get(i: Int)         = getCoord(i)
     override operator fun set(i: Int, v: Int) = setCoord(i, v)
 
-    override fun unaryPlus()  = Point2i(plus())
-    override fun unaryMinus() = Point2i(minus())
+    override fun unaryPlus()  = Point2i(+x, +y)
+    override fun unaryMinus() = Point2i(-x, -y)
 
-    override fun plus(pt: Point<Int, D2>): Point2i {
-        val r = Point2i(x, y); r += pt
-        return r
-    }
-    override fun plusAssign(pt: Point<Int, D2>) {
-        if (pt is Point2i) {
-            return plusA(pt)
-        }
-
-        x += pt[0]
-        y += pt[1]
-    }
-
-    override fun minus(pt: Point<Int, D2>): Point2i {
-        val r = Point2i(x, y); r -= pt
-        return r
-    }
-    override fun minusAssign(pt: Point<Int, D2>) {
-        if (pt is Point2i) {
-            return minusA(pt)
-        }
-
-        x -= pt[0]
-        y -= pt[1]
-    }
+    override fun minus(pt: Point<Int, D2>) = Vec2i(x - pt[0], y - pt[1])
 
     // Méthodes
     override fun size()= D2.size
@@ -79,10 +55,4 @@ class Point2i: JNIClass, Point<Int,D2> {
     private external fun setCoord(i: Int, v: Int)
 
     private external fun equal(other: Point2i): Boolean
-
-    private external fun plus(): Long
-    private external fun plusA(other: Point2i)
-
-    private external fun minus(): Long
-    private external fun minusA(other: Point2i)
 }

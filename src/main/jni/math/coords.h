@@ -50,40 +50,8 @@ namespace math {
         return (jboolean) ((*ptt) == (*pto));                                                   \
     }
 
-#define COORD_UPLUS(cls, type)                                                                  \
-    extern "C" JNIEXPORT                                                                        \
-    jlong JNICALL METH_NAME(cls, plus)(JNIEnv* env, jobject jthis) {                            \
-        auto opt = jni::fromJava<cls>(env, jthis);                                              \
-        auto pt = std::make_shared<cls>(+(*opt));                                               \
-        pt->register_jni(true);                                                                 \
-                                                                                                \
-        return pt->get_jhandle();                                                               \
-    }
-
-#define COORD_APLUS(cls, type)                                                                  \
-    extern "C" JNIEXPORT                                                                        \
-    void JNICALL METH_NAME(cls, plusA)(JNIEnv* env, jobject jthis, jobject jobj) {              \
-        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
-        auto pto = jni::fromJava<cls>(env, jobj);                                               \
-                                                                                                \
-        (*ptt) += (*pto);                                                                       \
-    }
-
-#define COORD_UMINUS(cls, type)                                                                 \
-    extern "C" JNIEXPORT                                                                        \
-    jlong JNICALL METH_NAME(cls, minus)(JNIEnv* env, jobject jthis) {                           \
-        auto opt = jni::fromJava<cls>(env, jthis);                                              \
-        auto pt = std::make_shared<cls>(-(*opt));                                               \
-        pt->register_jni(true);                                                                 \
-                                                                                                \
-        return pt->get_jhandle();                                                               \
-    }
-
-#define COORD_AMINUS(cls, type)                                                                 \
-    extern "C" JNIEXPORT                                                                        \
-    void JNICALL METH_NAME(cls, minusA)(JNIEnv* env, jobject jthis, jobject jobj) {             \
-        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
-        auto pto = jni::fromJava<cls>(env, jobj);                                               \
-                                                                                                \
-        (*ptt) -= (*pto);                                                                       \
-    }
+#define COORD_JNI(cls, type, ...)           \
+    COORD_CREATE(  cls, type, __VA_ARGS__)  \
+    COORD_GETCOORD(cls, type)               \
+    COORD_SETCOORD(cls, type)               \
+    COORD_EQUAL(   cls, type)

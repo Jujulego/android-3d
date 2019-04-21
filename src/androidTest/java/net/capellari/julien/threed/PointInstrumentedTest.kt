@@ -32,25 +32,11 @@ class PointInstrumentedTest {
         assertEquals(Point2i( 5,  1), +pt)
         assertEquals(Point2i(-5, -1), -pt)
     }
-    @Test fun plus_2i() {
-        val pt = Point2i(5, 1)
-
-        // plus
-        assertEquals(Point2i(10, 10), pt + Point2i(5, 9))
-
-        // plus assign
-        pt += Point2i(5, 9)
-        assertEquals(Point2i(10, 10), pt)
-    }
     @Test fun minus_2i() {
         val pt = Point2i(5, 1)
 
         // minus
-        assertEquals(Point2i(0, -8), pt - Point2i(5, 9))
-
-        // minus assign
-        pt -= Point2i(5, 9)
-        assertEquals(Point2i(0, -8), pt)
+        assertEquals(Vec2i(0, -8), pt - Point2i(5, 9))
     }
 
     @Test fun native_2f() {
@@ -77,24 +63,10 @@ class PointInstrumentedTest {
         assertEquals(Point2f( 5f,  1f), +pt)
         assertEquals(Point2f(-5f, -1f), -pt)
     }
-    @Test fun plus_2f() {
-        val pt = Point2f(5f, 1f)
-
-        // plus
-        assertEquals(Point2f(10f, 10f), pt + Point2f(5f, 9f))
-
-        // plus assign
-        pt += Point2f(5f, 9f)
-        assertEquals(Point2f(10f, 10f), pt)
-    }
     @Test fun minus_2f() {
         val pt = Point2f(5f, 1f)
 
         // minus
-        assertEquals(Point2f(0f, -8f), pt - Point2f(5f, 9f))
-
-        // minus assign
-        pt -= Point2f(5f, 9f)
-        assertEquals(Point2f(0f, -8f), pt)
+        assertEquals(Vec2f(0f, -8f), pt - Point2f(5f, 9f))
     }
 }
