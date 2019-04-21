@@ -1,13 +1,13 @@
 package net.capellari.julien.threed.math
 
 // Classe
-sealed class Dimension(val value: Int) {
+sealed class Dimension(val size: Int) {
     // Méthodes
     override fun equals(other: Any?)
-            = (other is Dimension) && (value == other.value)
+            = (other is Dimension) && (size == other.size)
 
     override fun hashCode(): Int {
-        return value
+        return size
     }
 }
 

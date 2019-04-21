@@ -1,6 +1,7 @@
 package net.capellari.julien.threed
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import net.capellari.julien.threed.math.Point
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.runner.RunWith
@@ -12,7 +13,8 @@ class PointInstrumentedTest {
         val pt = Point2i(5, 1)
 
         // equal
-        assertEquals(true, pt == Point2i(5, 1))
+        assertEquals(true,  pt == Point2i(5, 1))
+        assertEquals(false, pt == Point2i(1, 5))
 
         // get
         assertEquals(5, pt.x)
@@ -30,5 +32,25 @@ class PointInstrumentedTest {
 
         assertEquals(Point2i( 5,  1), +pt)
         assertEquals(Point2i(-5, -1), -pt)
+    }
+    @Test fun plus_i2() {
+        val pt = Point2i(5, 1)
+
+        // plus
+        assertEquals(Point2i(10, 10), pt + Point2i(5, 9))
+
+        // plus assign
+        pt += Point2i(5, 9)
+        assertEquals(Point2i(10, 10), pt)
+    }
+    @Test fun minus_i2() {
+        val pt = Point2i(5, 1)
+
+        // minus
+        assertEquals(Point2i(0, -8), pt - Point2i(5, 9))
+
+        // minus assign
+        pt -= Point2i(5, 9)
+        assertEquals(Point2i(0, -8), pt)
     }
 }

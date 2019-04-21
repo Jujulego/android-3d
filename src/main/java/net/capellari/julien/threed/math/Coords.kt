@@ -7,4 +7,7 @@ interface Coords<T: Number, D: Dimension> {
 
     operator fun unaryPlus(): Coords<T,D>
     operator fun unaryMinus(): Coords<T,D>
+
+    // Méthodes
+    fun size(): Int
 }

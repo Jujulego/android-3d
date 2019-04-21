@@ -3,10 +3,10 @@ package net.capellari.julien.threed.math
 // Classes
 class MatSize<D1: Dimension, D2: Dimension>(d1: D1, d2: D2) {
     // Attributs
-    val col = d1.value
-    val lig = d2.value
+    val col = d1.size
+    val lig = d2.size
 
-    val size = d1.value * d2.value
+    val size = d1.size * d2.size
 
     // Méthodes
     override fun equals(other: Any?): Boolean {
