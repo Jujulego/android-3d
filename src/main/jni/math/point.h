@@ -3,7 +3,11 @@
 //
 #pragma once
 
+#include <algorithm>
+#include <array>
+
 #include "coords.h"
+#include "jnitools.h"
 
 namespace math {
     // Template
@@ -105,3 +109,14 @@ namespace math {
     using Point3f = Point<float,3>;
     using Point4f = Point<float,4>;
 }
+
+// Macros JNI
+#define POINT_JNI(cls, type, ...)           \
+    COORD_CREATE(  cls, type, __VA_ARGS__)  \
+    COORD_GETCOORD(cls, type)               \
+    COORD_SETCOORD(cls, type)               \
+    COORD_EQUAL(   cls, type)               \
+    COORD_UPLUS(   cls, type)               \
+    COORD_APLUS(   cls, type)               \
+    COORD_UMINUS(  cls, type)               \
+    COORD_AMINUS(  cls, type)
