@@ -36,7 +36,7 @@ namespace math {
 
 #define COORD_SETCOORD(cls, type)                                                               \
     extern "C" JNIEXPORT                                                                        \
-    void JNICALL METH_NAME(cls, setCoord)(JNIEnv* env, jobject jthis, jint i, jint v) {         \
+    void JNICALL METH_NAME(cls, setCoord)(JNIEnv* env, jobject jthis, jint i, type v) {         \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
         (*pt)[i] = v;                                                                           \
     }
