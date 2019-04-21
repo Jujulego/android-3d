@@ -66,6 +66,28 @@ namespace math {
             return r;
         }
 
+        Coords& operator += (Coords<I,DEG,false> const& v) {
+            for (size_t i = 0; i < DEG; ++i) {
+                m_data[i] += v[i];
+            }
+
+            return *this;
+        }
+        Coords& operator -= (Coords<I,DEG,false> const& v) {
+            for (size_t i = 0; i < DEG; ++i) {
+                m_data[i] -= v[i];
+            }
+
+            return *this;
+        }
+
+        Coords operator + (Coords<I,DEG,false> const& v) const {
+            Coords r(*this); r += v; return r;
+        }
+        Coords operator - (Coords<I,DEG,false> const& v) const {
+            Coords r(*this); r -= v; return r;
+        }
+
         Coords<I,DEG,false> operator - (Coords const& pt) const {
             Coords<I,DEG,false> r;
 

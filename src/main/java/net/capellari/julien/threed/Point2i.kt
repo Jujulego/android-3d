@@ -1,10 +1,7 @@
 package net.capellari.julien.threed
 
 import net.capellari.julien.threed.jni.JNIClass
-import net.capellari.julien.threed.math.D2
-import net.capellari.julien.threed.math.Point
-import net.capellari.julien.threed.math.coordX
-import net.capellari.julien.threed.math.coordY
+import net.capellari.julien.threed.math.*
 
 class Point2i: JNIClass, Point<Int,D2> {
     // Companion
@@ -30,6 +27,18 @@ class Point2i: JNIClass, Point<Int,D2> {
 
     override fun unaryPlus()  = Point2i(+x, +y)
     override fun unaryMinus() = Point2i(-x, -y)
+
+    override fun plusAssign(v: Vector<Int, D2>) {
+        x += v[0]
+        y += v[1]
+    }
+    override fun minusAssign(v: Vector<Int, D2>) {
+        x -= v[0]
+        y -= v[1]
+    }
+
+    override fun plus(v: Vector<Int, D2>)  = Point2i(x + v[0], y + v[1])
+    override fun minus(v: Vector<Int, D2>) = Point2i(x - v[0], y - v[1])
 
     override fun minus(pt: Point<Int, D2>) = Vec2i(x - pt[0], y - pt[1])
 
