@@ -101,7 +101,7 @@ namespace math {
             Coords r(*this); r -= pt; return r;
         }
         I operator * (Coords const& pt) const {
-            I r = 0ULL;
+            I r = 0;
             for (size_t i = 0; i < DEG; ++i) {
                 r += m_data[i] * pt[i];
             }
@@ -138,6 +138,12 @@ namespace math {
     using Vec2f = Vector<float,2>;
     using Vec3f = Vector<float,3>;
     using Vec4f = Vector<float,4>;
+}
+
+// Opérateurs externes
+template<class I,size_t DEG>
+math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
+    return v * k;
 }
 
 // Macros JNI

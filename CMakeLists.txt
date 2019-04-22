@@ -32,6 +32,7 @@ add_library(android3d SHARED
         src/main/jni/jnitools/convert.cpp
 
         # - math
+        src/main/jni/math/matrix.cpp
         src/main/jni/math/outils.cpp
         src/main/jni/math/point.cpp
         src/main/jni/math/vector.cpp
