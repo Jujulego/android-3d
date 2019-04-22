@@ -52,6 +52,31 @@ class VectorInstrumentedTest {
         pt -= Vec2i(5, 9)
         assertEquals(Vec2i(0, -8), pt)
     }
+    @Test fun times_2i() {
+        val v = Vec2i(8, 12)
+
+        // times
+        assertEquals(Vec2i(16, 24), v * 2)
+        assertEquals(Vec2i(16, 24), 2 * v)
+
+        // times assign
+        v *= 2
+        assertEquals(Vec2i(16, 24), v)
+    }
+    @Test fun div_2i() {
+        val v = Vec2i(8, 12)
+
+        // div
+        assertEquals(Vec2i(4, 6), v / 2)
+
+        // div assign
+        v /= 2
+        assertEquals(Vec2i(4, 6), v)
+    }
+    @Test fun scalar_2i() {
+        // times (scalar)
+        assertEquals(44, Vec2i(4, 6) * Vec2i(8, 2))
+    }
 
     @Test fun native_2f() {
         val pt = Vec2f(5f, 1f)
@@ -96,5 +121,30 @@ class VectorInstrumentedTest {
         // minus assign
         pt -= Vec2f(5f, 9f)
         assertEquals(Vec2f(0f, -8f), pt)
+    }
+    @Test fun times_2f() {
+        val v = Vec2f(8f, 12f)
+
+        // times
+        assertEquals(Vec2f(16f, 24f), v  * 2f)
+        assertEquals(Vec2f(16f, 24f), 2f * v)
+
+        // times assign
+        v *= 2f
+        assertEquals(Vec2f(16f, 24f), v)
+    }
+    @Test fun div_2f() {
+        val v = Vec2f(8f, 12f)
+
+        // div
+        assertEquals(Vec2f(4f, 6f), v / 2f)
+
+        // div assign
+        v /= 2f
+        assertEquals(Vec2f(4f, 6f), v)
+    }
+    @Test fun scalar_2f() {
+        // times (scalar)
+        assertEquals(44f, Vec2f(4f, 6f) * Vec2f(8f, 2f))
     }
 }

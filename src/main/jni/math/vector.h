@@ -79,12 +79,42 @@ namespace math {
 
             return *this;
         }
+        Coords& operator *= (I const& k) {
+            for (size_t i = 0; i < DEG; ++i) {
+                m_data[i] *= k;
+            }
+
+            return *this;
+        }
+        Coords& operator /= (I const& k) {
+            for (size_t i = 0; i < DEG; ++i) {
+                m_data[i] /= k;
+            }
+
+            return *this;
+        }
 
         Coords operator + (Coords const& pt) const {
             Coords r(*this); r += pt; return r;
         }
         Coords operator - (Coords const& pt) const {
             Coords r(*this); r -= pt; return r;
+        }
+        I operator * (Coords const& pt) const {
+            I r = 0ULL;
+            for (size_t i = 0; i < DEG; ++i) {
+                r += m_data[i] * pt[i];
+            }
+
+            return r;
+        }
+        Coords operator * (I const& k) const {
+            Coords r(*this); r *= k;
+            return r;
+        }
+        Coords operator / (I const& k) const {
+            Coords r(*this); r /= k;
+            return r;
         }
 
         // Méthodes
