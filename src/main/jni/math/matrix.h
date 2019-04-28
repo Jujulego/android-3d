@@ -14,7 +14,7 @@ namespace math {
     using P = std::pair<size_t,size_t>;
 
     // Classe
-    template<class I,size_t LIG,size_t COL> class Matrix {
+    template<class I,size_t LIG,size_t COL> class Matrix: public jni::JNIClass {
         static_assert(std::is_arithmetic<I>::value, "I must be an arithmetic type");
 
     private:
@@ -22,7 +22,7 @@ namespace math {
         std::array<I,LIG*COL> m_data;
 
         // Méthodes
-        size_t to_index(size_t l, size_t c) const {
+        size_t to_index(size_t c, size_t l) const {
             return l + (c * LIG);
         }
 
@@ -34,6 +34,12 @@ namespace math {
             }
         }
         Matrix(Matrix const& m): m_data(m.m_data) {}
+
+        Matrix(I factors[]) {
+            for (size_t i = 0; i < LIG*COL; ++i) {
+                m_data[i] = factors[i];
+            }
+        }
 
         // Attributs
         I&       operator [] (P const& p)       { return m_data[to_index(p.first, p.second)]; }
@@ -97,12 +103,10 @@ namespace math {
             Matrix r(*this); r -= m; return r;
         }
         Matrix operator * (I const& k) const {
-            Matrix r(*this); r *= k;
-            return r;
+            Matrix r(*this); r *= k; return r;
         }
         Matrix operator / (I const& k) const {
-            Matrix r(*this); r /= k;
-            return r;
+            Matrix r(*this); r /= k; return r;
         }
 
         // Méthodes
@@ -127,6 +131,9 @@ namespace math {
             return P(LIG,COL);
         }
     };
+
+    // Alias
+    using Mat2i = Matrix<int,2,2>;
 }
 
 // Opérateurs externes
@@ -134,3 +141,52 @@ template<class I,size_t LIG,size_t COL>
 math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m) {
     return m * k;
 }
+
+// Macros JNI
+#define MAT_CREATE(cls, type)                                                                   \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, create)(JNIEnv*, jclass) {                                     \
+        auto pt = std::make_shared<cls>();                                                      \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define MAT_CREATEA(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, createA)(JNIEnv* env, jclass, type ## Array factors) {         \
+        auto pt = std::make_shared<cls>(env->GetIntArrayElements(factors, nullptr));            \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define MAT_GETFACTOR(cls, type)                                                                \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, getFactor)(JNIEnv* env, jobject jthis, jint c, jint l) {        \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        return (*pt)[math::P(c, l)];                                                            \
+    }
+
+#define MAT_SETFACTOR(cls, type)                                                                \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, setFactor)(JNIEnv* env, jobject jthis, jint c, jint l, type v) {\
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        (*pt)[math::P(c, l)] = v;                                                               \
+    }
+
+#define MAT_EQUAL(cls, type)                                                                    \
+    extern "C" JNIEXPORT                                                                        \
+    jboolean JNICALL METH_NAME(cls, equal)(JNIEnv* env, jobject jthis, jobject jobj) {          \
+        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+                                                                                                \
+        return jboolean((*ptt) == (*pto));                                                      \
+    }
+
+#define MAT_JNI(cls, type)      \
+    MAT_CREATE(cls, type)       \
+    MAT_CREATEA(cls, type)      \
+    MAT_GETFACTOR(cls, type)    \
+    MAT_SETFACTOR(cls, type)    \
+    MAT_EQUAL(cls, type)
