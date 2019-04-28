@@ -13,4 +13,10 @@ namespace jni {
      * @tparam O type to test
      */
     template<class O> struct is_jobject : std::is_base_of<_jobject,typename std::remove_pointer<O>::type> {};
+
+    /**
+     * Test if O is or is derived of jarray
+     * @tparam O type to test
+     */
+    template<class O> struct is_jarray : std::is_base_of<_jarray,typename std::remove_pointer<O>::type> {};
 }

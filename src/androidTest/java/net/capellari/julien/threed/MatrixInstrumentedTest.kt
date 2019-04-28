@@ -18,6 +18,9 @@ class MatrixInstrumentedTest {
         assertEquals(true,  mat == Mat2i(5, 1, 1, 5))
         assertEquals(false, mat == Mat2i(1, 5, 5, 1))
 
+        // get data
+        assertEquals(true, intArrayOf(5, 1, 1, 5).contentEquals(mat.data))
+
         // get
         assertEquals(5, mat[0,0])
         assertEquals(1, mat[0,1])

@@ -130,6 +130,10 @@ namespace math {
         P size() const {
             return P(LIG,COL);
         }
+
+        std::array<I,LIG*COL> const& data() const {
+            return m_data;
+        }
     };
 
     // Alias
@@ -155,10 +159,33 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
 #define MAT_CREATEA(cls, type)                                                                  \
     extern "C" JNIEXPORT                                                                        \
     jlong JNICALL METH_NAME(cls, createA)(JNIEnv* env, jclass, type ## Array factors) {         \
-        auto pt = std::make_shared<cls>(env->GetIntArrayElements(factors, nullptr));            \
+        jni::array<type ## Array> arr(env, factors);                                            \
+        auto pt = std::make_shared<cls>(arr.data());                                            \
         pt->register_jni(true);                                                                 \
                                                                                                 \
         return pt->get_jhandle();                                                               \
+    }
+
+#define MAT_CREATEM(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, createM)(JNIEnv* env, jclass, jobject jobj) {                  \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+        auto pt = std::make_shared<cls>(*pto);                                                  \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define MAT_GETDATA(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+                                                                                                \
+        auto data = pt->data();                                                                 \
+        jni::array<type ## Array> jarr(env, data.size());                                       \
+        std::copy(data.begin(), data.end(), jarr.begin());                                      \
+                                                                                                \
+        return jarr;                                                                            \
     }
 
 #define MAT_GETFACTOR(cls, type)                                                                \
@@ -187,6 +214,8 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
 #define MAT_JNI(cls, type)      \
     MAT_CREATE(cls, type)       \
     MAT_CREATEA(cls, type)      \
+    MAT_CREATEM(cls, type)      \
+    MAT_GETDATA(cls, type)      \
     MAT_GETFACTOR(cls, type)    \
     MAT_SETFACTOR(cls, type)    \
     MAT_EQUAL(cls, type)

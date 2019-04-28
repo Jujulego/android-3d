@@ -5,6 +5,7 @@
 
 #include <jni.h>
 
+#include "jnitools/array.h"
 #include "jnitools/class.h"
 #include "jnitools/convert.h"
 #include "jnitools/field.h"

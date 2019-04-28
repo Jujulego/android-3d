@@ -9,20 +9,22 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     // Companion
     companion object {
         // Méthodes
-        @JvmStatic
-        private external fun create(): Long
-
-        @JvmStatic
-        private external fun createA(factors: IntArray): Long
+        @JvmStatic private external fun create(): Long
+        @JvmStatic private external fun createA(factors: IntArray): Long
+        @JvmStatic private external fun createM(mat: Mat2i): Long
     }
+
+    // Propriétés
+    val data: IntArray get() = getDataA()
 
     // Constructeurs
     internal constructor(handle: Long): super(handle)
-    internal constructor(factors: Array<Int>): this(createA(IntArray(4) { factors[it] }))
+    internal constructor(factors: IntArray): this(createA(factors))
 
     constructor(): this(create())
+    constructor(mat: Mat2i): this(createM(mat))
     constructor(aa: Int, ab: Int,
-                ba: Int, bb: Int): this(arrayOf(aa, ba, ab, bb))
+                ba: Int, bb: Int): this(intArrayOf(aa, ba, ab, bb))
 
     // Opérateurs
     override fun get(c: Int, l: Int) = getFactor(c, l)
@@ -89,6 +91,7 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     override fun size() = MatSize(D2, D2)
 
     // Méthodes natives
+    private external fun getDataA(): IntArray
     private external fun getFactor(c: Int, l: Int): Int
     private external fun setFactor(c: Int, l: Int, v: Int)
 
