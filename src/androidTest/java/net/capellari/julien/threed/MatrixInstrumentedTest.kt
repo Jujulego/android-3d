@@ -34,4 +34,51 @@ class MatrixInstrumentedTest {
         mat[0,1] = 4
         assertEquals(Mat2i(7, 1, 4, 5), mat)
     }
+    @Test fun unary_2i() {
+        val mat = Mat2i(5, 1, 1, 5)
+
+        assertEquals(Mat2i( 5,  1,  1,  5), +mat)
+        assertEquals(Mat2i(-5, -1, -1, -5), -mat)
+    }
+    @Test fun plus_2i() {
+        val mat = Mat2i(5, 1, 1, 5)
+
+        // plus
+        assertEquals(Mat2i(1, 2, 3, 4), mat + Mat2i(-4, 1, 2, -1))
+
+        // plus assign
+        mat += Mat2i(-4, 1, 2, -1)
+        assertEquals(Mat2i(1, 2, 3, 4), mat)
+    }
+    @Test fun minus_2i() {
+        val mat = Mat2i(5, 1, 1, 5)
+
+        // minus
+        assertEquals(Mat2i(1, 2, 3, 4), mat - Mat2i(4, -1, -2, 1))
+
+        // minus assign
+        mat -= Mat2i(4, -1, -2, 1)
+        assertEquals(Mat2i(1, 2, 3, 4), mat)
+    }
+    @Test fun times_2i() {
+        val mat = Mat2i(5, 1, 1, 5)
+
+        // times
+        assertEquals(Mat2i(10, 2, 2, 10), mat * 2)
+        assertEquals(Mat2i(10, 2, 2, 10), 2 * mat)
+
+        // times assign
+        mat *= 2
+        assertEquals(Mat2i(10, 2, 2, 10), mat)
+    }
+    @Test fun div_2i() {
+        val mat = Mat2i(10, 2, 2, 10)
+
+        // div
+        assertEquals(Mat2i(5, 1, 1, 5), mat / 2)
+
+        // div assign
+        mat /= 2
+        assertEquals(Mat2i(5, 1, 1, 5), mat)
+    }
 }

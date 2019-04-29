@@ -1,5 +1,6 @@
 package net.capellari.julien.threed
 
+import android.util.Log
 import net.capellari.julien.threed.jni.JNIClass
 import net.capellari.julien.threed.math.D2
 import net.capellari.julien.threed.math.MatSize
@@ -15,6 +16,7 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     }
 
     // Propriétés
+    override val size = MatSize(D2, D2)
     val data: IntArray get() = getDataA()
 
     // Constructeurs
@@ -23,6 +25,7 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
 
     constructor(): this(create())
     constructor(mat: Mat2i): this(createM(mat))
+    constructor(gen: (Int) -> Int): this(IntArray(4, gen))
     constructor(aa: Int, ab: Int,
                 ba: Int, bb: Int): this(intArrayOf(aa, ba, ab, bb))
 
@@ -30,45 +33,40 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     override fun get(c: Int, l: Int) = getFactor(c, l)
     override fun set(c: Int, l: Int, v: Int) = setFactor(c, l, v)
 
-    override fun unaryPlus(): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun unaryMinus(): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun unaryPlus()  = Mat2i(data)
+    override fun unaryMinus() = data { Mat2i { i -> -it[i] }}
 
     override fun plusAssign(mat: Matrix<Int, D2, D2>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        if (mat is Mat2i) { // Prefer native call
+            return plusA(mat)
+        }
 
+        for (l in 0 until size.lig) {
+            for (c in 0 until size.col) {
+                this[c,l] += mat[c,l]
+            }
+        }
+    }
     override fun minusAssign(mat: Matrix<Int, D2, D2>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (mat is Mat2i) { // Prefer native call
+            return minusA(mat)
+        }
+
+        for (l in 0 until size.lig) {
+            for (c in 0 until size.col) {
+                this[c,l] -= mat[c,l]
+            }
+        }
     }
 
-    override fun timesAssign(k: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun timesAssign(k: Int) = timesA(k)
+    override fun divAssign(k: Int)   = divA(k)
 
-    override fun divAssign(k: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun plus(mat: Matrix<Int, D2, D2>)  = Mat2i(this).also { it += mat }
+    override fun minus(mat: Matrix<Int, D2, D2>) = Mat2i(this).also { it -= mat }
 
-    override fun plus(mat: Matrix<Int, D2, D2>): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun minus(mat: Matrix<Int, D2, D2>): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun times(k: Int): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun div(k: Int): Mat2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun times(k: Int) = data { Mat2i { i -> k * it[i] }}
+    override fun div(k: Int)   = data { Mat2i { i -> it[i] / k }}
 
     // Méthodes
     override fun equals(other: Any?): Boolean {
@@ -79,16 +77,14 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
 
         return false
     }
-
-    override fun lig(l: Int): Vec2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun hashCode(): Int {
+        return data.hashCode()
     }
 
-    override fun col(c: Int): Vec2i {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun lig(l: Int) = Vec2i(this[0,l], this[1,l])
+    override fun col(c: Int) = Vec2i(this[c,0], this[c,1])
 
-    override fun size() = MatSize(D2, D2)
+    inline fun<reified T> data(f: (IntArray) -> T): T = data.let(f)
 
     // Méthodes natives
     private external fun getDataA(): IntArray
@@ -96,4 +92,10 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     private external fun setFactor(c: Int, l: Int, v: Int)
 
     private external fun equal(mat: Mat2i): Boolean
+
+    private external fun plusA(mat: Mat2i)
+    private external fun minusA(mat: Mat2i)
+
+    private external fun timesA(k: Int)
+    private external fun divA(k: Int)
 }

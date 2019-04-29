@@ -1,6 +1,9 @@
 package net.capellari.julien.threed.math
 
 interface Matrix<T: Number, L: Dimension, C: Dimension> {
+    // Propriétés
+    val size: MatSize<L,C>
+
     // Opérateurs
     operator fun get(c: Int, l: Int): T
     operator fun set(c: Int, l: Int, v: T)
@@ -21,6 +24,4 @@ interface Matrix<T: Number, L: Dimension, C: Dimension> {
     // Méthodes
     fun lig(l: Int): Vector<T,C>
     fun col(c: Int): Vector<T,L>
-
-    fun size(): MatSize<L,C>
 }

@@ -211,6 +211,40 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
         return jboolean((*ptt) == (*pto));                                                      \
     }
 
+#define MAT_PLUSA(cls, type)                                                                    \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, plusA)(JNIEnv* env, jobject jthis, jobject jobj) {              \
+        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+                                                                                                \
+        (*ptt) += (*pto);                                                                       \
+    }
+
+#define MAT_MINUSA(cls, type)                                                                   \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, minusA)(JNIEnv* env, jobject jthis, jobject jobj) {             \
+        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+                                                                                                \
+        (*ptt) -= (*pto);                                                                       \
+    }
+
+#define MAT_TIMESA(cls, type)                                                                   \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, timesA)(JNIEnv* env, jobject jthis, type k) {                   \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+                                                                                                \
+        (*pt) *= k;                                                                             \
+    }
+
+#define MAT_DIVA(cls, type)                                                                     \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, divA)(JNIEnv* env, jobject jthis, type k) {                     \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+                                                                                                \
+        (*pt) /= k;                                                                             \
+    }
+
 #define MAT_JNI(cls, type)      \
     MAT_CREATE(cls, type)       \
     MAT_CREATEA(cls, type)      \
@@ -218,4 +252,8 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
     MAT_GETDATA(cls, type)      \
     MAT_GETFACTOR(cls, type)    \
     MAT_SETFACTOR(cls, type)    \
-    MAT_EQUAL(cls, type)
+    MAT_EQUAL(cls, type)        \
+    MAT_PLUSA(cls, type)        \
+    MAT_MINUSA(cls, type)       \
+    MAT_TIMESA(cls, type)       \
+    MAT_DIVA(cls, type)
