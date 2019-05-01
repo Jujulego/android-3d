@@ -47,9 +47,10 @@ class Vec2f: JNIClass, Vector<Float,D2> {
 
     override fun plus(v: Vector<Float, D2>)  = Vec2f(x + v[0], y + v[1])
     override fun minus(v: Vector<Float, D2>) = Vec2f(x - v[0], y - v[1])
-    override fun times(v: Vector<Float, D2>) = (x * v[0]) + (y * v[1])
     override fun times(k: Float)             = Vec2f(x * k, y * k)
     override fun div(k: Float)               = Vec2f(x / k, y / k)
+
+    override fun times(c: Coords<Float, D2>) = (x * c[0]) + (y * c[1])
 
     // Méthodes
     override fun size()= D2.size

@@ -8,6 +8,8 @@ interface Coords<T: Number, D: Dimension> {
     operator fun unaryPlus(): Coords<T,D>
     operator fun unaryMinus(): Coords<T,D>
 
+    operator fun times(c: Coords<T,D>): T // dot product
+
     // Méthodes
     fun size(): Int
 }

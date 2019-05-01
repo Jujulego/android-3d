@@ -7,8 +7,8 @@ class Point2i: JNIClass, Point<Int,D2> {
     // Companion
     companion object {
         // Méthodes
-        @JvmStatic
-        private external fun create(x: Int = 0, y: Int = 0): Long
+        @JvmStatic private external fun create(x: Int = 0, y: Int = 0): Long
+        @JvmStatic private external fun createA(factors: IntArray): Long
     }
 
     // Propriétés
@@ -17,9 +17,11 @@ class Point2i: JNIClass, Point<Int,D2> {
 
     // Constructeurs
     internal constructor(handle: Long): super(handle)
+    internal constructor(factors: IntArray): this(createA(factors))
 
     constructor(): this(create())
     constructor(x: Int, y: Int): this(create(x, y))
+    constructor(gen: (Int) -> Int): this(IntArray(2, gen))
 
     // Opérateurs
     override operator fun get(i: Int)         = getCoord(i)
@@ -41,6 +43,7 @@ class Point2i: JNIClass, Point<Int,D2> {
     override fun minus(v: Vector<Int, D2>) = Point2i(x - v[0], y - v[1])
 
     override fun minus(pt: Point<Int, D2>) = Vec2i(x - pt[0], y - pt[1])
+    override fun times(c: Coords<Int, D2>) = (x * c[0]) + (y * c[1])
 
     // Méthodes
     override fun size()= D2.size

@@ -21,6 +21,9 @@ interface Matrix<T: Number, L: Dimension, C: Dimension> {
     operator fun times(k: T): Matrix<T,L,C>
     operator fun div(k: T): Matrix<T,L,C>
 
+    operator fun times(pt: Point<T,C>): Point<T,C>
+    operator fun times(v: Vector<T,C>): Vector<T,C>
+
     // Méthodes
     fun lig(l: Int): Vector<T,C>
     fun col(c: Int): Vector<T,L>

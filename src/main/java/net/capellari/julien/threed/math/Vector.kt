@@ -9,7 +9,6 @@ interface Vector<T: Number, D: Dimension>: Coords<T, D> {
 
     operator fun plus(v: Vector<T,D>): Vector<T,D>
     operator fun minus(v: Vector<T,D>): Vector<T,D>
-    operator fun times(v: Vector<T,D>): T
     operator fun times(k: T): Vector<T,D>
     operator fun div(k: T): Vector<T,D>
 }

@@ -34,6 +34,11 @@ namespace math {
                 m_data[i] = 0;
             }
         };
+        Coords(I factors[DEG]) {
+            for (size_t i = 0; i < DEG; ++i) {
+                m_data[i] = factors[i];
+            }
+        }
         Coords(Coords const& c): m_data(c.m_data) {};
         template<class... Args> explicit Coords(Args const&... v): m_data({v...}) {
             static_assert(sizeof...(Args) == DEG, "Need exactly DEG args");

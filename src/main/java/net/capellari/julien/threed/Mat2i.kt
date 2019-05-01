@@ -2,9 +2,7 @@ package net.capellari.julien.threed
 
 import android.util.Log
 import net.capellari.julien.threed.jni.JNIClass
-import net.capellari.julien.threed.math.D2
-import net.capellari.julien.threed.math.MatSize
-import net.capellari.julien.threed.math.Matrix
+import net.capellari.julien.threed.math.*
 
 class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     // Companion
@@ -67,6 +65,14 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
 
     override fun times(k: Int) = data { Mat2i { i -> k * it[i] }}
     override fun div(k: Int)   = data { Mat2i { i -> it[i] / k }}
+
+    override fun times(pt: Point<Int, D2>): Point2i {
+        return Point2i { lig(it) * pt }
+    }
+
+    override fun times(v: Vector<Int, D2>): Vec2i {
+        return Vec2i { lig(it) * v }
+    }
 
     // Méthodes
     override fun equals(other: Any?): Boolean {

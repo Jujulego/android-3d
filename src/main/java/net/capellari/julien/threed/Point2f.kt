@@ -7,8 +7,7 @@ class Point2f: JNIClass, Point<Float,D2> {
     // Companion
     companion object {
         // Méthodes
-        @JvmStatic
-        private external fun create(x: Float = 0f, y: Float = 0f): Long
+        @JvmStatic private external fun create(x: Float = 0f, y: Float = 0f): Long
     }
 
     // Propriétés
@@ -41,6 +40,7 @@ class Point2f: JNIClass, Point<Float,D2> {
     override fun minus(v: Vector<Float, D2>) = Point2f(x - v[0], y - v[1])
 
     override fun minus(pt: Point<Float, D2>) = Vec2f(x - pt[0], y - pt[1])
+    override fun times(c: Coords<Float, D2>) = (x * c[0]) + (y * c[1])
 
     // Méthodes
     override fun size()= D2.size

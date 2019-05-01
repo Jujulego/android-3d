@@ -35,7 +35,7 @@ namespace math {
         }
         Matrix(Matrix const& m): m_data(m.m_data) {}
 
-        Matrix(I factors[]) {
+        Matrix(I factors[LIG*COL]) {
             for (size_t i = 0; i < LIG*COL; ++i) {
                 m_data[i] = factors[i];
             }
