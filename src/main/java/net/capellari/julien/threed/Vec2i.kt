@@ -10,6 +10,7 @@ class Vec2i: JNIClass, XY<Int>, Vector<Int,D2> {
         // Méthodes
         @JvmStatic private external fun create(x: Int, y: Int): Long
         @JvmStatic private external fun createA(factors: IntArray): Long
+        @JvmStatic private external fun createC(v: Vec2i): Long
     }
 
     // Propriétés
@@ -18,7 +19,9 @@ class Vec2i: JNIClass, XY<Int>, Vector<Int,D2> {
     // Constructeurs
     internal constructor(handle: Long): super(handle)
 
+    constructor(v: Vec2i): this(createC(v))
     constructor(x: Int = 0, y: Int = 0): this(create(x, y))
+
     constructor(factors: IntArray): this(createA(factors))
     constructor(gen: (Int) -> Int): this(IntArray(2, gen))
 
@@ -26,7 +29,7 @@ class Vec2i: JNIClass, XY<Int>, Vector<Int,D2> {
     override operator fun get(i: Int)         = getCoord(i)
     override operator fun set(i: Int, v: Int) = setCoord(i, v)
 
-    override fun unaryPlus()  = Vec2i(+x, +y)
+    override fun unaryPlus()  = Vec2i(this)
     override fun unaryMinus() = Vec2i(-x, -y)
 
     override fun plusAssign(v: Vector<Int, D2>) {

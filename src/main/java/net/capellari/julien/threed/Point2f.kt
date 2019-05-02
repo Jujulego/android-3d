@@ -10,6 +10,7 @@ class Point2f: JNIClass, XY<Float>, Point<Float,D2> {
         // Méthodes
         @JvmStatic private external fun create(x: Float, y: Float): Long
         @JvmStatic private external fun createA(factors: FloatArray): Long
+        @JvmStatic private external fun createC(pt: Point2f): Long
     }
 
     // Propriétés
@@ -18,6 +19,7 @@ class Point2f: JNIClass, XY<Float>, Point<Float,D2> {
     // Constructeurs
     internal constructor(handle: Long): super(handle)
 
+    constructor(pt: Point2f): this(createC(pt))
     constructor(x: Float = 0f, y: Float = 0f): this(create(x, y))
 
     constructor(factors: FloatArray): this(createA(factors))
@@ -27,7 +29,7 @@ class Point2f: JNIClass, XY<Float>, Point<Float,D2> {
     override operator fun get(i: Int)           = getCoord(i)
     override operator fun set(i: Int, v: Float) = setCoord(i, v)
 
-    override fun unaryPlus()  = Point2f(+x, +y)
+    override fun unaryPlus()  = Point2f(this)
     override fun unaryMinus() = Point2f(-x, -y)
 
     override fun plusAssign(v: Vector<Float, D2>) {

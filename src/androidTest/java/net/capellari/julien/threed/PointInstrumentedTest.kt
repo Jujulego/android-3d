@@ -41,10 +41,6 @@ class PointInstrumentedTest {
         // minus assign
         pt += Vec2i(3, -3)
         assertEquals(Point2i(8, -2), pt)
-
-        for (i in 0 until 10000) {
-            pt += Vec2i(3, 3)
-        }
     }
     @Test fun minus_2i() {
         val pt = Point2i(5, 1)
