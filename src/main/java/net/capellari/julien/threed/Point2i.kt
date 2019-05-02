@@ -2,25 +2,25 @@ package net.capellari.julien.threed
 
 import net.capellari.julien.threed.jni.JNIClass
 import net.capellari.julien.threed.math.*
+import net.capellari.julien.threed.math.coords.XY
 
-class Point2i: JNIClass, Point<Int,D2> {
+class Point2i: JNIClass, XY<Int>, Point<Int,D2> {
     // Companion
     companion object {
         // Méthodes
-        @JvmStatic private external fun create(x: Int = 0, y: Int = 0): Long
+        @JvmStatic private external fun create(x: Int, y: Int): Long
         @JvmStatic private external fun createA(factors: IntArray): Long
     }
 
     // Propriétés
-    var x by coordX()
-    var y by coordY()
+    val data get() = getDataA()
 
     // Constructeurs
     internal constructor(handle: Long): super(handle)
-    internal constructor(factors: IntArray): this(createA(factors))
 
-    constructor(): this(create())
-    constructor(x: Int, y: Int): this(create(x, y))
+    constructor(x: Int = 0, y: Int = 0): this(create(x, y))
+
+    constructor(factors: IntArray): this(createA(factors))
     constructor(gen: (Int) -> Int): this(IntArray(2, gen))
 
     // Opérateurs
@@ -43,19 +43,20 @@ class Point2i: JNIClass, Point<Int,D2> {
     override fun minus(v: Vector<Int, D2>) = Point2i(x - v[0], y - v[1])
 
     override fun minus(pt: Point<Int, D2>) = Vec2i(x - pt[0], y - pt[1])
-    override fun times(c: Coords<Int, D2>) = (x * c[0]) + (y * c[1])
+    override fun times(c: Coord<Int, D2>) = (x * c[0]) + (y * c[1])
 
     // Méthodes
-    override fun size()= D2.size
     override fun equals(other: Any?): Boolean {
+        if (other === this) return true
         if (other is Point2i) {
             return equal(other)
         }
 
-        return false
+        return super.equals(other)
     }
+
     override fun hashCode(): Int {
-        return (x shl 32) + y
+        return data.contentHashCode()
     }
 
     override fun toString(): String {
@@ -63,6 +64,7 @@ class Point2i: JNIClass, Point<Int,D2> {
     }
 
     // Méthodes natives
+    private external fun getDataA(): IntArray
     private external fun getCoord(i: Int): Int
     private external fun setCoord(i: Int, v: Int)
 

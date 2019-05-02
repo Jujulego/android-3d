@@ -2,23 +2,26 @@ package net.capellari.julien.threed
 
 import net.capellari.julien.threed.jni.JNIClass
 import net.capellari.julien.threed.math.*
+import net.capellari.julien.threed.math.coords.XY
 
-class Point2f: JNIClass, Point<Float,D2> {
+class Point2f: JNIClass, XY<Float>, Point<Float,D2> {
     // Companion
     companion object {
         // Méthodes
-        @JvmStatic private external fun create(x: Float = 0f, y: Float = 0f): Long
+        @JvmStatic private external fun create(x: Float, y: Float): Long
+        @JvmStatic private external fun createA(factors: FloatArray): Long
     }
 
     // Propriétés
-    var x by coordX()
-    var y by coordY()
+    val data get() = getDataA()
 
     // Constructeurs
     internal constructor(handle: Long): super(handle)
 
-    constructor(): this(create())
-    constructor(x: Float, y: Float): this(create(x, y))
+    constructor(x: Float = 0f, y: Float = 0f): this(create(x, y))
+
+    constructor(factors: FloatArray): this(createA(factors))
+    constructor(gen: (Int) -> Float): this(FloatArray(2, gen))
 
     // Opérateurs
     override operator fun get(i: Int)           = getCoord(i)
@@ -40,19 +43,20 @@ class Point2f: JNIClass, Point<Float,D2> {
     override fun minus(v: Vector<Float, D2>) = Point2f(x - v[0], y - v[1])
 
     override fun minus(pt: Point<Float, D2>) = Vec2f(x - pt[0], y - pt[1])
-    override fun times(c: Coords<Float, D2>) = (x * c[0]) + (y * c[1])
+    override fun times(c: Coord<Float, D2>) = (x * c[0]) + (y * c[1])
 
     // Méthodes
-    override fun size()= D2.size
     override fun equals(other: Any?): Boolean {
+        if (other === this) return true
         if (other is Point2f) {
             return equal(other)
         }
 
-        return false
+        return super.equals(other)
     }
+
     override fun hashCode(): Int {
-        return ((x * 32) + y).toInt()
+        return data.contentHashCode()
     }
 
     override fun toString(): String {
@@ -60,6 +64,7 @@ class Point2f: JNIClass, Point<Float,D2> {
     }
 
     // Méthodes natives
+    private external fun getDataA(): FloatArray
     private external fun getCoord(i: Int): Float
     private external fun setCoord(i: Int, v: Float)
 

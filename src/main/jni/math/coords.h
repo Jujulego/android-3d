@@ -27,7 +27,19 @@ namespace math {
         return pt->get_jhandle();                                                               \
     }
 
-#define COORD_CREATEA(cls, type, ...)                                                           \
+#define COORD_GETDATA(cls, type)                                                                \
+    extern "C" JNIEXPORT                                                                        \
+    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+                                                                                                \
+        auto data = pt->data();                                                                 \
+        jni::array<type ## Array> jarr(env, data.size());                                       \
+        std::copy(data.begin(), data.end(), jarr.begin());                                      \
+                                                                                                \
+        return jarr;                                                                            \
+    }
+
+#define COORD_CREATEA(cls, type)                                                                \
     extern "C" JNIEXPORT                                                                        \
     jlong JNICALL METH_NAME(cls, createA)(JNIEnv* env, jclass, type ## Array factors) {         \
         jni::array<type ## Array> arr(env, factors);                                            \
@@ -63,6 +75,7 @@ namespace math {
 #define COORD_JNI(cls, type, ...)           \
     COORD_CREATE(  cls, type, __VA_ARGS__)  \
     COORD_CREATEA( cls, type)               \
+    COORD_GETDATA(cls, type)                \
     COORD_GETCOORD(cls, type)               \
     COORD_SETCOORD(cls, type)               \
     COORD_EQUAL(   cls, type)

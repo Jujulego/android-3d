@@ -1,6 +1,6 @@
 package net.capellari.julien.threed.math
 
-interface Point<T: Number, D: Dimension>: Coords<T, D> {
+interface Point<T: Number, D: Dimension>: Coord<T, D> {
     // Opérateurs
     operator fun plusAssign(v: Vector<T,D>)
     operator fun minusAssign(v: Vector<T,D>)

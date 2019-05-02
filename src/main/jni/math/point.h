@@ -108,6 +108,10 @@ namespace math {
             return DEG;
         }
 
+        std::array<I,DEG> const& data() const {
+            return m_data;
+        }
+
         iterator       begin()       { return m_data.begin(); }
         const_iterator begin() const { return m_data.begin(); }
         iterator       end()         { return m_data.end();   }
