@@ -1,5 +1,7 @@
 package net.capellari.julien.threed
 
+import net.capellari.julien.threed.annotations.math.NumberType
+import net.capellari.julien.threed.annotations.math.PointClass
 import net.capellari.julien.threed.jni.JNIClass
 import net.capellari.julien.threed.math.*
 import net.capellari.julien.threed.math.coords.XY
@@ -62,7 +64,7 @@ class Point2f: JNIClass, XY<Float>, Point<Float,D2> {
     }
 
     override fun toString(): String {
-        return "Point($x, $y)"
+        return "PointClass($x, $y)"
     }
 
     // Méthodes natives

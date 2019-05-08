@@ -9,11 +9,11 @@ import org.junit.runner.RunWith
 class PointInstrumentedTest {
     // Tests
     @Test fun native_2i() {
-        val pt = Point2i(5, 1)
+        val pt = _Point2i(5, 1)
 
         // equal
-        assertEquals(true,  pt == Point2i(5, 1))
-        assertEquals(false, pt == Point2i(1, 5))
+        assertEquals(true,  pt == _Point2i(5, 1))
+        assertEquals(false, pt == _Point2i(1, 5))
 
         // get
         assertEquals(5, pt.x)
@@ -21,37 +21,37 @@ class PointInstrumentedTest {
 
         // set
         pt.x = 7
-        assertEquals(Point2i(7, 1), pt)
+        assertEquals(_Point2i(7, 1), pt)
 
         pt.y = 4
-        assertEquals(Point2i(7, 4), pt)
+        assertEquals(_Point2i(7, 4), pt)
     }
     @Test fun unary_2i() {
-        val pt = Point2i(5, 1)
+        val pt = _Point2i(5, 1)
 
-        assertEquals(Point2i( 5,  1), +pt)
-        assertEquals(Point2i(-5, -1), -pt)
+        assertEquals(_Point2i( 5,  1), +pt)
+        assertEquals(_Point2i(-5, -1), -pt)
     }
     @Test fun plus_2i() {
-        val pt = Point2i(5, 1)
+        val pt = _Point2i(5, 1)
 
         // minus
-        assertEquals(Point2i(8, -2), pt + Vec2i(3, -3))
+        assertEquals(_Point2i(8, -2), pt + Vec2i(3, -3))
 
         // minus assign
         pt += Vec2i(3, -3)
-        assertEquals(Point2i(8, -2), pt)
+        assertEquals(_Point2i(8, -2), pt)
     }
     @Test fun minus_2i() {
-        val pt = Point2i(5, 1)
+        val pt = _Point2i(5, 1)
 
         // minus
-        assertEquals(Vec2i(0, -8), pt - Point2i(5, 9))
-        assertEquals(Point2i(2, 4), pt - Vec2i(3, -3))
+        assertEquals(Vec2i(0, -8), pt - _Point2i(5, 9))
+        assertEquals(_Point2i(2, 4), pt - Vec2i(3, -3))
 
         // minus assign
         pt -= Vec2i(3, -3)
-        assertEquals(Point2i(2, 4), pt)
+        assertEquals(_Point2i(2, 4), pt)
     }
 
     @Test fun native_2f() {

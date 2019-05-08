@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -42,6 +42,7 @@ dependencies {
 
     // Annotations
     implementation project(':3d.annotations')
+    annotationProcessor project(':3d.annotations')
     kapt project(':3d.annotations')
 
     // Tests
