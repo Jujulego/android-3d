@@ -1,6 +1,5 @@
 package net.capellari.julien.threed
 
-import android.util.Log
 import net.capellari.julien.threed.jni.JNIClass
 import net.capellari.julien.threed.math.*
 
@@ -66,8 +65,8 @@ class Mat2i: JNIClass, Matrix<Int,D2,D2> {
     override fun times(k: Int) = data { Mat2i { i -> k * it[i] }}
     override fun div(k: Int)   = data { Mat2i { i -> it[i] / k }}
 
-    override fun times(pt: Point<Int, D2>): Point2i {
-        return Point2i { lig(it) * pt }
+    override fun times(pt: Point<Int, D2>): _Point2i {
+        return _Point2i { lig(it) * pt }
     }
 
     override fun times(v: Vector<Int, D2>): Vec2i {
