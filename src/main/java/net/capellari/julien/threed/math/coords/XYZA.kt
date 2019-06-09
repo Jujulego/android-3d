@@ -5,16 +5,16 @@ import net.capellari.julien.threed.annotations.math.Generator
 import net.capellari.julien.threed.annotations.math.Generators.*
 import net.capellari.julien.threed.annotations.math.NumberType
 import net.capellari.julien.threed.math.Coord
-import net.capellari.julien.threed.math.D2
+import net.capellari.julien.threed.math.D4
 
 @Generate(
-    Generator(POINT, NumberType.INT, 2),
-    Generator(POINT, NumberType.FLOAT, 2),
-
-    Generator(VECTOR, NumberType.INT, 2),
-    Generator(VECTOR, NumberType.FLOAT, 2)
+    Generator(POINT, NumberType.INT, 4),
+    Generator(POINT, NumberType.FLOAT, 4),
+    
+    Generator(VECTOR, NumberType.INT, 4),
+    Generator(VECTOR, NumberType.FLOAT, 4)
 )
-interface XY<T: Number>: Coord<T, D2> {
+interface XYZA<T: Number>: Coord<T, D4> {
     // Propriétés
     var x get() = get(0)
         set(v) = set(0, v)
@@ -22,6 +22,12 @@ interface XY<T: Number>: Coord<T, D2> {
     var y get() = get(1)
         set(v) = set(1, v)
 
+    var z get() = get(2)
+        set(v) = set(2, v)
+
+    var a get() = get(3)
+        set(v) = set(3, v)
+
     // Méthodes
-    override fun size()= D2.size
+    override fun size()= D4.size
 }
