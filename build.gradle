@@ -37,13 +37,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // AndroidX support
-    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     // Annotations
-    implementation project(':3d.annotations')
-    annotationProcessor project(':3d.annotations')
     kapt project(':3d.annotations')
+    compileOnly project(':3d.annotations')
+    annotationProcessor project(':3d.annotations')
 
     // Tests
     testImplementation 'junit:junit:4.12'
