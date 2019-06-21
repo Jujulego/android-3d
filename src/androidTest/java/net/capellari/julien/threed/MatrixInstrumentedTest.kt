@@ -9,76 +9,93 @@ import org.junit.runner.RunWith
 class MatrixInstrumentedTest {
     // Tests
     @Test fun native_2i() {
-        val mat = Mat2i(
-            5, 1,
-            1, 5
-        )
+        val mat = matrix(1, 2, 3, 4)
 
         // equal
-        assertEquals(true,  mat == Mat2i(5, 1, 1, 5))
-        assertEquals(false, mat == Mat2i(1, 5, 5, 1))
+        assertEquals(true,  mat == matrix(1, 2, 3, 4))
+        assertEquals(false, mat == matrix(1, 5, 5, 1))
 
         // get data
-        assertEquals(true, intArrayOf(5, 1, 1, 5).contentEquals(mat.data))
+        assertEquals(true, intArrayOf(1, 2, 3, 4).contentEquals(mat.data))
 
         // get
-        assertEquals(5, mat[0,0])
-        assertEquals(1, mat[0,1])
-        assertEquals(1, mat[1,0])
-        assertEquals(5, mat[1,1])
+        assertEquals(1, mat[0,0])
+        assertEquals(2, mat[0,1])
+        assertEquals(3, mat[1,0])
+        assertEquals(4, mat[1,1])
+
+        // lig
+        assertEquals(vector(1, 2), mat.lig(0))
+        assertEquals(vector(3, 4), mat.lig(1))
+
+        // col
+        assertEquals(vector(1, 3), mat.col(0))
+        assertEquals(vector(2, 4), mat.col(1))
 
         // set
         mat[0,0] = 7
-        assertEquals(Mat2i(7, 1, 1, 5), mat)
+        assertEquals(matrix(7, 2, 3, 4), mat)
 
         mat[0,1] = 4
-        assertEquals(Mat2i(7, 1, 4, 5), mat)
+        assertEquals(matrix(7, 4, 3, 4), mat)
     }
     @Test fun unary_2i() {
-        val mat = Mat2i(5, 1, 1, 5)
+        val mat = matrix(5, 1, 1, 5)
 
-        assertEquals(Mat2i( 5,  1,  1,  5), +mat)
-        assertEquals(Mat2i(-5, -1, -1, -5), -mat)
+        assertEquals(matrix( 5,  1,  1,  5), +mat)
+        assertEquals(matrix(-5, -1, -1, -5), -mat)
     }
     @Test fun plus_2i() {
-        val mat = Mat2i(5, 1, 1, 5)
+        val mat = matrix(5, 1, 1, 5)
 
         // plus
-        assertEquals(Mat2i(1, 2, 3, 4), mat + Mat2i(-4, 1, 2, -1))
+        assertEquals(matrix(1, 2, 3, 4), mat + matrix(-4, 1, 2, -1))
 
         // plus assign
-        mat += Mat2i(-4, 1, 2, -1)
-        assertEquals(Mat2i(1, 2, 3, 4), mat)
+        mat += matrix(-4, 1, 2, -1)
+        assertEquals(matrix(1, 2, 3, 4), mat)
     }
     @Test fun minus_2i() {
-        val mat = Mat2i(5, 1, 1, 5)
+        val mat = matrix(5, 1, 1, 5)
 
         // minus
-        assertEquals(Mat2i(1, 2, 3, 4), mat - Mat2i(4, -1, -2, 1))
+        assertEquals(matrix(1, 2, 3, 4), mat - matrix(4, -1, -2, 1))
 
         // minus assign
-        mat -= Mat2i(4, -1, -2, 1)
-        assertEquals(Mat2i(1, 2, 3, 4), mat)
+        mat -= matrix(4, -1, -2, 1)
+        assertEquals(matrix(1, 2, 3, 4), mat)
     }
     @Test fun times_2i() {
-        val mat = Mat2i(5, 1, 1, 5)
+        val mat = matrix(5, 1, 1, 5)
 
         // times
-        assertEquals(Mat2i(10, 2, 2, 10), mat * 2)
-        assertEquals(Mat2i(10, 2, 2, 10), 2 * mat)
+        assertEquals(matrix(10, 2, 2, 10), mat * 2)
+        assertEquals(matrix(10, 2, 2, 10), 2 * mat)
 
         // times assign
         mat *= 2
-        assertEquals(Mat2i(10, 2, 2, 10), mat)
+        assertEquals(matrix(10, 2, 2, 10), mat)
     }
     @Test fun div_2i() {
-        val mat = Mat2i(10, 2, 2, 10)
+        val mat = matrix(10, 2, 2, 10)
 
         // div
-        assertEquals(Mat2i(5, 1, 1, 5), mat / 2)
+        assertEquals(matrix(5, 1, 1, 5), mat / 2)
 
         // div assign
         mat /= 2
-        assertEquals(Mat2i(5, 1, 1, 5), mat)
+        assertEquals(matrix(5, 1, 1, 5), mat)
+    }
+    @Test fun times_v2i() {
+        val mat = Mat2i.identity()
+        val v = vector(4, 7)
+
+        assertEquals(vector(4, 7), mat * v)
+    }
+    @Test fun times_p2i() {
+        val mat = Mat2i.identity()
+        val pt = point(4, 7)
+
+        assertEquals(vector(4, 7), mat * pt)
     }
 }
