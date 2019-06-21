@@ -12,7 +12,10 @@ import net.capellari.julien.threed.math.D2
     Generator(POINT, NumberType.FLOAT, 2),
 
     Generator(VECTOR, NumberType.INT, 2),
-    Generator(VECTOR, NumberType.FLOAT, 2)
+    Generator(VECTOR, NumberType.FLOAT, 2),
+
+    Generator(MATRIX, NumberType.INT, 2),
+    Generator(MATRIX, NumberType.FLOAT, 2)
 )
 interface XY<T: Number>: Coord<T, D2> {
     // Propriétés
