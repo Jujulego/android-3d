@@ -8,6 +8,7 @@
 #include <type_traits>
 
 #include "vector.h"
+#include "point.h"
 
 namespace math {
     // Alias
@@ -109,6 +110,16 @@ namespace math {
             Matrix r(*this); r /= k; return r;
         }
 
+        template <bool PT> Coords<I,LIG, PT> operator * (Coords<I,COL,PT> const& v) const {
+            Coords<I,LIG,PT> r;
+
+            for (size_t l = 0; l < LIG; ++l) {
+                r[l] = lig(l) * v;
+            }
+
+            return r;
+        }
+
         // Méthodes
         Vector<I,COL> lig(size_t l) const {
             Vector<I,COL> v;
@@ -138,6 +149,12 @@ namespace math {
 
     // Alias
     using Mat2i = Matrix<int,2,2>;
+    using Mat3i = Matrix<int,3,3>;
+    using Mat4i = Matrix<int,4,4>;
+
+    using Mat2f = Matrix<float,2,2>;
+    using Mat3f = Matrix<float,3,3>;
+    using Mat4f = Matrix<float,4,4>;
 }
 
 // Opérateurs externes
@@ -237,6 +254,30 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
         (*pt) *= k;                                                                             \
     }
 
+#define MAT_TIMESP(cls, point, type)                                                            \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, timesP)(JNIEnv* env, jobject jthis, jobject jpt) {             \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptp = jni::fromJava<point>(env, jpt);                                              \
+                                                                                                \
+        auto ptr = std::make_shared<point>((*pt) * (*ptp));                                     \
+        ptr->register_jni(true);                                                                \
+                                                                                                \
+        return ptr->get_jhandle();                                                              \
+    }
+
+#define MAT_TIMESV(cls, vec, type)                                                              \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {              \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptv = jni::fromJava<vec>(env, jv);                                                 \
+                                                                                                \
+        auto ptr = std::make_shared<vec>((*pt) * (*ptv));                                       \
+        ptr->register_jni(true);                                                                \
+                                                                                                \
+        return ptr->get_jhandle();                                                              \
+    }
+
 #define MAT_DIVA(cls, type)                                                                     \
     extern "C" JNIEXPORT                                                                        \
     void JNICALL METH_NAME(cls, divA)(JNIEnv* env, jobject jthis, type k) {                     \
@@ -245,15 +286,17 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
         (*pt) /= k;                                                                             \
     }
 
-#define MAT_JNI(cls, type)      \
-    MAT_CREATE(cls, type)       \
-    MAT_CREATEA(cls, type)      \
-    MAT_CREATEM(cls, type)      \
-    MAT_GETDATA(cls, type)      \
-    MAT_GETFACTOR(cls, type)    \
-    MAT_SETFACTOR(cls, type)    \
-    MAT_EQUAL(cls, type)        \
-    MAT_PLUSA(cls, type)        \
-    MAT_MINUSA(cls, type)       \
-    MAT_TIMESA(cls, type)       \
+#define MAT_JNI(cls, point, vec, type)  \
+    MAT_CREATE(cls, type)               \
+    MAT_CREATEA(cls, type)              \
+    MAT_CREATEM(cls, type)              \
+    MAT_GETDATA(cls, type)              \
+    MAT_GETFACTOR(cls, type)            \
+    MAT_SETFACTOR(cls, type)            \
+    MAT_EQUAL(cls, type)                \
+    MAT_PLUSA(cls, type)                \
+    MAT_MINUSA(cls, type)               \
+    MAT_TIMESA(cls, type)               \
+    MAT_TIMESP(cls, point, type)        \
+    MAT_TIMESV(cls, vec, type)          \
     MAT_DIVA(cls, type)

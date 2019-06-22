@@ -105,7 +105,7 @@ namespace math {
         Coords operator - (Coords const& pt) const {
             Coords r(*this); r -= pt; return r;
         }
-        I operator * (Coords const& pt) const {
+        template<bool PT> I operator * (Coords<I,DEG,PT> const& pt) const {
             I r = 0;
             for (size_t i = 0; i < DEG; ++i) {
                 r += m_data[i] * pt[i];

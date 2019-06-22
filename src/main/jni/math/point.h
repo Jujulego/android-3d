@@ -103,6 +103,15 @@ namespace math {
             return r;
         }
 
+        template<bool PT> I operator * (Coords<I,DEG,PT> const& v) const {
+            I r = 0;
+            for (size_t i = 0; i < DEG; ++i) {
+                r += m_data[i] * v[i];
+            }
+
+            return r;
+        }
+
         // Méthodes
         size_t size() const {
             return DEG;

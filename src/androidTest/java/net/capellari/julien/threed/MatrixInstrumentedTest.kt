@@ -87,15 +87,16 @@ class MatrixInstrumentedTest {
         assertEquals(matrix(5, 1, 1, 5), mat)
     }
     @Test fun times_v2i() {
-        val mat = Mat2i.identity()
+        val mat = matrix(1, 2, 3, 4)
         val v = vector(4, 7)
 
-        assertEquals(vector(4, 7), mat * v)
+        assertEquals(vector(18, 40), mat * v)
+        assertEquals(vector(25, 36), v * mat)
     }
     @Test fun times_p2i() {
-        val mat = Mat2i.identity()
-        val pt = point(4, 7)
+        val mat = matrix(1, 2, 3, 4)
+        val v = point(4, 7)
 
-        assertEquals(vector(4, 7), mat * pt)
+        assertEquals(point(18, 40), mat * v)
     }
 }
