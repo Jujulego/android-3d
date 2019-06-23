@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <array>
 #include <type_traits>
+#include <complex.h>
 
 #include "vector.h"
 #include "point.h"
@@ -110,7 +111,7 @@ namespace math {
             Matrix r(*this); r /= k; return r;
         }
 
-        template <bool PT> Coords<I,LIG, PT> operator * (Coords<I,COL,PT> const& v) const {
+        template <bool PT> Coords<I,LIG,PT> operator * (Coords<I,COL,PT> const& v) const {
             Coords<I,LIG,PT> r;
 
             for (size_t l = 0; l < LIG; ++l) {
@@ -161,6 +162,28 @@ namespace math {
 template<class I,size_t LIG,size_t COL>
 math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m) {
     return m * k;
+}
+
+template<class I, size_t LIG, size_t COL, bool PT>
+math::Coords<I,COL,PT> operator * (math::Coords<I,LIG,PT> const& v, math::Matrix<I,LIG,COL> const& m) {
+    math::Coords<I,COL,PT> r;
+
+    for (size_t c = 0; c < COL; ++c) {
+        r[c] = v * m.col(c);
+    }
+
+    return r;
+}
+
+template<class I, size_t DEG, bool PT>
+math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,DEG,DEG> const& m) {
+    math::Coords<I,DEG,PT> tmp(v);
+
+    for (size_t c = 0; c < DEG; ++c) {
+        v[c] = tmp * m.col(c);
+    }
+
+    return v;
 }
 
 // Macros JNI
@@ -278,6 +301,15 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
         return ptr->get_jhandle();                                                              \
     }
 
+#define COORDS_TIMESMA(cls, mat, type)                                                          \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, timesMA)(JNIEnv* env, jobject jthis, jobject jm) {              \
+        auto ptv = jni::fromJava<cls>(env, jthis);                                              \
+        auto ptm = jni::fromJava<mat>(env, jm);                                                 \
+                                                                                                \
+        (*ptv) *= (*ptm);                                                                       \
+    }
+
 #define MAT_DIVA(cls, type)                                                                     \
     extern "C" JNIEXPORT                                                                        \
     void JNICALL METH_NAME(cls, divA)(JNIEnv* env, jobject jthis, type k) {                     \
@@ -298,5 +330,7 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
     MAT_MINUSA(cls, type)               \
     MAT_TIMESA(cls, type)               \
     MAT_TIMESP(cls, point, type)        \
+    COORDS_TIMESMA(point, cls, type)    \
     MAT_TIMESV(cls, vec, type)          \
+    COORDS_TIMESMA(vec, cls, type)      \
     MAT_DIVA(cls, type)
