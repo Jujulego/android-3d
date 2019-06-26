@@ -15,8 +15,8 @@ class MatrixInstrumentedTest {
         assertEquals(true,  mat == matrix(1, 2, 3, 4))
         assertEquals(false, mat == matrix(1, 5, 5, 1))
 
-        // get data
-        assertEquals(true, intArrayOf(1, 2, 3, 4).contentEquals(mat.data))
+        // get data (by columns not lines)
+        assertArrayEquals(intArrayOf(1, 3, 2, 4), mat.data)
 
         // get
         assertEquals(1, mat[0,0])
@@ -38,6 +38,13 @@ class MatrixInstrumentedTest {
 
         mat[0,1] = 4
         assertEquals(matrix(7, 4, 3, 4), mat)
+    }
+    @Test fun coord_gen_2i() {
+        val matl = Mat2i { l, c -> l }
+        assertEquals(matrix(0, 0, 1, 1), matl)
+
+        val matc = Mat2i { l, c -> c }
+        assertEquals(matrix(0, 1, 0, 1), matc)
     }
     @Test fun unary_2i() {
         val mat = matrix(5, 1, 1, 5)
@@ -86,6 +93,20 @@ class MatrixInstrumentedTest {
         mat /= 2
         assertEquals(matrix(5, 1, 1, 5), mat)
     }
+    @Test fun times_m2i() {
+        var m1 = matrix(1, 2, 3, 4)
+        var m2 = matrix(5, 6, 7, 8)
+
+        assertEquals(matrix(19, 22, 43, 50), m1 * m2)
+        assertEquals(matrix(23, 34, 31, 46), m2 * m1)
+
+        m1 *= m2
+        assertEquals(matrix(19, 22, 43, 50), m1)
+
+        m1 = matrix(1, 2, 3, 4)
+        m2 *= m1
+        assertEquals(matrix(23, 34, 31, 46), m2)
+    }
     @Test fun times_v2i() {
         val mat = matrix(1, 2, 3, 4)
         val v = vector(4, 7)
@@ -97,6 +118,10 @@ class MatrixInstrumentedTest {
         val mat = matrix(1, 2, 3, 4)
         val v = point(4, 7)
 
+        assertEquals(18, mat.lig(0) * v)
+        assertEquals(40, mat.lig(1) * v)
+
         assertEquals(point(18, 40), mat * v)
+        assertEquals(point(25, 36), v * mat)
     }
 }

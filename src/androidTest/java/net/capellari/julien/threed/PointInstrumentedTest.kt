@@ -156,9 +156,9 @@ class PointInstrumentedTest {
         assertEquals(point(2, 4, 2, 7), pt)
     }
     @Test fun times_2i() {
-        // dot product
-        assertEquals(0, point(0, 1) * point(1, 0))
-        assertEquals(0, point(0, 1) * vector(1, 0))
+        // dot product        assertEquals(44, vector(4, 6) * vector(8, 2))
+        assertEquals(44, point(4, 6) * point(8, 2))
+        assertEquals(44, point(4, 6) * vector(8, 2))
     }
     @Test fun times_3i() {
         // dot product

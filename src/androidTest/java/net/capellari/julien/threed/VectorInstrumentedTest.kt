@@ -218,6 +218,7 @@ class VectorInstrumentedTest {
     @Test fun scalar_2i() {
         // times (scalar)
         assertEquals(44, vector(4, 6) * vector(8, 2))
+        assertEquals(44, vector(4, 6) * point(8, 2))
     }
     @Test fun scalar_3i() {
         // times (scalar)

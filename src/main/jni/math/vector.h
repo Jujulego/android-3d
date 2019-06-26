@@ -156,5 +156,25 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
 }
 
 // Macros JNI
-#define VECTOR_JNI(cls, type, ...)          \
-    COORD_JNI(cls, type, __VA_ARGS__)
+#define VECTOR_TIMESV(cls, type)                                                                \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {               \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptv = jni::fromJava<cls>(env, jv);                                                 \
+                                                                                                \
+        return (*pt) * (*ptv);                                                                  \
+    }
+
+#define VECTOR_TIMESP(cls, point, type)                                                         \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, timesP)(JNIEnv* env, jobject jthis, jobject jpt) {              \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptp = jni::fromJava<point>(env, jpt);                                              \
+                                                                                                \
+        return (*pt) * (*ptp);                                                                  \
+    }
+
+#define VECTOR_JNI(cls, point, type, ...)           \
+    COORD_JNI(cls, type, __VA_ARGS__)               \
+    VECTOR_TIMESV(cls, type)                        \
+    VECTOR_TIMESP(cls, point, type)

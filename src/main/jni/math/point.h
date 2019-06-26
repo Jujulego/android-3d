@@ -140,5 +140,25 @@ namespace math {
 }
 
 // Macros JNI
-#define POINT_JNI(cls, type, ...)           \
-    COORD_JNI(cls, type, __VA_ARGS__)
+#define POINT_TIMESP(cls, type)                                                                 \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, timesP)(JNIEnv* env, jobject jthis, jobject jpt) {              \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptp = jni::fromJava<cls>(env, jpt);                                                \
+                                                                                                \
+        return (*pt) * (*ptp);                                                                  \
+    }
+
+#define POINT_TIMESV(cls, vec, type)                                                            \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {               \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptv = jni::fromJava<vec>(env, jv);                                                 \
+                                                                                                \
+        return (*pt) * (*ptv);                                                                  \
+    }
+
+#define POINT_JNI(cls, vec, type, ...)      \
+    COORD_JNI(cls, type, __VA_ARGS__)       \
+    POINT_TIMESP(cls, type)                 \
+    POINT_TIMESV(cls, vec, type)

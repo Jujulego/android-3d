@@ -24,7 +24,7 @@ namespace math {
         std::array<I,LIG*COL> m_data;
 
         // Méthodes
-        size_t to_index(size_t c, size_t l) const {
+        size_t to_index(size_t l, size_t c) const {
             return l + (c * LIG);
         }
 
@@ -38,8 +38,10 @@ namespace math {
         Matrix(Matrix const& m): m_data(m.m_data) {}
 
         Matrix(I factors[LIG*COL]) {
-            for (size_t i = 0; i < LIG*COL; ++i) {
-                m_data[i] = factors[i];
+            for (size_t l = 0; l < LIG; ++l) {
+                for (size_t c = 0; c < COL; ++c) {
+                    m_data[to_index(l, c)] = factors[c + (l * COL)];
+                }
             }
         }
 
@@ -186,6 +188,32 @@ math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,D
     return v;
 }
 
+template<class I, size_t L, size_t LC, size_t C>
+math::Matrix<I,L,C> operator * (math::Matrix<I,L,LC> const& m1, math::Matrix<I,LC,C> const& m2) {
+    math::Matrix<I,L,C> res;
+
+    for (size_t l = 0; l < L; ++l) {
+        for (size_t c = 0; c < C; ++c) {
+            res[math::P(l,c)] = m1.lig(l) * m2.col(c);
+        }
+    }
+
+    return res;
+}
+
+template<class I,size_t DEG>
+math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<I,DEG,DEG> const& m2) {
+    math::Matrix<I,DEG,DEG> tmp(m1);
+
+    for (size_t l = 0; l < DEG; ++l) {
+        for (size_t c = 0; c < DEG; ++c) {
+            m1[math::P(l,c)] = tmp.lig(l) * m2.col(c);
+        }
+    }
+
+    return m1;
+}
+
 // Macros JNI
 #define MAT_CREATE(cls, type)                                                                   \
     extern "C" JNIEXPORT                                                                        \
@@ -230,16 +258,16 @@ math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,D
 
 #define MAT_GETFACTOR(cls, type)                                                                \
     extern "C" JNIEXPORT                                                                        \
-    type JNICALL METH_NAME(cls, getFactor)(JNIEnv* env, jobject jthis, jint c, jint l) {        \
+    type JNICALL METH_NAME(cls, getFactor)(JNIEnv* env, jobject jthis, jint l, jint c) {        \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        return (*pt)[math::P(c, l)];                                                            \
+        return (*pt)[math::P(l,c)];                                                            \
     }
 
 #define MAT_SETFACTOR(cls, type)                                                                \
     extern "C" JNIEXPORT                                                                        \
-    void JNICALL METH_NAME(cls, setFactor)(JNIEnv* env, jobject jthis, jint c, jint l, type v) {\
+    void JNICALL METH_NAME(cls, setFactor)(JNIEnv* env, jobject jthis, jint l, jint c, type v) {\
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        (*pt)[math::P(c, l)] = v;                                                               \
+        (*pt)[math::P(l,c)] = v;                                                               \
     }
 
 #define MAT_EQUAL(cls, type)                                                                    \
@@ -275,6 +303,27 @@ math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,D
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
                                                                                                 \
         (*pt) *= k;                                                                             \
+    }
+
+#define MAT_TIMESM(cls, type)                                                                   \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, timesM)(JNIEnv* env, jobject jthis, jobject jmat) {            \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptm = jni::fromJava<cls>(env, jmat);                                               \
+                                                                                                \
+        auto ptr = std::make_shared<cls>((*pt) * (*ptm));                                       \
+        ptr->register_jni(true);                                                                \
+                                                                                                \
+        return ptr->get_jhandle();                                                              \
+    }
+
+#define MAT_TIMESMA(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, timesMA)(JNIEnv* env, jobject jthis, jobject jmat) {            \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        auto ptm = jni::fromJava<cls>(env, jmat);                                               \
+                                                                                                \
+        (*pt) *= (*ptm);                                                                        \
     }
 
 #define MAT_TIMESP(cls, point, type)                                                            \
@@ -329,6 +378,8 @@ math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,D
     MAT_PLUSA(cls, type)                \
     MAT_MINUSA(cls, type)               \
     MAT_TIMESA(cls, type)               \
+    MAT_TIMESM(cls, type)               \
+    MAT_TIMESMA(cls, type)              \
     MAT_TIMESP(cls, point, type)        \
     COORDS_TIMESMA(point, cls, type)    \
     MAT_TIMESV(cls, vec, type)          \
