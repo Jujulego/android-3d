@@ -8,9 +8,6 @@ import net.capellari.julien.threed.math.Coord
 import net.capellari.julien.threed.math.D2
 
 @Generate(
-    Generator(POINT, NumberType.INT, 2),
-    Generator(POINT, NumberType.FLOAT, 2),
-
     Generator(VECTOR, NumberType.INT, 2),
     Generator(VECTOR, NumberType.FLOAT, 2),
 

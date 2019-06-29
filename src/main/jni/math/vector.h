@@ -5,13 +5,18 @@
 
 #include <algorithm>
 #include <array>
+#include <memory>
+#include <type_traits>
 
-#include "coords.h"
 #include "jnitools.h"
+#include "macros.h"
 
 namespace math {
     // Template
-    template<class I, size_t DEG> class Coords<I,DEG,false>: public jni::JNIClass {
+    template<class I, size_t DEG> class Vector: public jni::JNIClass {
+        static_assert(DEG >= 2, "DEG should be at least 2");
+        static_assert(std::is_arithmetic<I>::value, "I must be an arithmetic type");
+
     private:
         // Attributs
         std::array<I,DEG> m_data;
@@ -29,18 +34,18 @@ namespace math {
         using difference_type = ptrdiff_t;
 
         // Constructeurs
-        Coords() {
+        Vector() {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] = 0;
             }
         };
-        Coords(I factors[DEG]) {
+        Vector(I factors[DEG]) {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] = factors[i];
             }
         }
-        Coords(Coords const& c): m_data(c.m_data) {};
-        template<class... Args> explicit Coords(Args const&... v): m_data({v...}) {
+        Vector(Vector const& c): m_data(c.m_data) {};
+        template<class... Args> explicit Vector(Args const&... v): m_data({v...}) {
             static_assert(sizeof...(Args) == DEG, "Need exactly DEG args");
         };
 
@@ -48,11 +53,11 @@ namespace math {
         I&       operator [] (size_t i)       { return m_data[i]; }
         I const& operator [] (size_t i) const { return m_data[i]; }
 
-        bool operator == (Coords const& c) const { return  std::equal(begin(), end(), c.begin()); }
-        bool operator != (Coords const& c) const { return !std::equal(begin(), end(), c.begin()); }
+        bool operator == (Vector const& c) const { return  std::equal(begin(), end(), c.begin()); }
+        bool operator != (Vector const& c) const { return !std::equal(begin(), end(), c.begin()); }
 
-        Coords operator + () const {
-            Coords r;
+        Vector operator + () const {
+            Vector r;
 
             for (size_t i = 0; i < DEG; ++i) {
                 r[i] = +m_data[i];
@@ -60,8 +65,8 @@ namespace math {
 
             return r;
         }
-        Coords operator - () const {
-            Coords r;
+        Vector operator - () const {
+            Vector r;
 
             for (size_t i = 0; i < DEG; ++i) {
                 r[i] = -m_data[i];
@@ -70,28 +75,28 @@ namespace math {
             return r;
         }
 
-        Coords& operator += (Coords const& c) {
+        Vector& operator += (Vector const& c) {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] += c[i];
             }
 
             return *this;
         }
-        Coords& operator -= (Coords const& c) {
+        Vector& operator -= (Vector const& c) {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] -= c[i];
             }
 
             return *this;
         }
-        Coords& operator *= (I const& k) {
+        Vector& operator *= (I const& k) {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] *= k;
             }
 
             return *this;
         }
-        Coords& operator /= (I const& k) {
+        Vector& operator /= (I const& k) {
             for (size_t i = 0; i < DEG; ++i) {
                 m_data[i] /= k;
             }
@@ -99,26 +104,26 @@ namespace math {
             return *this;
         }
 
-        Coords operator + (Coords const& pt) const {
-            Coords r(*this); r += pt; return r;
+        Vector operator + (Vector const& v) const {
+            Vector r(*this); r += v; return r;
         }
-        Coords operator - (Coords const& pt) const {
-            Coords r(*this); r -= pt; return r;
+        Vector operator - (Vector const& v) const {
+            Vector r(*this); r -= v; return r;
         }
-        template<bool PT> I operator * (Coords<I,DEG,PT> const& pt) const {
+        I operator * (Vector<I,DEG> const& v) const {
             I r = 0;
             for (size_t i = 0; i < DEG; ++i) {
-                r += m_data[i] * pt[i];
+                r += m_data[i] * v[i];
             }
 
             return r;
         }
-        Coords operator * (I const& k) const {
-            Coords r(*this); r *= k;
+        Vector operator * (I const& k) const {
+            Vector r(*this); r *= k;
             return r;
         }
-        Coords operator / (I const& k) const {
-            Coords r(*this); r /= k;
+        Vector operator / (I const& k) const {
+            Vector r(*this); r /= k;
             return r;
         }
 
@@ -138,8 +143,6 @@ namespace math {
     };
 
     // Alias
-    template<class I, size_t DEG> using Vector = Coords<I,DEG,false>;
-
     using Vec2i = Vector<int,2>;
     using Vec3i = Vector<int,3>;
     using Vec4i = Vector<int,4>;
@@ -156,7 +159,71 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
 }
 
 // Macros JNI
-#define VECTOR_TIMESV(cls, type)                                                                \
+#define VEC_CREATE(cls, type, ...)                                                              \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, create)(JNIEnv*, jclass, TYPE_ARGS(type, __VA_ARGS__)) {       \
+        auto pt = std::make_shared<cls>(ARGS(__VA_ARGS__));                                     \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define VEC_CREATEA(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, createA)(JNIEnv* env, jclass, type ## Array factors) {         \
+        jni::array<type ## Array> arr(env, factors);                                            \
+        auto pt = std::make_shared<cls>(arr.data());                                            \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define VEC_CREATEC(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    jlong JNICALL METH_NAME(cls, createC)(JNIEnv* env, jclass, jobject jobj) {                  \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+        auto pt = std::make_shared<cls>(*pto);                                                  \
+        pt->register_jni(true);                                                                 \
+                                                                                                \
+        return pt->get_jhandle();                                                               \
+    }
+
+#define VEC_GETDATA(cls, type)                                                                  \
+    extern "C" JNIEXPORT                                                                        \
+    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+                                                                                                \
+        auto data = pt->data();                                                                 \
+        jni::array<type ## Array> jarr(env, data.size());                                       \
+        std::copy(data.begin(), data.end(), jarr.begin());                                      \
+                                                                                                \
+        return jarr;                                                                            \
+    }
+
+#define VEC_GETCOORD(cls, type)                                                                 \
+    extern "C" JNIEXPORT                                                                        \
+    type JNICALL METH_NAME(cls, getCoord)(JNIEnv* env, jobject jthis, jint i) {                 \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        return (*pt)[i];                                                                        \
+    }
+
+#define VEC_SETCOORD(cls, type)                                                                 \
+    extern "C" JNIEXPORT                                                                        \
+    void JNICALL METH_NAME(cls, setCoord)(JNIEnv* env, jobject jthis, jint i, type v) {         \
+        auto pt = jni::fromJava<cls>(env, jthis);                                               \
+        (*pt)[i] = v;                                                                           \
+    }
+
+#define VEC_EQUAL(cls, type)                                                                    \
+    extern "C" JNIEXPORT                                                                        \
+    jboolean JNICALL METH_NAME(cls, equal)(JNIEnv* env, jobject jthis, jobject jobj) {          \
+        auto ptt = jni::fromJava<cls>(env, jthis);                                              \
+        auto pto = jni::fromJava<cls>(env, jobj);                                               \
+                                                                                                \
+        return (jboolean) ((*ptt) == (*pto));                                                   \
+    }
+
+#define VEC_TIMESV(cls, type)                                                                   \
     extern "C" JNIEXPORT                                                                        \
     type JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {               \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
@@ -165,16 +232,12 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
         return (*pt) * (*ptv);                                                                  \
     }
 
-#define VECTOR_TIMESP(cls, point, type)                                                         \
-    extern "C" JNIEXPORT                                                                        \
-    type JNICALL METH_NAME(cls, timesP)(JNIEnv* env, jobject jthis, jobject jpt) {              \
-        auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        auto ptp = jni::fromJava<point>(env, jpt);                                              \
-                                                                                                \
-        return (*pt) * (*ptp);                                                                  \
-    }
-
-#define VECTOR_JNI(cls, point, type, ...)           \
-    COORD_JNI(cls, type, __VA_ARGS__)               \
-    VECTOR_TIMESV(cls, type)                        \
-    VECTOR_TIMESP(cls, point, type)
+#define VECTOR_JNI(cls, type, ...)        \
+    VEC_CREATE(  cls, type, __VA_ARGS__)  \
+    VEC_CREATEA( cls, type)               \
+    VEC_CREATEC( cls, type)               \
+    VEC_GETDATA( cls, type)               \
+    VEC_GETCOORD(cls, type)               \
+    VEC_SETCOORD(cls, type)               \
+    VEC_EQUAL(   cls, type)               \
+    VEC_TIMESV(cls, type)

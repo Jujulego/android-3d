@@ -9,148 +9,153 @@ import org.junit.runner.RunWith
 class VectorInstrumentedTest {
     // Tests
     @Test fun native_2i() {
-        val pt = vector(5, 1)
+        val v = vector(5, 1)
 
         // equal
-        assertEquals(true,  pt == vector(5, 1))
-        assertEquals(false, pt == vector(1, 5))
+        assertEquals(true,  v == vector(5, 1))
+        assertEquals(false, v == vector(1, 5))
 
         // get
-        assertEquals(5, pt.x)
-        assertEquals(1, pt.y)
+        assertEquals(5, v.x)
+        assertEquals(1, v.y)
 
         // set
-        pt.x = 7
-        assertEquals(vector(7, 1), pt)
+        v.x = 7
+        assertEquals(vector(7, 1), v)
 
-        pt.y = 4
-        assertEquals(vector(7, 4), pt)
+        v.y = 4
+        assertEquals(vector(7, 4), v)
     }
     @Test fun native_3i() {
-        val pt = vector(5, 1, 5)
+        val v = vector(5, 1, 5)
 
         // equal
-        assertEquals(true,  pt == vector(5, 1, 5))
-        assertEquals(false, pt == vector(1, 5, 1))
+        assertEquals(true,  v == vector(5, 1, 5))
+        assertEquals(false, v == vector(1, 5, 1))
 
         // get
-        assertEquals(5, pt.x)
-        assertEquals(1, pt.y)
-        assertEquals(5, pt.z)
+        assertEquals(5, v.x)
+        assertEquals(1, v.y)
+        assertEquals(5, v.z)
 
         // set
-        pt.x = 7
-        assertEquals(vector(7, 1, 5), pt)
+        v.x = 7
+        assertEquals(vector(7, 1, 5), v)
 
-        pt.y = 4
-        assertEquals(vector(7, 4, 5), pt)
+        v.y = 4
+        assertEquals(vector(7, 4, 5), v)
 
-        pt.z = 8
-        assertEquals(vector(7, 4, 8), pt)
+        v.z = 8
+        assertEquals(vector(7, 4, 8), v)
     }
     @Test fun native_4i() {
-        val pt = vector(5, 1, 5, 8)
+        val v = vector(5, 1, 5, 8)
 
         // equal
-        assertEquals(true,  pt == vector(5, 1, 5, 8))
-        assertEquals(false, pt == vector(1, 5, 1, 8))
+        assertEquals(true,  v == vector(5, 1, 5, 8))
+        assertEquals(false, v == vector(1, 5, 1, 8))
 
         // get
-        assertEquals(5, pt.x)
-        assertEquals(1, pt.y)
-        assertEquals(5, pt.z)
-        assertEquals(8, pt.a)
+        assertEquals(5, v.x)
+        assertEquals(1, v.y)
+        assertEquals(5, v.z)
+        assertEquals(8, v.a)
 
         // set
-        pt.x = 7
-        assertEquals(vector(7, 1, 5, 8), pt)
+        v.x = 7
+        assertEquals(vector(7, 1, 5, 8), v)
 
-        pt.y = 4
-        assertEquals(vector(7, 4, 5, 8), pt)
+        v.y = 4
+        assertEquals(vector(7, 4, 5, 8), v)
 
-        pt.z = 8
-        assertEquals(vector(7, 4, 8, 8), pt)
+        v.z = 8
+        assertEquals(vector(7, 4, 8, 8), v)
 
-        pt.a = 1
-        assertEquals(vector(7, 4, 8, 1), pt)
+        v.a = 1
+        assertEquals(vector(7, 4, 8, 1), v)
+    }
+    @Test fun point_3i() {
+        val pt = point(5, 2)
+
+        assertEquals(vector(5, 2, 1), pt)
     }
     @Test fun unary_2i() {
-        val pt = vector(5, 1)
+        val v = vector(5, 1)
 
-        assertEquals(vector( 5,  1), +pt)
-        assertEquals(vector(-5, -1), -pt)
+        assertEquals(vector( 5,  1), +v)
+        assertEquals(vector(-5, -1), -v)
     }
     @Test fun unary_3i() {
-        val pt = vector(5, 1, 5)
+        val v = vector(5, 1, 5)
 
-        assertEquals(vector( 5,  1,  5), +pt)
-        assertEquals(vector(-5, -1, -5), -pt)
+        assertEquals(vector( 5,  1,  5), +v)
+        assertEquals(vector(-5, -1, -5), -v)
     }
     @Test fun unary_4i() {
-        val pt = vector(5, 1, 5, 8)
+        val v = vector(5, 1, 5, 8)
 
-        assertEquals(vector( 5,  1,  5,  8), +pt)
-        assertEquals(vector(-5, -1, -5, -8), -pt)
+        assertEquals(vector( 5,  1,  5,  8), +v)
+        assertEquals(vector(-5, -1, -5, -8), -v)
     }
     @Test fun plus_2i() {
-        val pt = vector(5, 1)
+        val v = vector(5, 1)
 
         // plus
-        assertEquals(vector(10, 10), pt + vector(5, 9))
+        assertEquals(vector(10, 10), v + vector(5, 9))
 
         // plus assign
-        pt += vector(5, 9)
-        assertEquals(vector(10, 10), pt)
+        v += vector(5, 9)
+        assertEquals(vector(10, 10), v)
     }
     @Test fun plus_3i() {
-        val pt = vector(5, 1, 5)
+        val v = vector(5, 1, 5)
 
         // plus
-        assertEquals(vector(10, 10, 10), pt + vector(5, 9, 5))
+        assertEquals(vector(10, 10, 10), v + vector(5, 9, 5))
 
         // plus assign
-        pt += vector(5, 9, 5)
-        assertEquals(vector(10, 10, 10), pt)
+        v += vector(5, 9, 5)
+        assertEquals(vector(10, 10, 10), v)
     }
     @Test fun plus_4i() {
-        val pt = vector(5, 1, 5, 8)
+        val v = vector(5, 1, 5, 8)
 
         // plus
-        assertEquals(vector(10, 10, 10, 10), pt + vector(5, 9, 5, 2))
+        assertEquals(vector(10, 10, 10, 10), v + vector(5, 9, 5, 2))
 
         // plus assign
-        pt += vector(5, 9, 5, 2)
-        assertEquals(vector(10, 10, 10, 10), pt)
+        v += vector(5, 9, 5, 2)
+        assertEquals(vector(10, 10, 10, 10), v)
     }
     @Test fun minus_2i() {
-        val pt = vector(5, 1)
+        val v = vector(5, 1)
 
         // minus
-        assertEquals(vector(0, -8), pt - vector(5, 9))
+        assertEquals(vector(0, -8), v - vector(5, 9))
 
         // minus assign
-        pt -= vector(5, 9)
-        assertEquals(vector(0, -8), pt)
+        v -= vector(5, 9)
+        assertEquals(vector(0, -8), v)
     }
     @Test fun minus_3i() {
-        val pt = vector(5, 1, 5)
+        val v = vector(5, 1, 5)
 
         // minus
-        assertEquals(vector(0, -8, 0), pt - vector(5, 9, 5))
+        assertEquals(vector(0, -8, 0), v - vector(5, 9, 5))
 
         // minus assign
-        pt -= vector(5, 9, 5)
-        assertEquals(vector(0, -8, 0), pt)
+        v -= vector(5, 9, 5)
+        assertEquals(vector(0, -8, 0), v)
     }
     @Test fun minus_4i() {
-        val pt = vector(5, 1, 5, 8)
+        val v = vector(5, 1, 5, 8)
 
         // minus
-        assertEquals(vector(0, -8, 0, 6), pt - vector(5, 9, 5, 2))
+        assertEquals(vector(0, -8, 0, 6), v - vector(5, 9, 5, 2))
 
         // minus assign
-        pt -= vector(5, 9, 5, 2)
-        assertEquals(vector(0, -8, 0, 6), pt)
+        v -= vector(5, 9, 5, 2)
+        assertEquals(vector(0, -8, 0, 6), v)
     }
     @Test fun times_2i() {
         val v = vector(8, 12)
@@ -218,7 +223,6 @@ class VectorInstrumentedTest {
     @Test fun scalar_2i() {
         // times (scalar)
         assertEquals(44, vector(4, 6) * vector(8, 2))
-        assertEquals(44, vector(4, 6) * point(8, 2))
     }
     @Test fun scalar_3i() {
         // times (scalar)
@@ -234,148 +238,148 @@ class VectorInstrumentedTest {
     }
 
     @Test fun native_2f() {
-        val pt = vector(5f, 1f)
+        val v = vector(5f, 1f)
 
         // equal
-        assertEquals(true,  pt == vector(5f, 1f))
-        assertEquals(false, pt == vector(1f, 5f))
+        assertEquals(true,  v == vector(5f, 1f))
+        assertEquals(false, v == vector(1f, 5f))
 
         // get
-        assertEquals(5f, pt.x)
-        assertEquals(1f, pt.y)
+        assertEquals(5f, v.x)
+        assertEquals(1f, v.y)
 
         // set
-        pt.x = 7f
-        assertEquals(vector(7f, 1f), pt)
+        v.x = 7f
+        assertEquals(vector(7f, 1f), v)
 
-        pt.y = 4f
-        assertEquals(vector(7f, 4f), pt)
+        v.y = 4f
+        assertEquals(vector(7f, 4f), v)
     }
     @Test fun native_3f() {
-        val pt = vector(5f, 1f, 8f)
+        val v = vector(5f, 1f, 8f)
 
         // equal
-        assertEquals(true,  pt == vector(5f, 1f, 8f))
-        assertEquals(false, pt == vector(1f, 5f, 8f))
+        assertEquals(true,  v == vector(5f, 1f, 8f))
+        assertEquals(false, v == vector(1f, 5f, 8f))
 
         // get
-        assertEquals(5f, pt.x)
-        assertEquals(1f, pt.y)
-        assertEquals(8f, pt.z)
+        assertEquals(5f, v.x)
+        assertEquals(1f, v.y)
+        assertEquals(8f, v.z)
 
         // set
-        pt.x = 7f
-        assertEquals(vector(7f, 1f, 8f), pt)
+        v.x = 7f
+        assertEquals(vector(7f, 1f, 8f), v)
 
-        pt.y = 4f
-        assertEquals(vector(7f, 4f, 8f), pt)
+        v.y = 4f
+        assertEquals(vector(7f, 4f, 8f), v)
 
-        pt.z = 2f
-        assertEquals(vector(7f, 4f, 2f), pt)
+        v.z = 2f
+        assertEquals(vector(7f, 4f, 2f), v)
     }
     @Test fun native_4f() {
-        val pt = vector(5f, 1f, 8f, 4f)
+        val v = vector(5f, 1f, 8f, 4f)
 
         // equal
-        assertEquals(true,  pt == vector(5f, 1f, 8f, 4f))
-        assertEquals(false, pt == vector(1f, 5f, 8f, 4f))
+        assertEquals(true,  v == vector(5f, 1f, 8f, 4f))
+        assertEquals(false, v == vector(1f, 5f, 8f, 4f))
 
         // get
-        assertEquals(5f, pt.x)
-        assertEquals(1f, pt.y)
-        assertEquals(8f, pt.z)
-        assertEquals(4f, pt.a)
+        assertEquals(5f, v.x)
+        assertEquals(1f, v.y)
+        assertEquals(8f, v.z)
+        assertEquals(4f, v.a)
 
         // set
-        pt.x = 7f
-        assertEquals(vector(7f, 1f, 8f, 4f), pt)
+        v.x = 7f
+        assertEquals(vector(7f, 1f, 8f, 4f), v)
 
-        pt.y = 4f
-        assertEquals(vector(7f, 4f, 8f, 4f), pt)
+        v.y = 4f
+        assertEquals(vector(7f, 4f, 8f, 4f), v)
 
-        pt.z = 2f
-        assertEquals(vector(7f, 4f, 2f, 4f), pt)
+        v.z = 2f
+        assertEquals(vector(7f, 4f, 2f, 4f), v)
 
-        pt.a = 5f
-        assertEquals(vector(7f, 4f, 2f, 5f), pt)
+        v.a = 5f
+        assertEquals(vector(7f, 4f, 2f, 5f), v)
     }
     @Test fun unary_2f() {
-        val pt = vector(5f, 1f)
+        val v = vector(5f, 1f)
 
-        assertEquals(vector( 5f,  1f), +pt)
-        assertEquals(vector(-5f, -1f), -pt)
+        assertEquals(vector( 5f,  1f), +v)
+        assertEquals(vector(-5f, -1f), -v)
     }
     @Test fun unary_3f() {
-        val pt = vector(5f, 1f, 4f)
+        val v = vector(5f, 1f, 4f)
 
-        assertEquals(vector( 5f,  1f,  4f), +pt)
-        assertEquals(vector(-5f, -1f, -4f), -pt)
+        assertEquals(vector( 5f,  1f,  4f), +v)
+        assertEquals(vector(-5f, -1f, -4f), -v)
     }
     @Test fun unary_4f() {
-        val pt = vector(5f, 1f, 4f, 7f)
+        val v = vector(5f, 1f, 4f, 7f)
 
-        assertEquals(vector( 5f,  1f,  4f,  7f), +pt)
-        assertEquals(vector(-5f, -1f, -4f, -7f), -pt)
+        assertEquals(vector( 5f,  1f,  4f,  7f), +v)
+        assertEquals(vector(-5f, -1f, -4f, -7f), -v)
     }
     @Test fun plus_2f() {
-        val pt = vector(5f, 1f)
+        val v = vector(5f, 1f)
 
         // plus
-        assertEquals(vector(10f, 10f), pt + vector(5f, 9f))
+        assertEquals(vector(10f, 10f), v + vector(5f, 9f))
 
         // plus assign
-        pt += vector(5f, 9f)
-        assertEquals(vector(10f, 10f), pt)
+        v += vector(5f, 9f)
+        assertEquals(vector(10f, 10f), v)
     }
     @Test fun plus_3f() {
-        val pt = vector(5f, 1f, 4f)
+        val v = vector(5f, 1f, 4f)
 
         // plus
-        assertEquals(vector(10f, 10f, 10f), pt + vector(5f, 9f, 6f))
+        assertEquals(vector(10f, 10f, 10f), v + vector(5f, 9f, 6f))
 
         // plus assign
-        pt += vector(5f, 9f, 6f)
-        assertEquals(vector(10f, 10f, 10f), pt)
+        v += vector(5f, 9f, 6f)
+        assertEquals(vector(10f, 10f, 10f), v)
     }
     @Test fun plus_4f() {
-        val pt = vector(5f, 1f, 4f, 7f)
+        val v = vector(5f, 1f, 4f, 7f)
 
         // plus
-        assertEquals(vector(10f, 10f, 10f, 10f), pt + vector(5f, 9f, 6f, 3f))
+        assertEquals(vector(10f, 10f, 10f, 10f), v + vector(5f, 9f, 6f, 3f))
 
         // plus assign
-        pt += vector(5f, 9f, 6f, 3f)
-        assertEquals(vector(10f, 10f, 10f, 10f), pt)
+        v += vector(5f, 9f, 6f, 3f)
+        assertEquals(vector(10f, 10f, 10f, 10f), v)
     }
     @Test fun minus_2f() {
-        val pt = vector(5f, 1f)
+        val v = vector(5f, 1f)
 
         // minus
-        assertEquals(vector(0f, -8f), pt - vector(5f, 9f))
+        assertEquals(vector(0f, -8f), v - vector(5f, 9f))
 
         // minus assign
-        pt -= vector(5f, 9f)
-        assertEquals(vector(0f, -8f), pt)
+        v -= vector(5f, 9f)
+        assertEquals(vector(0f, -8f), v)
     }
     @Test fun minus_3f() {
-        val pt = vector(5f, 1f, 4f)
+        val v = vector(5f, 1f, 4f)
 
         // minus
-        assertEquals(vector(0f, -8f, -2f), pt - vector(5f, 9f, 6f))
+        assertEquals(vector(0f, -8f, -2f), v - vector(5f, 9f, 6f))
 
         // minus assign
-        pt -= vector(5f, 9f, 6f)
-        assertEquals(vector(0f, -8f, -2f), pt)
+        v -= vector(5f, 9f, 6f)
+        assertEquals(vector(0f, -8f, -2f), v)
     }
     @Test fun minus_4f() {
-        val pt = vector(5f, 1f, 4f, 7f)
+        val v = vector(5f, 1f, 4f, 7f)
 
         // minus
-        assertEquals(vector(0f, -8f, -2f, 4f), pt - vector(5f, 9f, 6f, 3f))
+        assertEquals(vector(0f, -8f, -2f, 4f), v - vector(5f, 9f, 6f, 3f))
 
         // minus assign
-        pt -= vector(5f, 9f, 6f, 3f)
-        assertEquals(vector(0f, -8f, -2f, 4f), pt)
+        v -= vector(5f, 9f, 6f, 3f)
+        assertEquals(vector(0f, -8f, -2f, 4f), v)
     }
     @Test fun times_2f() {
         val v = vector(8f, 12f)

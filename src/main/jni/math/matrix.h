@@ -9,7 +9,6 @@
 #include <complex.h>
 
 #include "vector.h"
-#include "point.h"
 
 namespace math {
     // Alias
@@ -17,6 +16,8 @@ namespace math {
 
     // Classe
     template<class I,size_t LIG,size_t COL> class Matrix: public jni::JNIClass {
+        static_assert(LIG >= 2, "LIG should be at least 2");
+        static_assert(COL >= 2, "COL should be at least 2");
         static_assert(std::is_arithmetic<I>::value, "I must be an arithmetic type");
 
     private:
@@ -113,8 +114,8 @@ namespace math {
             Matrix r(*this); r /= k; return r;
         }
 
-        template <bool PT> Coords<I,LIG,PT> operator * (Coords<I,COL,PT> const& v) const {
-            Coords<I,LIG,PT> r;
+        Vector<I,LIG> operator * (Vector<I,COL> const& v) const {
+            Vector<I,LIG> r;
 
             for (size_t l = 0; l < LIG; ++l) {
                 r[l] = lig(l) * v;
@@ -188,9 +189,9 @@ math::Matrix<I,LIG,COL> operator * (I const& k, math::Matrix<I,LIG,COL> const& m
     return m * k;
 }
 
-template<class I, size_t LIG, size_t COL, bool PT>
-math::Coords<I,COL,PT> operator * (math::Coords<I,LIG,PT> const& v, math::Matrix<I,LIG,COL> const& m) {
-    math::Coords<I,COL,PT> r;
+template<class I, size_t LIG, size_t COL>
+math::Vector<I,COL> operator * (math::Vector<I,LIG> const& v, math::Matrix<I,LIG,COL> const& m) {
+    math::Vector<I,COL> r;
 
     for (size_t c = 0; c < COL; ++c) {
         r[c] = v * m.col(c);
@@ -199,9 +200,9 @@ math::Coords<I,COL,PT> operator * (math::Coords<I,LIG,PT> const& v, math::Matrix
     return r;
 }
 
-template<class I, size_t DEG, bool PT>
-math::Coords<I,DEG,PT>& operator *= (math::Coords<I,DEG,PT>& v, math::Matrix<I,DEG,DEG> const& m) {
-    math::Coords<I,DEG,PT> tmp(v);
+template<class I, size_t DEG>
+math::Vector<I,DEG>& operator *= (math::Vector<I,DEG>& v, math::Matrix<I,DEG,DEG> const& m) {
+    math::Vector<I,DEG> tmp(v);
 
     for (size_t c = 0; c < DEG; ++c) {
         v[c] = tmp * m.col(c);
@@ -348,18 +349,6 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
         (*pt) *= (*ptm);                                                                        \
     }
 
-#define MAT_TIMESP(cls, point, type)                                                            \
-    extern "C" JNIEXPORT                                                                        \
-    jlong JNICALL METH_NAME(cls, timesP)(JNIEnv* env, jobject jthis, jobject jpt) {             \
-        auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        auto ptp = jni::fromJava<point>(env, jpt);                                              \
-                                                                                                \
-        auto ptr = std::make_shared<point>((*pt) * (*ptp));                                     \
-        ptr->register_jni(true);                                                                \
-                                                                                                \
-        return ptr->get_jhandle();                                                              \
-    }
-
 #define MAT_TIMESV(cls, vec, type)                                                              \
     extern "C" JNIEXPORT                                                                        \
     jlong JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {              \
@@ -389,7 +378,7 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
         (*pt) /= k;                                                                             \
     }
 
-#define MAT_JNI(cls, point, vec, type)  \
+#define MAT_JNI(cls, vec, type)  \
     MAT_CREATE(cls, type)               \
     MAT_CREATEA(cls, type)              \
     MAT_CREATEM(cls, type)              \
@@ -402,8 +391,6 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
     MAT_TIMESA(cls, type)               \
     MAT_TIMESM(cls, type)               \
     MAT_TIMESMA(cls, type)              \
-    MAT_TIMESP(cls, point, type)        \
-    COORDS_TIMESMA(point, cls, type)    \
     MAT_TIMESV(cls, vec, type)          \
     COORDS_TIMESMA(vec, cls, type)      \
     MAT_DIVA(cls, type)

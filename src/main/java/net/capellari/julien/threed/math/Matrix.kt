@@ -26,8 +26,6 @@ interface Matrix<T: Number, L: Dimension, C: Dimension> {
     /*operator fun timesAssign(mat: Matrix<T,L,C>)*/
     operator fun times(mat: Matrix<T,L,C>): Matrix<T,L,C>
 
-    operator fun times(pt: Point<T,C>): Point<T,C>
-
     operator fun times(v: Vector<T,C>): Vector<T,C>
 
     // Méthodes
