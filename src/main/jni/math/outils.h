@@ -6,6 +6,9 @@
 #include "vector.h"
 
 namespace math {
+    double length(double x, double y);
+    double length(double x, double y, double z);
+
     // Templates
     template<class I, size_t DEG> I&       x(Vector<I,DEG>&       v) { return v[0]; }
     template<class I, size_t DEG> I const& x(Vector<I,DEG> const& v) { return v[0]; }

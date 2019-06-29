@@ -140,4 +140,29 @@ class MatrixInstrumentedTest {
 
         assertEquals(point(2f, 3f, 4f), pt * mat)
     }
+
+    @Test fun rotate_4i() {
+        val pt = point(1, 1, 1)
+
+        // clkw = clock-wise    cclkw = counter clock-wise
+        assertEquals(point( 1, -1,  1), pt * rotate(-90.0, 1, 0, 0)) // 90 clkw x
+        assertEquals(point( 1,  1, -1), pt * rotate(-90.0, 0, 1, 0)) // 90 clkw y
+        assertEquals(point( 1, -1,  1), pt * rotate(-90.0, 0, 0, 1)) // 90 clkw z
+
+        assertEquals(point( 1,  1, -1), pt * rotate( 90.0, 1, 0, 0)) // 90 cclkw x
+        assertEquals(point(-1,  1,  1), pt * rotate( 90.0, 0, 1, 0)) // 90 cclkw y
+        assertEquals(point(-1,  1,  1), pt * rotate( 90.0, 0, 0, 1)) // 90 cclkw z
+    }
+    @Test fun rotate_4f() {
+        val pt = point(1f, 1f, 1f)
+
+        // clkw = clock-wise    cclkw = counter clock-wise
+        assertEquals(point( 1f, -1f,  1f), pt * rotate(-90.0, 1f, 0f, 0f)) // 90 clkw x
+        assertEquals(point( 1f,  1f, -1f), pt * rotate(-90.0, 0f, 1f, 0f)) // 90 clkw y
+        assertEquals(point( 1f, -1f,  1f), pt * rotate(-90.0, 0f, 0f, 1f)) // 90 clkw z
+
+        assertEquals(point( 1f,  1f, -1f), pt * rotate( 90.0, 1f, 0f, 0f)) // 90 cclkw x
+        assertEquals(point(-1f,  1f,  1f), pt * rotate( 90.0, 0f, 1f, 0f)) // 90 cclkw y
+        assertEquals(point(-1f,  1f,  1f), pt * rotate( 90.0, 0f, 0f, 1f)) // 90 cclkw z
+    }
 }

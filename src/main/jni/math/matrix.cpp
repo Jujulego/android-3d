@@ -46,3 +46,18 @@ jobject JNICALL METH_NAME(Mat4f, translate)(JNIEnv* env, jobject jthis, jfloat d
 
     return jthis;
 }
+
+extern "C" JNIEXPORT
+long JNICALL METH_NAME(Mat4i, nrotate)(JNIEnv*, jclass, jdouble a, jint x, jint y, jint z) {
+    auto pt = std::make_shared<Mat4i>(matrix::rotate(a, x, y, z));
+    pt->register_jni(true);
+
+    return pt->get_jhandle();
+}
+extern "C" JNIEXPORT
+long JNICALL METH_NAME(Mat4f, nrotate)(JNIEnv*, jclass, jdouble a, jfloat x, jfloat y, jfloat z) {
+    auto pt = std::make_shared<Mat4f>(matrix::rotate(a, x, y, z));
+    pt->register_jni(true);
+
+    return pt->get_jhandle();
+}

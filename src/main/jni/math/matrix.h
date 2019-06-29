@@ -5,10 +5,13 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <type_traits>
+
 #include <complex.h>
 
 #include "vector.h"
+#include "outils.h"
 
 namespace math {
     // Alias
@@ -166,6 +169,58 @@ namespace math {
 
     // Outils
     namespace matrix {
+        template<class I> Mat4<I> rotate(double a, I x, I y, I z) {
+            Mat4<I> mat;
+            mat[P(3, 3)] = 1;
+
+            a *= (M_PI / 180);
+            double s = sin(a);
+            double c = cos(a);
+
+            if (x == 1 && y == 0 && z == 0) {
+                mat[P(0,0)] = 1;
+                mat[P(1,1)] = c; mat[P(2,2)] =  c;
+                mat[P(2,1)] = s; mat[P(1,2)] = -s;
+            } else if (x == 0 && y == 1 && z == 0) {
+                mat[P(1,1)] = 1;
+                mat[P(0,0)] = c; mat[P(2,2)] =  c;
+                mat[P(0,2)] = s; mat[P(2,0)] = -s;
+            } else if (x == 0 && y == 0 && z == 1) {
+                mat[P(2,2)] = 1;
+                mat[P(0,0)] = c; mat[P(1,1)] =  c;
+                mat[P(0,1)] = s; mat[P(1,0)] = -s;
+            } else {
+                double len = length(x, y, z);
+                if (len == 1) {
+                    double r = 1 / len;
+                    x *= r;
+                    y *= r;
+                    z *= r;
+                }
+
+                I xy = x * y;
+                I yz = y * z;
+                I zx = z * x;
+
+                double nc = 1 - c;
+                double xs = x * s;
+                double ys = y * s;
+                double zs = z * s;
+
+                mat[P(0,0)] = x*x*nc +  c;
+                mat[P(0,1)] =  xy*nc - zs;
+                mat[P(0,2)] =  zx*nc + ys;
+                mat[P(1,0)] =  xy*nc + zs;
+                mat[P(1,1)] = y*y*nc +  c;
+                mat[P(1,2)] =  yz*nc - xs;
+                mat[P(2,0)] =  zx*nc - ys;
+                mat[P(2,1)] =  yz*nc + xs;
+                mat[P(2,2)] = z*z*nc +  c;
+            }
+
+            return mat;
+        }
+
         template<class I> Mat4<I>& scale(Mat4<I>& mat, I fx, I fy, I fz) {
             mat[P(0,0)] *= fx;
             mat[P(1,1)] *= fy;
