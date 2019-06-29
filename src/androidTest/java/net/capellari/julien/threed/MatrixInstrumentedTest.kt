@@ -124,4 +124,35 @@ class MatrixInstrumentedTest {
         assertEquals(point(18, 40), mat * v)
         assertEquals(point(25, 36), v * mat)
     }
+
+    @Test fun scale_4i() {
+        val mat = scale(2, 2, 2)
+        val pt = point(1, 1, 1, 1)
+
+        assertEquals(point(2, 2, 2, 1), pt * mat)
+    }
+    @Test fun scale_4f() {
+        val mat = scale(2f, 2f, 2f)
+        val pt = point(1f, 1f, 1f, 1f)
+
+        assertEquals(point(2f, 2f, 2f, 1f), pt * mat)
+    }
+
+    @Test fun translate_4i() {
+        val mat = translate(1, 2, 3)
+        val pt = point(1, 1, 1, 1)
+
+        assertEquals(matrix(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            1, 2, 3, 1), mat)
+        assertEquals(point(2, 3, 4, 1), pt * mat)
+    }
+    @Test fun translate_4f() {
+        val mat = translate(1f, 2f, 3f)
+        val pt = point(1f, 1f, 1f, 0f)
+
+        assertEquals(point(2f, 3f, 4f, 0f), pt * mat)
+    }
 }

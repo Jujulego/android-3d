@@ -151,13 +151,35 @@ namespace math {
     };
 
     // Alias
-    using Mat2i = Matrix<int,2,2>;
-    using Mat3i = Matrix<int,3,3>;
-    using Mat4i = Matrix<int,4,4>;
+    template<class I> using Mat2 = Matrix<I,2,2>;
+    template<class I> using Mat3 = Matrix<I,3,3>;
+    template<class I> using Mat4 = Matrix<I,4,4>;
 
-    using Mat2f = Matrix<float,2,2>;
-    using Mat3f = Matrix<float,3,3>;
-    using Mat4f = Matrix<float,4,4>;
+    using Mat2i = Mat2<int>;
+    using Mat3i = Mat3<int>;
+    using Mat4i = Mat4<int>;
+
+    using Mat2f = Mat2<float>;
+    using Mat3f = Mat3<float>;
+    using Mat4f = Mat4<float>;
+
+    // Outils
+    namespace matrix {
+        template<class I> Mat4<I>& scale(Mat4<I>& mat, I fx, I fy, I fz) {
+            mat[P(0,0)] *= fx;
+            mat[P(1,1)] *= fy;
+            mat[P(2,2)] *= fz;
+
+            return mat;
+        }
+        template<class I> Mat4<I>& translate(Mat4<I>& mat, I dx, I dy, I dz) {
+            for (int c = 0; c < 4; ++c) {
+                mat[P(3,c)] += mat[P(0,c)] * dx + mat[P(1,c)] * dy + mat[P(2,c)] * dz;
+            }
+
+            return mat;
+        }
+    }
 }
 
 // Opérateurs externes
