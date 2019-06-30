@@ -10,3 +10,15 @@ inline operator fun <reified T: Number, reified D: Dimension>
 
 inline operator fun <reified T: Number, reified L: Dimension, reified C: Dimension>
         T.times(m: Matrix<T,L,C>): Matrix<T,L,C> = m * this
+
+inline fun <reified T: Number, reified L: Dimension, reified C: Dimension, reified R> Matrix<T,L,C>.factors(cb: (l: Int, c: Int, v: T) -> R): Array<R> {
+    var res = arrayOf<R>()
+
+    for (l in 0 until size.lig) {
+        for (c in 0 until size.col) {
+            res += cb(l, c, this[l,c])
+        }
+    }
+
+    return res
+}
