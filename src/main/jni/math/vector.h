@@ -143,13 +143,26 @@ namespace math {
     };
 
     // Alias
-    using Vec2i = Vector<int,2>;
-    using Vec3i = Vector<int,3>;
-    using Vec4i = Vector<int,4>;
+    template<class I> using Vec2 = Vector<I,2>;
+    template<class I> using Vec3 = Vector<I,3>;
+    template<class I> using Vec4 = Vector<I,4>;
 
-    using Vec2f = Vector<float,2>;
-    using Vec3f = Vector<float,3>;
-    using Vec4f = Vector<float,4>;
+    using Vec2i = Vec2<int>;
+    using Vec3i = Vec3<int>;
+    using Vec4i = Vec4<int>;
+
+    using Vec2f = Vec2<float>;
+    using Vec3f = Vec3<float>;
+    using Vec4f = Vec4<float>;
+
+    // Outils
+    template<class I> Vec3<I> cross(Vec3<I> const& v1, Vec3<I> const& v2) {
+        return Vec3<I>(
+                v1[1] * v2[2] - v1[2] * v2[1],
+                v1[0] * v2[2] - v1[2] * v2[0],
+                v1[0] * v2[1] - v1[1] * v2[0]
+        );
+    }
 }
 
 // Opérateurs externes
