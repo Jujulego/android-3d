@@ -169,6 +169,28 @@ namespace math {
 
     // Outils
     namespace matrix {
+        template<class I> Mat4<I>& scale(Mat4<I>& mat, I fx, I fy, I fz) {
+            mat[P(0,0)] *= fx;
+            mat[P(1,1)] *= fy;
+            mat[P(2,2)] *= fz;
+
+            return mat;
+        }
+        template<class I> Mat4<I>& scale(Mat4<I>& mat, Vec3<I> const& f) {
+            return scale(mat, f[0], f[1], f[2]);
+        }
+
+        template<class I> Mat4<I>& translate(Mat4<I>& mat, I dx, I dy, I dz) {
+            for (int l = 0; l < 4; ++l) {
+                mat[P(l,3)] += mat[P(l,0)] * dx + mat[P(l,1)] * dy + mat[P(l,2)] * dz;
+            }
+
+            return mat;
+        }
+        template<class I> Mat4<I>& translate(Mat4<I>& mat, Vec3<I> const& d) {
+            return translate(mat, d[0], d[1], d[2]);
+        }
+
         template<class I> Mat4<I> rotate(double a, I x, I y, I z) {
             Mat4<I> mat;
             mat[P(3, 3)] = 1;
@@ -220,20 +242,30 @@ namespace math {
 
             return mat;
         }
-
-        template<class I> Mat4<I>& scale(Mat4<I>& mat, I fx, I fy, I fz) {
-            mat[P(0,0)] *= fx;
-            mat[P(1,1)] *= fy;
-            mat[P(2,2)] *= fz;
-
-            return mat;
+        template<class I> Mat4<I> rotate(double a, Vec3<I> const& axe) {
+            return rotate(a, axe[0], axe[1], axe[2]);
         }
-        template<class I> Mat4<I>& translate(Mat4<I>& mat, I dx, I dy, I dz) {
-            for (int c = 0; c < 4; ++c) {
-                mat[P(3,c)] += mat[P(0,c)] * dx + mat[P(1,c)] * dy + mat[P(2,c)] * dz;
-            }
 
-            return mat;
+        template<class I> Mat4<I> lookAt(Vec3<I> const& eye, Vec3<I> const& center, Vec3<I> const& up) {
+            // Compute f
+            Vec3<I> f = center - eye;
+            f /= f.length();
+
+            // Compute s
+            Vec3<I> s = cross(f, up);
+            s /= s.length();
+
+            // Compute u
+            Vec3<I> u = cross(s, f);
+
+            // Compute m
+            Mat4<I> m;
+            m[P(0,0)] =  s[0];  m[P(0,1)] =  s[1];  m[P(0,2)] =  s[2];
+            m[P(1,0)] =  u[0];  m[P(1,1)] =  u[1];  m[P(1,2)] =  u[2];
+            m[P(2,0)] = -f[0];  m[P(2,1)] = -f[1];  m[P(2,2)] = -f[2];
+                                                                        m[P(3,3)] = 1;
+
+            return translate(m, -eye);
         }
     }
 }
