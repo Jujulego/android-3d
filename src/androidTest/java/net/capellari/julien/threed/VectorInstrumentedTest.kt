@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class VectorInstrumentedTest {
-    // Tests
+    // Tests (i)
     @Test fun native_2i() {
         val v = vector(5, 1)
 
@@ -237,6 +237,7 @@ class VectorInstrumentedTest {
         assertEquals(vector(0, 0, 1), vector(1, 0, 0) cross vector(0, 1, 0))
     }
 
+    // Tests (f)
     @Test fun native_2f() {
         val v = vector(5f, 1f)
 
