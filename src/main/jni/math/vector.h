@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <memory>
 #include <type_traits>
 
@@ -136,6 +137,15 @@ namespace math {
             return m_data;
         }
 
+        double length() const {
+            I sum2 = 0;
+            for (size_t i = 0; i < DEG; ++i) {
+                sum2 += m_data[i] * m_data[i];
+            }
+
+            return sqrt(sum2);
+        }
+
         iterator       begin()       { return m_data.begin(); }
         const_iterator begin() const { return m_data.begin(); }
         iterator       end()         { return m_data.end();   }
@@ -159,7 +169,7 @@ namespace math {
     template<class I> Vec3<I> cross(Vec3<I> const& v1, Vec3<I> const& v2) {
         return Vec3<I>(
                 v1[1] * v2[2] - v1[2] * v2[1],
-                v1[0] * v2[2] - v1[2] * v2[0],
+                v1[2] * v2[0] - v1[0] * v2[2],
                 v1[0] * v2[1] - v1[1] * v2[0]
         );
     }
