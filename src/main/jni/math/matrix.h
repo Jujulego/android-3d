@@ -8,8 +8,8 @@
 #include <cmath>
 #include <type_traits>
 
-#include <complex.h>
-
+#include "jnitools.h"
+#include "macros.h"
 #include "vector.h"
 #include "outils.h"
 
