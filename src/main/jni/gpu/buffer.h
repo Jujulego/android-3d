@@ -26,6 +26,8 @@ private:
 public:
     // Constructors
     Buffer();
+    Buffer(Buffer const&) = delete;
+    Buffer(Buffer&&) = delete;
 
     // Destructor
     virtual ~Buffer();
@@ -38,11 +40,15 @@ public:
     void set(GLsizeiptr size, GLvoid const *data, GLenum usage = GL_STATIC_DRAW);
     void update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const;
 
+    void copy(Buffer const& buffer, GLintptr from, GLintptr to, GLsizeiptr size) const;
+
     // Accessors
     bool isGenerated() const noexcept;
     bool isBounded() const noexcept;
 
-    GLuint const& target() const noexcept;
+    GLuint const& id() const noexcept;
+    GLenum const& target() const noexcept;
     GLsizeiptr const& size() const noexcept;
+
     GLenum usage() const;
 };

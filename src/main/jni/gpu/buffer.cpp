@@ -78,6 +78,25 @@ void Buffer::update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const 
     }
 }
 
+void Buffer::copy(Buffer const& buffer, GLintptr from, GLintptr to, GLsizeiptr size) const {
+    // lock both buffers (order : smaller id first)
+    std::lock_guard<std::recursive_mutex> lck1((m_id < buffer.m_id) ? m_mtx : buffer.m_mtx);
+    std::lock_guard<std::recursive_mutex> lck2((m_id < buffer.m_id) ? buffer.m_mtx : m_mtx);
+
+    // Checks
+    if (from >= buffer.m_size)        throw std::overflow_error("from is greater than size");
+    if (from + size >= buffer.m_size) throw std::overflow_error("from + size is greater than size");
+
+    if (to >= m_size)        throw std::overflow_error("to is greater than size");
+    if (to + size >= m_size) throw std::overflow_error("to + size is greater than size");
+
+    if (isBounded() && buffer.isBounded()) {
+        glCopyBufferSubData(buffer.m_target, m_target, from, to, size);
+    } else {
+        throw std::runtime_error("buffers needs to be bound before being copied");
+    }
+}
+
 void Buffer::unbound() noexcept {
     std::lock_guard<std::recursive_mutex> lck(m_mtx);
 
@@ -99,7 +118,11 @@ bool Buffer::isBounded() const noexcept {
     return m_bounded > 0;
 }
 
-GLuint const& Buffer::target() const noexcept {
+GLuint const& Buffer::id() const noexcept {
+    return m_id;
+}
+
+GLenum const& Buffer::target() const noexcept {
     return m_target;
 }
 
