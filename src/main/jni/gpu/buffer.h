@@ -3,28 +3,30 @@
 //
 #pragma once
 
+#include <mutex>
 #include <vector>
+
 #include <GLES3/gl32.h>
 
 // Class
 class Buffer {
 private:
     // Attributes
-    GLuint m_target;
-    GLenum m_id = GL_INVALID_INDEX;
+    GLenum m_target;
+    GLuint m_id = GL_INVALID_INDEX;
     GLsizeiptr m_size;
 
     unsigned m_bounded = 0;
-
-protected:
-    // Constructors
-    Buffer();
+    mutable std::recursive_mutex m_mtx;
 
     // Methods
     void generate() noexcept;
     void destroy() noexcept;
 
 public:
+    // Constructors
+    Buffer();
+
     // Destructor
     virtual ~Buffer();
 
@@ -37,10 +39,10 @@ public:
     void update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const;
 
     // Accessors
-    bool isGenerated() const;
-    bool isBounded() const;
+    bool isGenerated() const noexcept;
+    bool isBounded() const noexcept;
 
-    GLuint const& target() const;
-    GLsizeiptr const& size() const;
+    GLuint const& target() const noexcept;
+    GLsizeiptr const& size() const noexcept;
     GLenum usage() const;
 };
