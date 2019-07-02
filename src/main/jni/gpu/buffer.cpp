@@ -22,9 +22,7 @@ Buffer::~Buffer() {
 void Buffer::generate() noexcept {
     std::lock_guard<std::recursive_mutex> lck(m_mtx);
 
-    if (!isGenerated()) {
-        glGenBuffers(1, &m_id);
-    }
+    if (!isGenerated()) glGenBuffers(1, &m_id);
 }
 
 void Buffer::destroy() noexcept {
@@ -70,13 +68,8 @@ void Buffer::update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const 
     std::lock_guard<std::recursive_mutex> lck(m_mtx);
 
     // Checks
-    if (offset >= m_size) {
-        throw std::overflow_error("offset is greater than size");
-    }
-
-    if (offset + size >= m_size) {
-        throw std::overflow_error("offset + size is greater than size");
-    }
+    if (offset >= m_size)        throw std::overflow_error("offset is greater than size");
+    if (offset + size >= m_size) throw std::overflow_error("offset + size is greater than size");
 
     if (isBounded()) {
         glBufferSubData(m_target, offset, size, data);

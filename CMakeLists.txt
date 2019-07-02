@@ -38,6 +38,7 @@ add_library(android3d SHARED
 
         # - gpu
         src/main/jni/gpu/buffer.cpp
+        src/main/jni/gpu/guard.cpp
 )
 
 target_link_libraries(android3d ${log-lib} GLESv3) # assimp)
