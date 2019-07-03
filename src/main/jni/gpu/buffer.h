@@ -8,47 +8,58 @@
 
 #include <GLES3/gl32.h>
 
-// Class
-class Buffer {
-private:
-    // Attributes
-    GLenum m_target;
-    GLuint m_id = GL_INVALID_INDEX;
-    GLsizeiptr m_size;
+namespace gpu {
+    // Class
+    class Buffer {
+    private:
+        // Attributes
+        GLenum m_target;
+        GLuint m_id = GL_INVALID_INDEX;
+        GLsizeiptr m_size;
 
-    unsigned m_bounded = 0;
-    mutable std::recursive_mutex m_mtx;
+        unsigned m_bounded = 0;
+        mutable std::recursive_mutex m_mtx;
 
-    // Methods
-    void generate() noexcept;
-    void destroy() noexcept;
+        // Methods
+        void generate() noexcept;
 
-public:
-    // Constructors
-    Buffer();
-    Buffer(Buffer const&) = delete;
-    Buffer(Buffer&&) = delete;
+        void destroy() noexcept;
 
-    // Destructor
-    virtual ~Buffer();
+    public:
+        // Constructors
+        Buffer();
 
-    // Methods
-    void bound(GLenum target);
-    void unbound() noexcept;
+        Buffer(Buffer const&) = delete;
 
-    void allocate(GLsizeiptr size, GLenum usage = GL_STATIC_DRAW);
-    void set(GLsizeiptr size, GLvoid const *data, GLenum usage = GL_STATIC_DRAW);
-    void update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const;
+        Buffer(Buffer&&) = delete;
 
-    void copy(Buffer const& buffer, GLintptr from, GLintptr to, GLsizeiptr size) const;
+        // Destructor
+        virtual ~Buffer();
 
-    // Accessors
-    bool isGenerated() const noexcept;
-    bool isBounded() const noexcept;
+        // Methods
+        void bound(GLenum target);
 
-    GLuint const& id() const noexcept;
-    GLenum const& target() const noexcept;
-    GLsizeiptr const& size() const noexcept;
+        void unbound() noexcept;
 
-    GLenum usage() const;
-};
+        void allocate(GLsizeiptr size, GLenum usage = GL_STATIC_DRAW);
+
+        void set(GLsizeiptr size, GLvoid const* data, GLenum usage = GL_STATIC_DRAW);
+
+        void update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const;
+
+        void copy(Buffer const& buffer, GLintptr from, GLintptr to, GLsizeiptr size) const;
+
+        // Accessors
+        bool isGenerated() const noexcept;
+
+        bool isBounded() const noexcept;
+
+        GLuint const& id() const noexcept;
+
+        GLenum const& target() const noexcept;
+
+        GLsizeiptr const& size() const noexcept;
+
+        GLenum usage() const;
+    };
+}

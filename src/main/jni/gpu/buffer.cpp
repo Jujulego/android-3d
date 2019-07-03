@@ -7,6 +7,8 @@
 
 #include "buffer.h"
 
+using namespace gpu;
+
 // Constructor
 Buffer::Buffer() {
     generate();
@@ -49,7 +51,7 @@ void Buffer::bound(GLenum target) {
     }
 }
 
-void Buffer::set(GLsizeiptr size, GLvoid const *data, GLenum usage) {
+void Buffer::set(GLsizeiptr size, GLvoid const* data, GLenum usage) {
     std::lock_guard<std::recursive_mutex> lck(m_mtx);
 
     if (isBounded()) {
@@ -68,7 +70,7 @@ void Buffer::update(GLintptr offset, GLsizeiptr size, GLvoid const* data) const 
     std::lock_guard<std::recursive_mutex> lck(m_mtx);
 
     // Checks
-    if (offset >= m_size)        throw std::overflow_error("offset is greater than size");
+    if (offset >= m_size) throw std::overflow_error("offset is greater than size");
     if (offset + size >= m_size) throw std::overflow_error("offset + size is greater than size");
 
     if (isBounded()) {
@@ -84,10 +86,10 @@ void Buffer::copy(Buffer const& buffer, GLintptr from, GLintptr to, GLsizeiptr s
     std::lock_guard<std::recursive_mutex> lck2((m_id < buffer.m_id) ? buffer.m_mtx : m_mtx);
 
     // Checks
-    if (from >= buffer.m_size)        throw std::overflow_error("from is greater than size");
+    if (from >= buffer.m_size) throw std::overflow_error("from is greater than size");
     if (from + size >= buffer.m_size) throw std::overflow_error("from + size is greater than size");
 
-    if (to >= m_size)        throw std::overflow_error("to is greater than size");
+    if (to >= m_size) throw std::overflow_error("to is greater than size");
     if (to + size >= m_size) throw std::overflow_error("to + size is greater than size");
 
     if (isBounded() && buffer.isBounded()) {

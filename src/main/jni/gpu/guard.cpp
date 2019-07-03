@@ -3,6 +3,8 @@
 //
 #include "guard.h"
 
+using namespace gpu;
+
 // Constructor
 bound_guard::bound_guard(Buffer &buffer, GLenum target): m_buffer(buffer) {
     m_buffer.bound(target);

@@ -7,20 +7,22 @@
 
 #include "buffer.h"
 
-// Class
-class bound_guard {
-private:
-    // Attributes
-    Buffer& m_buffer;
-    bool m_bounded = false;
+namespace gpu {
+    // Class
+    class bound_guard {
+    private:
+        // Attributes
+        Buffer& m_buffer;
+        bool m_bounded = false;
 
-public:
-    // Constructors
-    bound_guard(Buffer& buffer, GLenum target);
+    public:
+        // Constructors
+        bound_guard(Buffer& buffer, GLenum target);
 
-    // Destructor
-    ~bound_guard();
+        // Destructor
+        ~bound_guard();
 
-    // Methods
-    void unbound() noexcept;
-};
+        // Methods
+        void unbound() noexcept;
+    };
+}
