@@ -16,6 +16,7 @@ abstract class JNIClass {
     // Constructeur
     protected constructor(nativeHandle: Long) {
         this.nativeHandle = nativeHandle
+        assert(nativeHandle != 0L)
         assert(acquire())
     }
 

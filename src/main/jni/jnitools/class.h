@@ -8,12 +8,14 @@
 
 #include "convert.h"
 
+#define INVALID_HANDLE 0UL
+
 namespace jni {
     // Classes
     class JNIClass: public std::enable_shared_from_this<JNIClass> {
     private:
         // Attributs
-        unsigned long handle = 0UL;
+        unsigned long handle = INVALID_HANDLE;
 
     public:
         // Destructeur

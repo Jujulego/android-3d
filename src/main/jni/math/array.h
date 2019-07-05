@@ -98,8 +98,13 @@ namespace math {
     extern "C" JNIEXPORT                                                        \
     jlong JNICALL METH_NAME(cls, nget)(JNIEnv* env, jobject jthis, jint i) {    \
         auto pt = jni::fromJava<cls>(env, jthis);                               \
+        auto ptr = pt->get(i);                                                  \
                                                                                 \
-        return pt->get(i)->get_jhandle();                                       \
+        jlong handle = ptr->get_jhandle();                                      \
+        if (handle == INVALID_HANDLE) ptr->register_jni();                      \
+        ptr->acquire();                                                         \
+                                                                                \
+        return ptr->get_jhandle();                                              \
     }
 
 #define VECARR_SET(cls, vec)                                                                \

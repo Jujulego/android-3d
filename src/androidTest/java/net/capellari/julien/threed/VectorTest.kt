@@ -6,7 +6,7 @@ import org.junit.Assert.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class VectorInstrumentedTest {
+class VectorTest {
     // Tests (i)
     @Test fun native_2i() {
         val v = vector(5, 1)
