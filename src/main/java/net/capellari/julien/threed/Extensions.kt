@@ -3,6 +3,14 @@ package net.capellari.julien.threed
 import net.capellari.julien.threed.math.Dimension
 import net.capellari.julien.threed.math.Matrix
 import net.capellari.julien.threed.math.Vector
+import net.capellari.julien.threed.math.VectorArray
+
+// Array
+inline fun <reified V: Vector<*,*>> VectorArray<V>.forEach(cb: (V) -> Unit) {
+    for (i in 0 until size) {
+        cb(get(i))
+    }
+}
 
 // Math
 inline operator fun <reified T: Number, reified D: Dimension>

@@ -7,4 +7,7 @@ interface VectorArray<V: Vector<*,*>> {
     // Operators
     operator fun get(i: Int): V
     operator fun set(i: Int, value: V)
+
+    // Methods
+    fun add(v: V)
 }

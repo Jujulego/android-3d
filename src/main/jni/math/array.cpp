@@ -6,4 +6,4 @@
 using namespace math;
 
 // JNI
-VECTOR_ARRAY_JNI(VectorArray2i, jint)
+VECTOR_ARRAY_JNI(VectorArray2i, Vec2i, jint)
