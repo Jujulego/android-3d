@@ -213,7 +213,7 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
 
 #define VEC_GETDATA(cls, type)                                                                  \
     extern "C" JNIEXPORT                                                                        \
-    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
+    type ## Array JNICALL METH_NAME(cls, getData)(JNIEnv* env, jobject jthis) {                 \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
                                                                                                 \
         auto data = pt->data();                                                                 \
@@ -255,12 +255,18 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
         return (*pt) * (*ptv);                                                                  \
     }
 
-#define VECTOR_JNI(cls, type, ...)        \
-    VEC_CREATE(  cls, type, __VA_ARGS__)  \
-    VEC_CREATEA( cls, type)               \
-    VEC_CREATEC( cls, type)               \
-    VEC_GETDATA( cls, type)               \
-    VEC_GETCOORD(cls, type)               \
-    VEC_SETCOORD(cls, type)               \
-    VEC_EQUAL(   cls, type)               \
-    VEC_TIMESV(cls, type)
+#define VEC_CONVERT(cls)                                                                            \
+    template<> jobject jni::toJava<cls,jobject>(JNIEnv* env, cls const& obj) {                      \
+        return jni::construct(env, "net/capellari/julien/threed/" #cls, "(J)V", obj.get_jhandle()); \
+    }
+
+#define VECTOR_JNI(cls, type, ...)          \
+    VEC_CREATE(  cls, type, __VA_ARGS__)    \
+    VEC_CREATEA( cls, type)                 \
+    VEC_CREATEC( cls, type)                 \
+    VEC_GETDATA( cls, type)                 \
+    VEC_GETCOORD(cls, type)                 \
+    VEC_SETCOORD(cls, type)                 \
+    VEC_EQUAL(   cls, type)                 \
+    VEC_TIMESV(  cls, type)                 \
+    VEC_CONVERT( cls)

@@ -44,14 +44,14 @@ namespace jni {
     }
 
     // - contructeur
-    template<class... Args> inline localref<jobject> construct(JNIEnv* env, jclass jcls, std::string const& sig, Args const& ... args) {
+    template<class... Args> inline jobject construct(JNIEnv* env, jclass jcls, std::string const& sig, Args const& ... args) {
         jmethodID constructor = findMethod(env, jcls, "<init>", sig);
-        return localref<jobject>(env, env->NewObject(jcls, constructor, args...));
+        return env->NewObject(jcls, constructor, args...);
     }
 
-    template<class... Args> inline localref<jobject> construct(JNIEnv* env, std::string const& cls, std::string const& sig, Args const& ... args) {
+    template<class... Args> inline jobject construct(JNIEnv* env, std::string const& cls, std::string const& sig, Args const& ... args) {
         localref<jclass> jcls = findClass(env, cls);
-        return localref<jobject>(env, construct(env, jcls, sig, args...));
+        return construct(env, jcls, sig, args...);
     }
 
     // - throw

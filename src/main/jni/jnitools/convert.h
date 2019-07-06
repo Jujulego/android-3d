@@ -10,5 +10,5 @@
 namespace jni {
     // Outils
     template<class R,class J=jobject> R fromJava(JNIEnv* env, J jobj);
-    template<class R,class J=jobject> localref<J> toJava(JNIEnv* env, R const& obj);
+    template<class R,class J=jobject> J toJava(JNIEnv* env, R const& obj);
 }

@@ -356,7 +356,7 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
 
 #define MAT_GETDATA(cls, type)                                                                  \
     extern "C" JNIEXPORT                                                                        \
-    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
+    type ## Array JNICALL METH_NAME(cls, getData)(JNIEnv* env, jobject jthis) {                 \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
                                                                                                 \
         auto data = pt->data();                                                                 \
@@ -417,14 +417,14 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
 
 #define MAT_TIMESM(cls, type)                                                                   \
     extern "C" JNIEXPORT                                                                        \
-    jlong JNICALL METH_NAME(cls, timesM)(JNIEnv* env, jobject jthis, jobject jmat) {            \
+    jobject JNICALL METH_NAME(cls, timesM)(JNIEnv* env, jobject jthis, jobject jmat) {          \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
         auto ptm = jni::fromJava<cls>(env, jmat);                                               \
                                                                                                 \
         auto ptr = std::make_shared<cls>((*pt) * (*ptm));                                       \
         ptr->register_jni(true);                                                                \
                                                                                                 \
-        return ptr->get_jhandle();                                                              \
+        return jni::toJava(env, *ptr);                                                          \
     }
 
 #define MAT_TIMESMA(cls, type)                                                                  \
@@ -438,17 +438,17 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
 
 #define MAT_TIMESV(cls, vec, type)                                                              \
     extern "C" JNIEXPORT                                                                        \
-    jlong JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {              \
+    jobject JNICALL METH_NAME(cls, timesV)(JNIEnv* env, jobject jthis, jobject jv) {            \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
         auto ptv = jni::fromJava<vec>(env, jv);                                                 \
                                                                                                 \
         auto ptr = std::make_shared<vec>((*pt) * (*ptv));                                       \
         ptr->register_jni(true);                                                                \
                                                                                                 \
-        return ptr->get_jhandle();                                                              \
+        return jni::toJava(env, *ptr);                                                          \
     }
 
-#define COORDS_TIMESMA(cls, mat, type)                                                          \
+#define VEC_TIMESMA(cls, mat, type)                                                             \
     extern "C" JNIEXPORT                                                                        \
     void JNICALL METH_NAME(cls, timesMA)(JNIEnv* env, jobject jthis, jobject jm) {              \
         auto ptv = jni::fromJava<cls>(env, jthis);                                              \
@@ -465,19 +465,25 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
         (*pt) /= k;                                                                             \
     }
 
-#define MAT_JNI(cls, vec, type)  \
-    MAT_CREATE(cls, type)               \
-    MAT_CREATEA(cls, type)              \
-    MAT_CREATEM(cls, type)              \
-    MAT_GETDATA(cls, type)              \
-    MAT_GETFACTOR(cls, type)            \
-    MAT_SETFACTOR(cls, type)            \
-    MAT_EQUAL(cls, type)                \
-    MAT_PLUSA(cls, type)                \
-    MAT_MINUSA(cls, type)               \
-    MAT_TIMESA(cls, type)               \
-    MAT_TIMESM(cls, type)               \
-    MAT_TIMESMA(cls, type)              \
-    MAT_TIMESV(cls, vec, type)          \
-    COORDS_TIMESMA(vec, cls, type)      \
-    MAT_DIVA(cls, type)
+#define MAT_CONVERT(cls)                                                                            \
+    template<> jobject jni::toJava<cls,jobject>(JNIEnv* env, cls const& obj) {                      \
+        return jni::construct(env, "net/capellari/julien/threed/" #cls, "(J)V", obj.get_jhandle()); \
+    }
+
+#define MAT_JNI(cls, vec, type)     \
+    MAT_CONVERT(  cls)              \
+    MAT_CREATE(   cls, type)        \
+    MAT_CREATEA(  cls, type)        \
+    MAT_CREATEM(  cls, type)        \
+    MAT_GETDATA(  cls, type)        \
+    MAT_GETFACTOR(cls, type)        \
+    MAT_SETFACTOR(cls, type)        \
+    MAT_EQUAL(    cls, type)        \
+    MAT_PLUSA(    cls, type)        \
+    MAT_MINUSA(   cls, type)        \
+    MAT_TIMESA(   cls, type)        \
+    MAT_TIMESM(   cls, type)        \
+    MAT_TIMESMA(  cls, type)        \
+    MAT_TIMESV(   cls, vec, type)   \
+    VEC_TIMESMA(  vec, cls, type)   \
+    MAT_DIVA(     cls, type)

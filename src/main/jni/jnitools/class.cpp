@@ -59,7 +59,7 @@ void JNIClass::register_jni(bool acq) {
 }
 
 void JNIClass::acquire() {
-    assert(handle != 0);
+    assert(is_registred());
     assert(::acquire(handle));
 }
 
@@ -70,7 +70,11 @@ void JNIClass::dispose() {
     }
 }
 
-jlong JNIClass::get_jhandle() {
+bool JNIClass::is_registred() const {
+    return handle != INVALID_HANDLE;
+}
+
+jlong JNIClass::get_jhandle() const {
     return static_cast<jlong>(handle);
 }
 

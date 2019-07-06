@@ -26,7 +26,8 @@ namespace jni {
         void acquire();
         void dispose();
 
-        jlong get_jhandle();
+        bool is_registred() const;
+        jlong get_jhandle() const;
     };
 
     // Outils

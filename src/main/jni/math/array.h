@@ -96,7 +96,7 @@ namespace math {
 
 #define VECARR_GET(cls)                                                         \
     extern "C" JNIEXPORT                                                        \
-    jlong JNICALL METH_NAME(cls, nget)(JNIEnv* env, jobject jthis, jint i) {    \
+    jobject JNICALL METH_NAME(cls, get)(JNIEnv* env, jobject jthis, jint i) {    \
         auto pt = jni::fromJava<cls>(env, jthis);                               \
                                                                                 \
         if (i >= pt->size()) {                                                  \
@@ -105,12 +105,8 @@ namespace math {
         }                                                                       \
                                                                                 \
         auto ptr = pt->get(i);                                                  \
-                                                                                \
-        jlong handle = ptr->get_jhandle();                                      \
-        if (handle == INVALID_HANDLE) ptr->register_jni();                      \
-        ptr->acquire();                                                         \
-                                                                                \
-        return ptr->get_jhandle();                                              \
+        if (!ptr->is_registred()) ptr->register_jni();                          \
+        return jni::toJava(env, *ptr);                                          \
     }
 
 #define VECARR_SET(cls, vec)                                                                \
