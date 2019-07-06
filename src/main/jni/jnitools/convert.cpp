@@ -20,6 +20,6 @@ template<> std::string jni::fromJava<std::string>(JNIEnv* env, jstring jstr) {
 
     return ret;
 }
-template<> localref<jstring> jni::toJava(JNIEnv *env, const std::string &obj) {
+template<> localref<jstring> jni::toJava(JNIEnv *env, const std::string& obj) {
     return localref(env, env->NewStringUTF(obj.data()));
 }

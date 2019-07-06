@@ -30,6 +30,7 @@ add_library(android3d SHARED
         # - jnitools
         src/main/jni/jnitools/class.cpp
         src/main/jni/jnitools/convert.cpp
+        src/main/jni/jnitools/outils.cpp
 
         # - math
         src/main/jni/math/array.cpp

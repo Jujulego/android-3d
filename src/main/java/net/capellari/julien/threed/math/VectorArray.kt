@@ -9,5 +9,5 @@ interface VectorArray<V: Vector<*,*>> {
     operator fun set(i: Int, value: V)
 
     // Methods
-    fun add(v: V)
+    fun add(element: V): Boolean
 }

@@ -98,6 +98,12 @@ namespace math {
     extern "C" JNIEXPORT                                                        \
     jlong JNICALL METH_NAME(cls, nget)(JNIEnv* env, jobject jthis, jint i) {    \
         auto pt = jni::fromJava<cls>(env, jthis);                               \
+                                                                                \
+        if (i >= pt->size()) {                                                  \
+            jni::javaThrow(env, "java/lang/ArrayIndexOutOfBoundsException", "i out of bounds"); \
+            return 0;                                                           \
+        }                                                                       \
+                                                                                \
         auto ptr = pt->get(i);                                                  \
                                                                                 \
         jlong handle = ptr->get_jhandle();                                      \
@@ -116,13 +122,15 @@ namespace math {
         pt->get(i) = ptv;                                                                   \
     }
 
-#define VECARR_ADD(cls, vec)                                                        \
-    extern "C" JNIEXPORT                                                            \
-    void JNICALL METH_NAME(cls, add)(JNIEnv* env, jobject jthis, jobject jobj) {    \
-        auto pt = jni::fromJava<cls>(env, jthis);                                   \
-        auto ptv = jni::fromJava<vec>(env, jobj);                                   \
-                                                                                    \
-        pt->push(ptv);                                                              \
+#define VECARR_ADD(cls, vec)                                                            \
+    extern "C" JNIEXPORT                                                                \
+    jboolean JNICALL METH_NAME(cls, add)(JNIEnv* env, jobject jthis, jobject jobj) {    \
+        auto pt = jni::fromJava<cls>(env, jthis);                                       \
+        auto ptv = jni::fromJava<vec>(env, jobj);                                       \
+                                                                                        \
+        pt->push(ptv);                                                                  \
+                                                                                        \
+        return true;                                                                    \
     }
 
 #define VECARR_GETSIZE(cls)                                             \
