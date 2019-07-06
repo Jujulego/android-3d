@@ -96,7 +96,7 @@ namespace math {
 
 #define VECARR_GET(cls)                                                         \
     extern "C" JNIEXPORT                                                        \
-    jobject JNICALL METH_NAME(cls, get)(JNIEnv* env, jobject jthis, jint i) {    \
+    jlong JNICALL METH_NAME(cls, nget)(JNIEnv* env, jobject jthis, jint i) {    \
         auto pt = jni::fromJava<cls>(env, jthis);                               \
                                                                                 \
         if (i >= pt->size()) {                                                  \
@@ -106,12 +106,14 @@ namespace math {
                                                                                 \
         auto ptr = pt->get(i);                                                  \
         if (!ptr->is_registred()) ptr->register_jni();                          \
-        return jni::toJava(env, *ptr);                                          \
+        ptr->acquire();                                                         \
+                                                                                \
+        return ptr->get_jhandle();                                              \
     }
 
 #define VECARR_SET(cls, vec)                                                                \
     extern "C" JNIEXPORT                                                                    \
-    void JNICALL METH_NAME(cls, set)(JNIEnv* env, jobject jthis, jint i, jobject jobj) {    \
+    void JNICALL METH_NAME(cls, nset)(JNIEnv* env, jobject jthis, jint i, jobject jobj) {   \
         auto pt = jni::fromJava<cls>(env, jthis);                                           \
         auto ptv = jni::fromJava<vec>(env, jobj);                                           \
                                                                                             \
@@ -120,7 +122,7 @@ namespace math {
 
 #define VECARR_ADD(cls, vec)                                                            \
     extern "C" JNIEXPORT                                                                \
-    jboolean JNICALL METH_NAME(cls, add)(JNIEnv* env, jobject jthis, jobject jobj) {    \
+    jboolean JNICALL METH_NAME(cls, nadd)(JNIEnv* env, jobject jthis, jobject jobj) {   \
         auto pt = jni::fromJava<cls>(env, jthis);                                       \
         auto ptv = jni::fromJava<vec>(env, jobj);                                       \
                                                                                         \

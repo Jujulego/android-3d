@@ -356,7 +356,7 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
 
 #define MAT_GETDATA(cls, type)                                                                  \
     extern "C" JNIEXPORT                                                                        \
-    type ## Array JNICALL METH_NAME(cls, getData)(JNIEnv* env, jobject jthis) {                 \
+    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                 \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
                                                                                                 \
         auto data = pt->data();                                                                 \
