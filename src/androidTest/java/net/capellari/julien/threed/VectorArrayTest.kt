@@ -23,6 +23,26 @@ class VectorArrayTest {
         val arr = VectorArray2i(1)
         arr[8]
     }
+    @Test fun interator_2i() {
+        val arr = VectorArray2i(2)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(1, 1)
+
+        val it = arr.iterator()
+
+        assertFalse(it.hasPrevious())
+        assertTrue(it.hasNext())
+
+        assertEquals(vector(0, 0), it.next())
+
+        assertTrue(it.hasPrevious())
+        assertFalse(it.hasNext())
+
+        assertEquals(vector(0, 0), it.previous())
+
+        assertFalse(it.hasPrevious())
+        assertTrue(it.hasNext())
+    }
     @Test fun add_2i() {
         val arr = VectorArray2i()
         val v = vector(8, 4)
