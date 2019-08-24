@@ -28,7 +28,7 @@ class VectorArrayTest {
         arr[0] = vector(0, 0)
         arr[1] = vector(1, 1)
 
-        val it = arr.iterator()
+        val it = arr.listIterator()
 
         assertFalse(it.hasPrevious())
         assertTrue(it.hasNext())
@@ -54,5 +54,44 @@ class VectorArrayTest {
     @Test fun size_2i() {
         assertEquals(0, VectorArray2i().size)
         assertEquals(5, VectorArray2i(5).size)
+    }
+    @Test fun contains_2i() {
+        val arr = VectorArray2i(2)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(1, 1)
+
+        assertTrue(arr.contains(vector(1, 1)))
+        assertFalse(arr.contains(vector(2, 2)))
+    }
+    @Test fun containsAll_2i() {
+        val arr = VectorArray2i(2)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(1, 1)
+
+        assertTrue(arr.containsAll(listOf(vector(1, 1))))
+        assertFalse(arr.containsAll(listOf(vector(1, 1), vector(2, 2))))
+    }
+    @Test fun remove_existing_2i() {
+        val arr = VectorArray2i(3)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(1, 1)
+        arr[2] = vector(2, 2)
+
+        assertTrue(arr.remove(vector(1, 1)))
+
+        assertEquals(arr.size, 2)
+        assertEquals(arr[0], vector(0, 0))
+        assertEquals(arr[1], vector(2, 2))
+    }
+    @Test fun remove_absent_2i() {
+        val arr = VectorArray2i(2)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(2, 2)
+
+        assertFalse(arr.remove(vector(1, 1)))
+
+        assertEquals(arr.size, 2)
+        assertEquals(arr[0], vector(0, 0))
+        assertEquals(arr[1], vector(2, 2))
     }
 }
