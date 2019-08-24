@@ -46,7 +46,5 @@ interface VectorArray<V: Vector<*,*>>: MutableList<V> {
     override fun retainAll(elements: Collection<V>)
             = removeAll(filter { !elements.contains(it) })
 
-    override fun subList(fromIndex: Int, toIndex: Int): MutableList<V> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun subList(fromIndex: Int, toIndex: Int): VectorArray<V>
 }
