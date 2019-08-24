@@ -51,6 +51,17 @@ class VectorArrayTest {
         assertEquals(1, arr.size)
         assertSame(v, arr[0])
     }
+    @Test fun add_index_2i() {
+        val arr = VectorArray2i(2)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(2, 2)
+
+        val v = vector(8, 4)
+        arr.add(1, v)
+
+        assertEquals(3, arr.size)
+        assertSame(v, arr[1])
+    }
     @Test fun size_2i() {
         assertEquals(0, VectorArray2i().size)
         assertEquals(5, VectorArray2i(5).size)
@@ -93,5 +104,15 @@ class VectorArrayTest {
         assertEquals(arr.size, 2)
         assertEquals(arr[0], vector(0, 0))
         assertEquals(arr[1], vector(2, 2))
+    }
+    @Test fun clear_2i() {
+        val arr = VectorArray2i(3)
+        arr[0] = vector(0, 0)
+        arr[1] = vector(1, 1)
+        arr[2] = vector(2, 2)
+
+        arr.clear()
+
+        assertEquals(arr.size, 0)
     }
 }

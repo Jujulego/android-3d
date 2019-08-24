@@ -4,6 +4,7 @@
 #pragma once
 
 #include <algorithm>
+#include <iterator>
 #include <memory>
 #include <type_traits>
 #include <vector>
@@ -38,6 +39,7 @@ namespace math {
             // Alias
             using value_type        = vector_type;
             using reference         = vector_type&;
+            using pointer           = vector_pointer;
             using difference_type   = ptrdiff_t;
             using iterator_category = std::random_access_iterator_tag;
 
@@ -47,9 +49,9 @@ namespace math {
 
             // Operators
             // - deference
-            reference      operator *  () const { return *(*m_it); }
-            vector_pointer operator -> () const { return *m_it; }
-            reference      operator [](size_t i) const { return *(m_it[i]); }
+            reference operator *  () const { return *(*m_it); }
+            pointer   operator -> () const { return *m_it; }
+            reference operator [](size_t i) const { return *(m_it[i]); }
 
             // - compare
             bool operator <  (vector_iterator const& vit) const { return m_it <  vit.m_it; }
@@ -90,8 +92,8 @@ namespace math {
             }
 
             // Methods
-            vector_pointer&       get()       { return *m_it; }
-            vector_pointer const& get() const { return *m_it; }
+            pointer&       get()       { return *m_it; }
+            pointer const& get() const { return *m_it; }
 
             base_iterator const& it() const { return m_it; }
         };
@@ -109,6 +111,7 @@ namespace math {
             using value_type        = vector_type;
             using reference         = vector_type const&;
             using difference_type   = ptrdiff_t;
+            using pointer           = vector_const_pointer;
             using iterator_category = std::random_access_iterator_tag;
 
             // Constructors
@@ -118,9 +121,9 @@ namespace math {
 
             // Operators
             // - deference
-            reference      operator *  () const { return *(*m_it); }
-            vector_const_pointer operator -> () const { return *m_it; }
-            reference      operator [](size_t i) const { return *(m_it[i]); }
+            reference operator *  () const { return *(*m_it); }
+            pointer   operator -> () const { return *m_it; }
+            reference operator [](size_t i) const { return *(m_it[i]); }
 
             // - compare
             bool operator <  (const_vector_iterator const& vit) const { return m_it <  vit.m_it; }
@@ -166,8 +169,8 @@ namespace math {
             }
 
             // Methods
-            vector_const_pointer&       get()       { return *m_it; }
-            vector_const_pointer const& get() const { return *m_it; }
+            pointer&       get()       { return *m_it; }
+            pointer const& get() const { return *m_it; }
 
             base_iterator const& it() const { return m_it; }
         };
@@ -204,12 +207,20 @@ namespace math {
         vector_pointer&       get(size_t i)       { return m_data[i]; }
         vector_pointer const& get(size_t i) const { return m_data[i]; }
 
+        void insert(const_iterator const& pos, vector_pointer const& vec) {
+            m_data.insert(pos.it(), vec);
+        }
+
         void push(vector_pointer const& vec) {
             m_data.push_back(vec);
         }
 
         void erase(const_iterator const& it) {
             m_data.erase(it.it());
+        }
+
+        void clear() {
+            m_data.clear();
         }
 
         size_t size() const {
@@ -220,6 +231,11 @@ namespace math {
         const_iterator begin() const { return const_vector_iterator(m_data.begin()); }
         iterator       end()         { return vector_iterator(m_data.end());         }
         const_iterator end()   const { return const_vector_iterator(m_data.end());   }
+
+        std::reverse_iterator<iterator>       rbegin()       { return std::reverse_iterator(begin()); }
+        std::reverse_iterator<const_iterator> rbegin() const { return std::reverse_iterator(begin()); }
+        std::reverse_iterator<iterator>       rend()         { return std::reverse_iterator(end());   }
+        std::reverse_iterator<const_iterator> rend()   const { return std::reverse_iterator(end());   }
     };
 
     // Alias
@@ -251,8 +267,8 @@ namespace math {
     jlong JNICALL METH_NAME(cls, nget)(JNIEnv* env, jobject jthis, jint i) {    \
         auto pt = jni::fromJava<cls>(env, jthis);                               \
                                                                                 \
-        if (i >= pt->size()) {                                                  \
-            jni::javaThrow(env, "java/lang/ArrayIndexOutOfBoundsException", "i out of bounds"); \
+        if (i < 0 || i >= pt->size()) {                                         \
+            jni::javaThrow(env, "java/lang/ArrayIndexOutOfBoundsException", "index out of bounds"); \
             return 0;                                                           \
         }                                                                       \
                                                                                 \
@@ -283,6 +299,22 @@ namespace math {
         return true;                                                                    \
     }
 
+#define VECARR_INSERT(cls, vec)                                                                  \
+    extern "C" JNIEXPORT                                                                         \
+    jboolean JNICALL METH_NAME(cls, ninsert)(JNIEnv* env, jobject jthis, jint i, jobject jobj) { \
+        auto pt = jni::fromJava<cls>(env, jthis);                                                \
+        auto ptv = jni::fromJava<vec>(env, jobj);                                                \
+                                                                                                 \
+        if (i < 0 || i >= pt->size()) {                                                          \
+            jni::javaThrow(env, "java/lang/ArrayIndexOutOfBoundsException", "index out of bounds"); \
+            return false;                                                                        \
+        }                                                                                        \
+                                                                                                 \
+        pt->insert(pt->begin() + i, ptv);                                                        \
+                                                                                                 \
+        return true;                                                                             \
+    }
+
 #define VECARR_GETSIZE(cls)                                             \
     extern "C" JNIEXPORT                                                \
     jint JNICALL METH_NAME(cls, getSize)(JNIEnv* env, jobject jthis) {  \
@@ -303,9 +335,21 @@ namespace math {
         return it - pt->begin();                                                \
     }
 
-#define VECARR_REMOVE(cls, vec)                                                        \
+#define VECARR_RFIND(cls, vec)                                                   \
+    extern "C" JNIEXPORT                                                         \
+    jint JNICALL METH_NAME(cls, rfind)(JNIEnv* env, jobject jthis, jobject jv) { \
+        auto pt = jni::fromJava<cls>(env, jthis);                                \
+        auto ptv = jni::fromJava<vec>(env, jv);                                  \
+                                                                                 \
+        auto it = std::find(pt->rbegin(), pt->rend(), *ptv);                     \
+                                                                                 \
+        if (it == pt->rend()) return -1;                                         \
+        return pt->size() - 1 - (it - pt->rbegin());                             \
+    }
+
+#define VECARR_ERASE(cls, vec)                                                         \
     extern "C" JNIEXPORT                                                               \
-    jboolean JNICALL METH_NAME(cls, nremove)(JNIEnv* env, jobject jthis, jobject jv) { \
+    jboolean JNICALL METH_NAME(cls, nerase)(JNIEnv* env, jobject jthis, jobject jv) {  \
         auto pt = jni::fromJava<cls>(env, jthis);                                      \
         auto ptv = jni::fromJava<vec>(env, jv);                                        \
                                                                                        \
@@ -317,11 +361,36 @@ namespace math {
         return true;                                                                   \
     }
 
+#define VECARR_REMOVE(cls, vec)                                                \
+    extern "C" JNIEXPORT                                                       \
+    void JNICALL METH_NAME(cls, nremove)(JNIEnv* env, jobject jthis, jint i) { \
+        auto pt = jni::fromJava<cls>(env, jthis);                              \
+                                                                               \
+        if (i < 0 || i >= pt->size()) {                                        \
+            jni::javaThrow(env, "java/lang/ArrayIndexOutOfBoundsException", "index out of bounds"); \
+            return;                                                            \
+        }                                                                      \
+                                                                               \
+        pt->erase(pt->begin() + i);                                            \
+    }
+
+#define VECARR_CLEAR(cls, vec)                                        \
+    extern "C" JNIEXPORT                                              \
+    void JNICALL METH_NAME(cls, nclear)(JNIEnv* env, jobject jthis) { \
+        auto pt = jni::fromJava<cls>(env, jthis);                     \
+                                                                      \
+        pt->clear();                                                  \
+    }
+
 #define VECTOR_ARRAY_JNI(cls, vec, type)    \
     VECARR_CREATE(cls)                      \
     VECARR_GET(cls)                         \
     VECARR_SET(cls, vec)                    \
     VECARR_ADD(cls, vec)                    \
+    VECARR_INSERT(cls, vec)                 \
     VECARR_GETSIZE(cls)                     \
     VECARR_FIND(cls, vec)                   \
-    VECARR_REMOVE(cls, vec)
+    VECARR_RFIND(cls, vec)                  \
+    VECARR_ERASE(cls, vec)                  \
+    VECARR_REMOVE(cls, vec)                 \
+    VECARR_CLEAR(cls, vec)
