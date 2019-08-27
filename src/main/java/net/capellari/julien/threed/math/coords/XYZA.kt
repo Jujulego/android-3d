@@ -12,7 +12,10 @@ import net.capellari.julien.threed.math.D4
     Generator(VECTOR, NumberType.FLOAT, 4),
 
     Generator(MATRIX, NumberType.INT, 4),
-    Generator(MATRIX, NumberType.FLOAT, 4)
+    Generator(MATRIX, NumberType.FLOAT, 4),
+
+    Generator(VECTOR_ARRAY, NumberType.INT, 4),
+    Generator(VECTOR_ARRAY, NumberType.FLOAT, 4)
 )
 interface XYZA<T: Number>: Coord<T, D4> {
     // Propriétés
