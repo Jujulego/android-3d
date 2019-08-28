@@ -1,6 +1,7 @@
 package net.capellari.julien.threed.gpu
 
 import net.capellari.julien.threed.jni.JNIClass
+import org.intellij.lang.annotations.Language
 
 class Program: JNIClass(create()) {
     // Companion
@@ -9,9 +10,18 @@ class Program: JNIClass(create()) {
     }
 
     // Methods
+    // - native
     external fun addShader(shader: Shader)
 
     external fun compile()
     external fun use()
     external fun destroy()
+
+    // - utils
+    fun addShader(type: ShaderType, @Language("GLSL") source: String) {
+        val shader = Shader(type)
+
+        shader.source = source
+        addShader(shader)
+    }
 }

@@ -2,7 +2,7 @@ package net.capellari.julien.threed.gpu
 
 import net.capellari.julien.threed.jni.JNIClass
 
-sealed class Shader(type: ShaderType) : JNIClass(create(type.gl)) {
+class Shader(type: ShaderType) : JNIClass(create(type.gl)) {
     // Companion
     companion object {
         // Statics
@@ -18,7 +18,3 @@ sealed class Shader(type: ShaderType) : JNIClass(create(type.gl)) {
     external fun compile()
     external fun destroy()
 }
-
-class VertexShader: Shader(ShaderType.VERTEX)
-class GeometryShader: Shader(ShaderType.GEOMETRY)
-class FragmentShader: Shader(ShaderType.FRAGMENT)
