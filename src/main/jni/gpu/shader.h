@@ -7,15 +7,15 @@
 
 #include <GLES3/gl32.h>
 
+#include "jnitools.h"
+
 namespace gpu {
     // Class
-    class Shader {
+    class Shader: public jni::JNIClass {
     private:
         // Attributes
         GLenum m_type;
         GLuint m_shader = GL_INVALID_INDEX;
-
-        bool m_compiled = false;
 
     public:
         // Constructors
@@ -23,8 +23,8 @@ namespace gpu {
 
         // Methods
         void compile();
+        GLuint const& shader() const;
 
-        std::string getSource() const;
         void setSource(std::string const& source);
 
         bool hasError() const;
