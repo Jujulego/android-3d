@@ -1,5 +1,5 @@
 //
-// Created by julie on 28/08/2019.
+// Created by julien on 28/08/2019.
 //
 #pragma once
 
@@ -31,6 +31,8 @@ namespace gpu {
     private:
         // Attributes
         GLenum m_type;
+        std::string m_source;
+
         GLuint m_shader = GL_INVALID_INDEX;
 
     public:
@@ -39,8 +41,10 @@ namespace gpu {
 
         // Methods
         void compile() throw(ShaderError);
-        void setSource(std::string const& source);
+        void destroy();
 
         GLuint const& shader() const;
+        std::string& source();
+        std::string const& source() const;
     };
 }

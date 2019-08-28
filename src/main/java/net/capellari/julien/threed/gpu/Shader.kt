@@ -1,7 +1,6 @@
 package net.capellari.julien.threed.gpu
 
 import net.capellari.julien.threed.jni.JNIClass
-import org.intellij.lang.annotations.Language
 
 sealed class Shader(type: ShaderType) : JNIClass(create(type.gl)) {
     // Companion
@@ -10,9 +9,14 @@ sealed class Shader(type: ShaderType) : JNIClass(create(type.gl)) {
         @JvmStatic private external fun create(type: Int): Long
     }
 
+    // Properties
+    var source: String
+        external get
+        external set
+
     // Methods
-    external fun setSource(@Language("GLSL") source: String)
     external fun compile()
+    external fun destroy()
 }
 
 class VertexShader: Shader(ShaderType.VERTEX)
