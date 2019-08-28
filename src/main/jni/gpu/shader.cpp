@@ -73,7 +73,7 @@ std::string const& ShaderError::error() const {
     return m_error;
 }
 
-const char* ShaderError::what() const {
+const char* ShaderError::what() const noexcept {
     return m_error.data();
 }
 

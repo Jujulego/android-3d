@@ -24,7 +24,7 @@ namespace gpu {
 
         // Methods
         std::string const& error() const;
-        const char* what() const override;
+        const char* what() const noexcept override;
     };
 
     // Class
@@ -38,7 +38,7 @@ namespace gpu {
         // Methods
         void addShader(std::shared_ptr<Shader> const& shader);
 
-        void compile() throw(ProgramError, ShaderError);
+        void compile();
         void use();
         void destroy();
     };

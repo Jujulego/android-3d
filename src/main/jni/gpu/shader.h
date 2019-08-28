@@ -23,7 +23,7 @@ namespace gpu {
 
         // Methods
         std::string const& error() const;
-        const char* what() const override;
+        const char* what() const noexcept override;
     };
 
     // Class
@@ -40,7 +40,7 @@ namespace gpu {
         Shader(GLenum const& type);
 
         // Methods
-        void compile() throw(ShaderError);
+        void compile();
         void destroy();
 
         GLuint const& shader() const;

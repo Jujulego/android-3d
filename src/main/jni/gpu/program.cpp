@@ -80,7 +80,7 @@ std::string const& ProgramError::error() const {
     return m_error;
 }
 
-const char* ProgramError::what() const {
+const char* ProgramError::what() const noexcept {
     return m_error.data();
 }
 
