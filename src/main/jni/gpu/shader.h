@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <exception>
 #include <string>
 
 #include <GLES3/gl32.h>
@@ -10,6 +11,21 @@
 #include "jnitools.h"
 
 namespace gpu {
+    // Error
+    class ShaderError: public std::exception {
+    private:
+        // Attributes
+        std::string m_error;
+
+    public:
+        // Constructor
+        ShaderError(std::string const& error);
+
+        // Methods
+        std::string const& error() const;
+        const char* what() const override;
+    };
+
     // Class
     class Shader: public jni::JNIClass {
     private:
@@ -22,12 +38,9 @@ namespace gpu {
         Shader(GLenum const& type);
 
         // Methods
-        void compile();
-        GLuint const& shader() const;
-
+        void compile() throw(ShaderError);
         void setSource(std::string const& source);
 
-        bool hasError() const;
-        std::string getError() const;
+        GLuint const& shader() const;
     };
 }

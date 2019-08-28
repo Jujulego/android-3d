@@ -18,7 +18,27 @@ Shader::Shader(GLenum const& type): m_type(type) {
 
 // Methods
 void Shader::compile() {
+    // compile
     glCompileShader(m_shader);
+
+    // check for error
+    GLint success;
+    glGetShaderiv(m_shader, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        GLint length = 0;
+        std::string error;
+
+        // get length
+        glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &length);
+        error.reserve(length);
+
+        // get info log
+        glGetShaderInfoLog(m_shader, length, nullptr, error.data());
+
+        // throw error
+        throw ShaderError(error);
+    }
 }
 
 GLuint const& Shader::shader() const {
@@ -30,25 +50,15 @@ void Shader::setSource(std::string const& source) {
     glShaderSource(m_shader, 1, &data, nullptr);
 }
 
-bool Shader::hasError() const {
-    GLint success;
-    glGetShaderiv(m_shader, GL_COMPILE_STATUS, &success);
+// Error
+ShaderError::ShaderError(std::string const& error): m_error(error) {}
 
-    return !success;
+std::string const& ShaderError::error() const {
+    return m_error;
 }
 
-std::string Shader::getError() const {
-    GLint length = 0;
-    std::string error;
-
-    // get length
-    glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &length);
-    error.reserve(length);
-
-    // get info log
-    glGetShaderInfoLog(m_shader, length, nullptr, error.data());
-
-    return error;
+const char* ShaderError::what() const {
+    return m_error.data();
 }
 
 // JNI
@@ -72,8 +82,9 @@ extern "C" JNIEXPORT
 void JNICALL METH_NAME(Shader, compile)(JNIEnv* env, jobject jthis) {
     auto pt = jni::fromJava<Shader>(env, jthis);
 
-    pt->compile();
-    if (pt->hasError()) {
-        jni::javaThrow(env, "net/capellari/julien/threed/gpu/ShaderError", pt->getError());
+    try {
+        pt->compile();
+    } catch (ShaderError& err) {
+        jni::javaThrow(env, "net/capellari/julien/threed/gpu/ShaderError", err.error());
     }
 }
