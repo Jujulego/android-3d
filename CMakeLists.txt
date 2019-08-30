@@ -40,7 +40,6 @@ add_library(android3d SHARED
 
         # - gpu
         src/main/jni/gpu/buffer.cpp
-        src/main/jni/gpu/guard.cpp
         src/main/jni/gpu/program.cpp
         src/main/jni/gpu/shader.cpp
 )
