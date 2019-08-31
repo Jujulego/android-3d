@@ -1,6 +1,8 @@
 package net.capellari.julien.threed.math
 
-interface Vector<T: Number, D: Dimension>: Coord<T, D> {
+import net.capellari.julien.threed.gpu.NativeBufferable
+
+interface Vector<T: Number, D: Dimension>: Coord<T, D>, NativeBufferable {
     // Opérateurs
     operator fun plusAssign(v: Vector<T,D>)
     operator fun plus(v: Vector<T,D>): Vector<T,D>

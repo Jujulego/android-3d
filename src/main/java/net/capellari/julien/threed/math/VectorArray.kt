@@ -1,6 +1,8 @@
 package net.capellari.julien.threed.math
 
-interface VectorArray<V: Vector<*,*>>: MutableList<V> {
+import net.capellari.julien.threed.gpu.NativeBufferableArray
+
+interface VectorArray<V: Vector<*,*>>: MutableList<V>, NativeBufferableArray {
     // Properties
     override val size: Int
 

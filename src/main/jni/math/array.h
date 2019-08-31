@@ -9,13 +9,15 @@
 #include <type_traits>
 #include <vector>
 
+#include "gpu/buffer.h"
 #include "jnitools.h"
+
 #include "macros.h"
 #include "vector.h"
 
 namespace math {
     // Template
-    template<class I, size_t DEG> class VectorArray: public jni::JNIClass {
+    template<class I, size_t DEG> class VectorArray: public jni::JNIClass, public gpu::BufferableArray {
         static_assert(DEG >= 2, "DEG should be at least 2");
         static_assert(std::is_arithmetic<I>::value, "I must be an arithmetic type");
 
@@ -221,6 +223,18 @@ namespace math {
 
         void clear() {
             m_data.clear();
+        }
+
+        GLsizeiptr getBufferSize() const override {
+            return static_cast<GLsizeiptr>(m_data.size()) * sizeof(I) * DEG;
+        }
+
+        size_t getBufferElementCount() const override {
+            return m_data.size();
+        }
+
+        gpu::Bufferable const& getBufferElement(size_t const& i) const override {
+            return *(get(i));
         }
 
         size_t size() const {

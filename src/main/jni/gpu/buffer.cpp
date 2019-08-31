@@ -49,6 +49,20 @@ void Buffer::setData(Bufferable const& data, GLenum const& usage) {
     }
 }
 
+void Buffer::setDataArray(BufferableArray const& data, GLenum const& usage) {
+    if (m_target != GL_INVALID_ENUM) {
+        glBufferData(m_target, data.getBufferSize(), nullptr, usage);
+
+        GLintptr offset = 0;
+        for (size_t i = 0; i < data.getBufferElementCount(); ++i) {
+            Bufferable const& el = data.getBufferElement(i);
+
+            glBufferSubData(m_target, offset, el.getBufferSize(), el.getData());
+            offset += el.getBufferSize();
+        }
+    }
+}
+
 void Buffer::unbound() {
     if (m_target != GL_INVALID_ENUM) {
         glBindBuffer(m_target, 0);
@@ -83,6 +97,14 @@ void JNICALL METH_NAME(Buffer, setNData)(JNIEnv* env, jobject jthis, jobject jda
     auto data = jni::fromJava<Bufferable>(env, jdata);
 
     pt->setData(*data, usage);
+}
+
+extern "C" JNIEXPORT
+void JNICALL METH_NAME(Buffer, setNDataArray)(JNIEnv* env, jobject jthis, jobject jdata, jint usage) {
+    auto pt = jni::fromJava<Buffer>(env, jthis);
+    auto data = jni::fromJava<BufferableArray>(env, jdata);
+
+    pt->setDataArray(*data, usage);
 }
 
 extern "C" JNIEXPORT

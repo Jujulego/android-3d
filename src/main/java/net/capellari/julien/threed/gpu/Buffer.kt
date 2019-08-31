@@ -1,6 +1,5 @@
 package net.capellari.julien.threed.gpu
 
-import android.opengl.GLES32
 import net.capellari.julien.threed.jni.JNIClass
 
 class Buffer: JNIClass(create()) {
@@ -8,17 +7,6 @@ class Buffer: JNIClass(create()) {
     companion object {
         // Static methods
         @JvmStatic private external fun create(): Long
-
-        // Enums
-        enum class Target(val gl: Int) {
-            ARRAY_BUFFER(GLES32.GL_ARRAY_BUFFER)
-        }
-
-        enum class Usage(val gl: Int) {
-            STATIC_DRAW(GLES32.GL_STATIC_DRAW),
-            DYNAMIC_DRAW(GLES32.GL_DYNAMIC_DRAW),
-            STREAM_DRAW(GLES32.GL_STREAM_DRAW)
-        }
     }
 
     // Methods
@@ -37,5 +25,23 @@ class Buffer: JNIClass(create()) {
     private external fun setNData(data: NativeBufferable, usage: Int)
     private external fun setJData(data: Bufferable, usage: Int)
 
+    fun setDataArray(data: BufferableArray, usage: Usage) {
+        if (data is NativeBufferableArray) {
+            setNDataArray(data, usage.gl)
+        } else {
+            setJDataArray(data, usage.gl)
+        }
+    }
+    private external fun setNDataArray(data: NativeBufferableArray, usage: Int)
+    private external fun setJDataArray(data: BufferableArray, usage: Int)
+
     external fun unbound()
+
+    // - utils
+    fun bound(target: Target, f: () -> Unit) {
+        bound(target)
+        f()
+        unbound()
+    }
+
 }

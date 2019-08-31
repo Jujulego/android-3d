@@ -8,7 +8,7 @@
 #include "jnitools.h"
 
 namespace gpu {
-    // Interface ;)
+    // Interfaces
     struct Bufferable {
         // Destructor
         virtual ~Bufferable() = default;
@@ -16,6 +16,17 @@ namespace gpu {
         // Abstract methods
         virtual GLsizeiptr getBufferSize() const = 0;
         virtual void const* getData() const = 0;
+    };
+
+    struct BufferableArray {
+        // Destructor
+        virtual ~BufferableArray() = default;
+
+        // Abstract methods
+        virtual GLsizeiptr getBufferSize() const = 0;
+
+        virtual size_t getBufferElementCount() const = 0;
+        virtual Bufferable const& getBufferElement(size_t const& i) const = 0;
     };
 
     // Class
@@ -41,6 +52,7 @@ namespace gpu {
 
         void bound(GLenum const& target);
         void setData(Bufferable const& data, GLenum const& usage);
+        void setDataArray(BufferableArray const& data, GLenum const& usage);
         void unbound();
     };
 }
