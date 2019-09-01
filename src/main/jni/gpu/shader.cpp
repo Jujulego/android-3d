@@ -10,6 +10,8 @@
 #include "macros.h"
 #include "shader.h"
 
+#define LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "gpu::Shader", __VA_ARGS__)
+
 using namespace gpu;
 
 // Constructor
@@ -37,7 +39,7 @@ void Shader::compile() {
 
         // get length
         glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &length);
-        error.reserve(length);
+        error.resize(length);
 
         // get info log
         glGetShaderInfoLog(m_shader, length, nullptr, error.data());

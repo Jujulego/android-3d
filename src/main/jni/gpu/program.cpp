@@ -3,11 +3,14 @@
 //
 #include <memory>
 
-#include <GLES3/gl32.h>
+#include <android/log.h>
+#include <GLES3/gl3.h>
 
 #include "jnitools.h"
 #include "macros.h"
 #include "program.h"
+
+#define LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "gpu::Program", __VA_ARGS__)
 
 using namespace gpu;
 
@@ -26,6 +29,7 @@ void Program::compile() {
     while (it != m_shaders.end()) {
         auto shader = *it;
         shader->compile();
+
         glAttachShader(m_program, shader->shader());
 
         ++it;

@@ -12,7 +12,7 @@ set(CMAKE_C_STANDARD 11)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g3")
 
 # Dépendances
 # - Assimp
@@ -21,6 +21,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g3")
 
 # - NDK
 find_library(log-lib log)
+find_library(gles-lib GLESv3)
 
 # JNI
 include_directories(src/main/jni)
@@ -44,4 +45,4 @@ add_library(android3d SHARED
         src/main/jni/gpu/shader.cpp
 )
 
-target_link_libraries(android3d ${log-lib} GLESv3) # assimp)
+target_link_libraries(android3d ${log-lib} ${gles-lib}) # assimp)
