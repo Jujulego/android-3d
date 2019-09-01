@@ -40,6 +40,7 @@ add_library(android3d SHARED
         src/main/jni/math/vector.cpp
 
         # - gpu
+        src/main/jni/gpu/attribute.cpp
         src/main/jni/gpu/buffer.cpp
         src/main/jni/gpu/error.cpp
         src/main/jni/gpu/program.cpp

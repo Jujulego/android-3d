@@ -19,20 +19,24 @@ void Program::addShader(std::shared_ptr<Shader> const& shader) {
     m_shaders.push_back(shader);
 }
 
+void Program::addAttribute(std::shared_ptr<Attribute> const& attribute) {
+    m_attributes.push_back(attribute);
+}
+
 void Program::compile() {
     // Create new program
     destroy(); // cleanup previous one
     m_program = glCreateProgram();
 
     // Compile and attach shaders
-    auto it = m_shaders.begin();
-    while (it != m_shaders.end()) {
-        auto shader = *it;
+    auto sit = m_shaders.begin();
+    while (sit != m_shaders.end()) {
+        auto shader = *sit;
         shader->compile();
 
         glAttachShader(m_program, shader->shader());
 
-        ++it;
+        ++sit;
     }
 
     // Link program
@@ -58,9 +62,17 @@ void Program::compile() {
     }
 
     // Destroy shaders
-    while (it != m_shaders.end()) {
-        (*it)->destroy();
-        ++it;
+    sit = m_shaders.begin();
+    while (sit != m_shaders.end()) {
+        (*sit)->destroy();
+        ++sit;
+    }
+
+    // Prepare attributes
+    auto ait = m_attributes.begin();
+    while (ait != m_attributes.end()) {
+        (*ait)->prepare(m_program);
+        ++ait;
     }
 }
 
@@ -75,6 +87,10 @@ void Program::destroy() {
         glDeleteProgram(m_program);
         m_program = GL_INVALID_INDEX;
     }
+}
+
+GLuint const& Program::program() const {
+    return m_program;
 }
 
 // Error
@@ -99,6 +115,14 @@ void JNICALL METH_NAME(Program, addShader)(JNIEnv* env, jobject jthis, jobject j
     auto shader = jni::fromJava<Shader>(env, jshader);
 
     pt->addShader(shader);
+}
+
+extern "C" JNIEXPORT
+void JNICALL METH_NAME(Program, addAttribute)(JNIEnv* env, jobject jthis, jobject jattr) {
+    auto pt = jni::fromJava<Program>(env, jthis);
+    auto attr = jni::fromJava<Attribute>(env, jattr);
+
+    pt->addAttribute(attr);
 }
 
 extern "C" JNIEXPORT

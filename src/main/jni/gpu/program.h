@@ -10,6 +10,7 @@
 
 #include "jnitools.h"
 
+#include "attribute.h"
 #include "error.h"
 #include "shader.h"
 
@@ -34,14 +35,19 @@ namespace gpu {
     private:
         // Attributes
         GLuint m_program = GL_INVALID_INDEX;
+
         std::list<std::shared_ptr<Shader>> m_shaders;
+        std::list<std::shared_ptr<Attribute>> m_attributes;
 
     public:
         // Methods
         void addShader(std::shared_ptr<Shader> const& shader);
+        void addAttribute(std::shared_ptr<Attribute> const& attribute);
 
         void compile();
         void use();
         void destroy();
+
+        GLuint const& program() const;
     };
 }
