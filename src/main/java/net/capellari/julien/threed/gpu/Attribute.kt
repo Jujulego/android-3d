@@ -16,4 +16,5 @@ class Attribute: JNIClass {
 
     // Methods
     external fun prepare(program: Program)
+    external fun enable(stride: Int, offset: Int = 0, normalized: Boolean = false)
 }

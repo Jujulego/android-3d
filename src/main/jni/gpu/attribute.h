@@ -17,21 +17,22 @@ namespace gpu {
     private:
         // Attributes
         std::string m_name;
-        GLint m_location = GL_INVALID_INDEX;
+        GLuint m_location = GL_INVALID_INDEX;
         GLenum m_type;
         GLint m_size;
 
-        GLint m_index = GL_INVALID_INDEX;
+        GLuint m_index = GL_INVALID_INDEX;
 
         // Methods
-        GLint getIndex(GLuint const& program) const;
+        GLuint getIndex(GLuint const& program) const;
 
     public:
         // Constructor
-        Attribute(GLint const& location, GLenum const& type, GLint const& size);
+        Attribute(GLuint const& location, GLenum const& type, GLint const& size);
         Attribute(std::string const& name, GLenum const& type, GLint const& size);
 
         // Methods
         void prepare(GLuint const& program);
+        void enable(GLsizei const& stride, GLsizeiptr const& offset = 0, bool normalized = false);
     };
 }

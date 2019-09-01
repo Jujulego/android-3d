@@ -15,21 +15,21 @@
 using namespace gpu;
 
 // Constructors
-Attribute::Attribute(GLint const& location, GLenum const& type, GLint const& size)
+Attribute::Attribute(GLuint const& location, GLenum const& type, GLint const& size)
         : m_location(location), m_type(type), m_size(size) {}
 
 Attribute::Attribute(std::string const& name, GLenum const& type, GLint const& size)
         : m_name(name), m_type(type), m_size(size) {}
 
 // Methods
-GLint Attribute::getIndex(GLuint const& program) const {
+GLuint Attribute::getIndex(GLuint const& program) const {
     // Known index
     if (m_location != GL_INVALID_INDEX) {
-        return m_index;
+        return m_location;
     }
 
     // Search for it
-    GLint index = glGetAttribLocation(program, m_name.data());
+    GLuint index = glGetAttribLocation(program, m_name.data());
     if (index == GL_INVALID_INDEX) {
         throw ProgramError("Attribute " + m_name + " not found");
     }
@@ -40,6 +40,12 @@ GLint Attribute::getIndex(GLuint const& program) const {
 void Attribute::prepare(GLuint const& program) {
     // Get index
     m_index = getIndex(program);
+}
+
+void Attribute::enable(GLsizei const& stride, GLsizeiptr const& offset, bool normalized) {
+    // Enable attribute !
+    glVertexAttribPointer(m_index, m_size, m_type, normalized ? GL_TRUE : GL_FALSE, stride, (void*) offset);
+    glEnableVertexAttribArray(m_index);
 }
 
 // JNI
@@ -67,4 +73,11 @@ void JNICALL METH_NAME(Attribute, prepare)(JNIEnv* env, jobject jthis, jobject j
     auto program = jni::fromJava<Program>(env, jprogram);
 
     pt->prepare(program->program());
+}
+
+extern "C" JNIEXPORT
+void JNICALL METH_NAME(Attribute, enable)(JNIEnv* env, jobject jthis, jint stride, jint offset, jboolean normalized) {
+    auto pt = jni::fromJava<Attribute>(env, jthis);
+
+    pt->enable(stride, offset, normalized);
 }

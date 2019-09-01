@@ -38,9 +38,9 @@ class Buffer: JNIClass(create()) {
     external fun unbound()
 
     // - utils
-    fun bound(target: Target, f: () -> Unit) {
+    fun bound(target: Target, f: (buffer: Buffer) -> Unit) {
         bound(target)
-        f()
+        f(this)
         unbound()
     }
 
