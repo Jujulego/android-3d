@@ -17,7 +17,9 @@ namespace gpu {
     private:
         // Attributes
         std::string m_name;
-        GLint m_known_index = GL_INVALID_INDEX;
+        GLint m_location = GL_INVALID_INDEX;
+        GLenum m_type;
+        GLint m_size;
 
         GLint m_index = GL_INVALID_INDEX;
 
@@ -26,8 +28,8 @@ namespace gpu {
 
     public:
         // Constructor
-        Attribute(GLint const& index);
-        Attribute(std::string const& name);
+        Attribute(GLint const& location, GLenum const& type, GLint const& size);
+        Attribute(std::string const& name, GLenum const& type, GLint const& size);
 
         // Methods
         void prepare(GLuint const& program);

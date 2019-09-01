@@ -15,13 +15,16 @@
 using namespace gpu;
 
 // Constructors
-Attribute::Attribute(GLint const& index): m_known_index(index) {}
-Attribute::Attribute(std::string const& name): m_name(name) {}
+Attribute::Attribute(GLint const& location, GLenum const& type, GLint const& size)
+        : m_location(location), m_type(type), m_size(size) {}
+
+Attribute::Attribute(std::string const& name, GLenum const& type, GLint const& size)
+        : m_name(name), m_type(type), m_size(size) {}
 
 // Methods
 GLint Attribute::getIndex(GLuint const& program) const {
     // Known index
-    if (m_known_index != GL_INVALID_INDEX) {
+    if (m_location != GL_INVALID_INDEX) {
         return m_index;
     }
 
@@ -41,18 +44,18 @@ void Attribute::prepare(GLuint const& program) {
 
 // JNI
 extern "C" JNIEXPORT
-jlong JNICALL METH_NAME(Attribute, create__I)(JNIEnv*, jclass, jint index) {
-    auto pt = std::make_shared<Attribute>(index);
+jlong JNICALL METH_NAME(Attribute, create__III)(JNIEnv*, jclass, jint location, jint type, jint size) {
+    auto pt = std::make_shared<Attribute>(location, type, size);
     pt->register_jni(true);
 
     return pt->get_jhandle();
 }
 
 extern "C" JNIEXPORT
-jlong JNICALL METH_NAME(Attribute, create__Ljava_lang_String_2)(JNIEnv* env, jclass, jstring jname) {
+jlong JNICALL METH_NAME(Attribute, create__Ljava_lang_String_2II)(JNIEnv* env, jclass, jstring jname, jint type, jint size) {
     auto name = jni::fromJava<std::string>(env, jname);
 
-    auto pt = std::make_shared<Attribute>(name);
+    auto pt = std::make_shared<Attribute>(name, type, size);
     pt->register_jni(true);
 
     return pt->get_jhandle();
