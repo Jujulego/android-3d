@@ -69,14 +69,10 @@ std::string const& Shader::source() const {
 }
 
 // Error
-ShaderError::ShaderError(std::string const& error): m_error(error) {}
+ShaderError::ShaderError(std::string const& error): GPUError(error) {}
 
-std::string const& ShaderError::error() const {
-    return m_error;
-}
-
-const char* ShaderError::what() const noexcept {
-    return m_error.data();
+std::string ShaderError::javaName() const {
+    return "net/capellari/julien/threed/gpu/ShaderError";
 }
 
 // JNI
@@ -109,8 +105,8 @@ void JNICALL METH_NAME(Shader, compile)(JNIEnv* env, jobject jthis) {
 
     try {
         pt->compile();
-    } catch (ShaderError& err) {
-        jni::javaThrow(env, "net/capellari/julien/threed/gpu/ShaderError", err.error());
+    } catch (GPUError& err) {
+        err.javaThrow(env);
     }
 }
 

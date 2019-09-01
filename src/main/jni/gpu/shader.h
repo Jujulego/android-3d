@@ -10,20 +10,22 @@
 
 #include "jnitools.h"
 
+#include "error.h"
+
 namespace gpu {
     // Error
-    class ShaderError: public std::exception {
+    class ShaderError: public GPUError {
     private:
         // Attributes
         std::string m_error;
 
+    protected:
+        // Methods
+        std::string javaName() const override;
+
     public:
         // Constructor
         ShaderError(std::string const& error);
-
-        // Methods
-        std::string const& error() const;
-        const char* what() const noexcept override;
     };
 
     // Class

@@ -9,22 +9,24 @@
 #include <GLES3/gl32.h>
 
 #include "jnitools.h"
+
+#include "error.h"
 #include "shader.h"
 
 namespace gpu {
     // Error
-    class ProgramError: public std::exception {
+    class ProgramError: public GPUError {
     private:
         // Attributes
         std::string m_error;
 
+    protected:
+        // Methods
+        std::string javaName() const override;
+
     public:
         // Constructor
         ProgramError(std::string const& error);
-
-        // Methods
-        std::string const& error() const;
-        const char* what() const noexcept override;
     };
 
     // Class

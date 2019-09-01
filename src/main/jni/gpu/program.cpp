@@ -78,14 +78,10 @@ void Program::destroy() {
 }
 
 // Error
-ProgramError::ProgramError(std::string const& error): m_error(error) {}
+ProgramError::ProgramError(std::string const& error): GPUError(error) {}
 
-std::string const& ProgramError::error() const {
-    return m_error;
-}
-
-const char* ProgramError::what() const noexcept {
-    return m_error.data();
+std::string ProgramError::javaName() const {
+    return "net/capellari/julien/threed/gpu/ProgramError";
 }
 
 // JNI
@@ -111,10 +107,8 @@ void JNICALL METH_NAME(Program, compile)(JNIEnv* env, jobject jthis) {
 
     try {
         pt->compile();
-    } catch (ShaderError& err) {
-        jni::javaThrow(env, "net/capellari/julien/threed/gpu/ShaderError", err.error());
-    } catch (ProgramError& err) {
-        jni::javaThrow(env, "net/capellari/julien/threed/gpu/ProgramError", err.error());
+    } catch (GPUError& err) {
+        err.javaThrow(env);
     }
 }
 
