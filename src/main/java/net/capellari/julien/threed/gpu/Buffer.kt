@@ -12,8 +12,8 @@ class Buffer: JNIClass(create()) {
     // Methods
     external fun regenerate()
 
-    fun bind(target: Target) = nbound(target.gl)
-    private external fun nbound(target: Int)
+    fun bind(target: Target) = nbind(target.gl)
+    private external fun nbind(target: Int)
 
     fun setData(data: Bufferable, usage: Usage) {
         if (data is NativeBufferable) {
@@ -24,6 +24,11 @@ class Buffer: JNIClass(create()) {
     }
     private external fun setNData(data: NativeBufferable, usage: Int)
     private external fun setJData(data: Bufferable, usage: Int)
+
+    fun setData(data: IntArray, usage: Usage) {
+        setJData(data, usage.gl)
+    }
+    private external fun setJData(data: IntArray, usage: Int)
 
     fun setDataArray(data: BufferableArray, usage: Usage) {
         if (data is NativeBufferableArray) {
@@ -36,12 +41,4 @@ class Buffer: JNIClass(create()) {
     private external fun setJDataArray(data: BufferableArray, usage: Int)
 
     external fun unbind()
-
-    // - utils
-    fun bind(target: Target, f: (buffer: Buffer) -> Unit) {
-        bind(target)
-        f(this)
-        unbind()
-    }
-
 }

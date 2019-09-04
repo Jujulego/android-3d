@@ -52,6 +52,7 @@ namespace gpu {
 
         void bind(GLenum const& target);
         void setData(Bufferable const& data, GLenum const& usage);
+        void setData(jni::array<jintArray> const& data, GLenum const& usage);
         void setDataArray(BufferableArray const& data, GLenum const& usage);
         void unbind();
     };

@@ -3,11 +3,15 @@
 //
 #include <memory>
 
+#include <android/log.h>
+#include <GLES3/gl3.h>
 #include <GLES3/gl32.h>
 
 #include "buffer.h"
 #include "jnitools.h"
 #include "macros.h"
+
+#define LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "gpu::Buffer", __VA_ARGS__)
 
 using namespace gpu;
 
@@ -46,6 +50,12 @@ void Buffer::bind(GLenum const& target) {
 void Buffer::setData(Bufferable const& data, GLenum const& usage) {
     if (m_target != GL_INVALID_ENUM) {
         glBufferData(m_target, data.getBufferSize(), data.getData(), usage);
+    }
+}
+
+void Buffer::setData(jni::array<jintArray> const& data, GLenum const& usage) {
+    if (m_target != GL_INVALID_ENUM) {
+        glBufferData(m_target, data.size() * sizeof(jint), data.data(), usage);
     }
 }
 
@@ -97,6 +107,14 @@ void JNICALL METH_NAME(Buffer, setNData)(JNIEnv* env, jobject jthis, jobject jda
     auto data = jni::fromJava<Bufferable>(env, jdata);
 
     pt->setData(*data, usage);
+}
+
+extern "C" JNIEXPORT
+void JNICALL METH_NAME(Buffer, setJData___3II)(JNIEnv* env, jobject jthis, jintArray jdata, jint usage) {
+    auto pt = jni::fromJava<Buffer>(env, jthis);
+    auto data = jni::array<jintArray>(env, jdata);
+
+    pt->setData(data, usage);
 }
 
 extern "C" JNIEXPORT
