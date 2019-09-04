@@ -50,9 +50,9 @@ namespace gpu {
         // Methods
         void regenerate();
 
-        void bound(GLenum const& target);
+        void bind(GLenum const& target);
         void setData(Bufferable const& data, GLenum const& usage);
         void setDataArray(BufferableArray const& data, GLenum const& usage);
-        void unbound();
+        void unbind();
     };
 }

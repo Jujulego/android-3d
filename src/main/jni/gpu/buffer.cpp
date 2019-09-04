@@ -27,7 +27,7 @@ void Buffer::generate() {
 }
 
 void Buffer::destroy() {
-    unbound();
+    unbind();
     glDeleteBuffers(1, &m_buffer);
 }
 
@@ -36,7 +36,7 @@ void Buffer::regenerate() {
     generate();
 }
 
-void Buffer::bound(GLenum const& target) {
+void Buffer::bind(GLenum const& target) {
     if (m_target == GL_INVALID_ENUM) {
         glBindBuffer(target, m_buffer);
         m_target = target;
@@ -63,7 +63,7 @@ void Buffer::setDataArray(BufferableArray const& data, GLenum const& usage) {
     }
 }
 
-void Buffer::unbound() {
+void Buffer::unbind() {
     if (m_target != GL_INVALID_ENUM) {
         glBindBuffer(m_target, 0);
         m_target = GL_INVALID_ENUM;
@@ -86,9 +86,9 @@ void JNICALL METH_NAME(Buffer, regenerate)(JNIEnv* env, jobject jthis) {
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(Buffer, nbound)(JNIEnv* env, jobject jthis, jint target) {
+void JNICALL METH_NAME(Buffer, nbind)(JNIEnv* env, jobject jthis, jint target) {
     auto pt = jni::fromJava<Buffer>(env, jthis);
-    pt->bound(target);
+    pt->bind(target);
 }
 
 extern "C" JNIEXPORT
@@ -108,7 +108,7 @@ void JNICALL METH_NAME(Buffer, setNDataArray)(JNIEnv* env, jobject jthis, jobjec
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(Buffer, unbound)(JNIEnv* env, jobject jthis) {
+void JNICALL METH_NAME(Buffer, unbind)(JNIEnv* env, jobject jthis) {
     auto pt = jni::fromJava<Buffer>(env, jthis);
-    pt->unbound();
+    pt->unbind();
 }

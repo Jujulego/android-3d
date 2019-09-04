@@ -12,7 +12,7 @@ class Buffer: JNIClass(create()) {
     // Methods
     external fun regenerate()
 
-    fun bound(target: Target) = nbound(target.gl)
+    fun bind(target: Target) = nbound(target.gl)
     private external fun nbound(target: Int)
 
     fun setData(data: Bufferable, usage: Usage) {
@@ -35,13 +35,13 @@ class Buffer: JNIClass(create()) {
     private external fun setNDataArray(data: NativeBufferableArray, usage: Int)
     private external fun setJDataArray(data: BufferableArray, usage: Int)
 
-    external fun unbound()
+    external fun unbind()
 
     // - utils
-    fun bound(target: Target, f: (buffer: Buffer) -> Unit) {
-        bound(target)
+    fun bind(target: Target, f: (buffer: Buffer) -> Unit) {
+        bind(target)
         f(this)
-        unbound()
+        unbind()
     }
 
 }
