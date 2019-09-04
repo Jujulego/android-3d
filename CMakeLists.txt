@@ -45,6 +45,7 @@ add_library(android3d SHARED
         src/main/jni/gpu/error.cpp
         src/main/jni/gpu/program.cpp
         src/main/jni/gpu/shader.cpp
+        src/main/jni/gpu/vertex_array.cpp
 )
 
 target_link_libraries(android3d ${log-lib} ${gles-lib}) # assimp)
