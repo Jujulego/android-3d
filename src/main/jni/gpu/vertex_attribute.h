@@ -13,7 +13,7 @@
 
 namespace gpu {
     // Class
-    class Attribute: public jni::JNIClass {
+    class VertexAttribute: public jni::JNIClass {
     private:
         // Attributes
         std::string m_name;
@@ -28,8 +28,8 @@ namespace gpu {
 
     public:
         // Constructor
-        Attribute(GLuint const& location, GLenum const& type, GLint const& size);
-        Attribute(std::string const& name, GLenum const& type, GLint const& size);
+        VertexAttribute(GLuint const& location, GLenum const& type, GLint const& size);
+        VertexAttribute(std::string const& name, GLenum const& type, GLint const& size);
 
         // Methods
         void prepare(GLuint const& program);

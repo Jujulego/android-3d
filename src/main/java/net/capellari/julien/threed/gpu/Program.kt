@@ -12,7 +12,7 @@ class Program: JNIClass(create()) {
     // Methods
     // - native
     external fun addShader(shader: Shader)
-    external fun addAttribute(attribute: Attribute)
+    external fun addVertexAttribute(attribute: VertexAttribute)
 
     external fun compile()
     external fun use()

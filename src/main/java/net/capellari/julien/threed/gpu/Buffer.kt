@@ -22,12 +22,12 @@ class Buffer: JNIClass(create()) {
             setJData(data, usage.gl)
         }
     }
-    private external fun setNData(data: NativeBufferable, usage: Int)
-    private external fun setJData(data: Bufferable, usage: Int)
-
     fun setData(data: IntArray, usage: Usage) {
         setJData(data, usage.gl)
     }
+
+    private external fun setNData(data: NativeBufferable, usage: Int)
+    private external fun setJData(data: Bufferable, usage: Int)
     private external fun setJData(data: IntArray, usage: Int)
 
     fun setDataArray(data: BufferableArray, usage: Usage) {

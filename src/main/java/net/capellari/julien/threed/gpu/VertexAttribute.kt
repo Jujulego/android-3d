@@ -2,7 +2,7 @@ package net.capellari.julien.threed.gpu
 
 import net.capellari.julien.threed.jni.JNIClass
 
-class Attribute: JNIClass {
+class VertexAttribute: JNIClass {
     // Companion
     companion object {
         // Static methods

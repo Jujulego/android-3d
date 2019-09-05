@@ -8,21 +8,21 @@
 
 #include "jnitools.h"
 
-#include "attribute.h"
+#include "vertex_attribute.h"
 #include "macros.h"
 #include "program.h"
 
 using namespace gpu;
 
 // Constructors
-Attribute::Attribute(GLuint const& location, GLenum const& type, GLint const& size)
+VertexAttribute::VertexAttribute(GLuint const& location, GLenum const& type, GLint const& size)
         : m_location(location), m_type(type), m_size(size) {}
 
-Attribute::Attribute(std::string const& name, GLenum const& type, GLint const& size)
+VertexAttribute::VertexAttribute(std::string const& name, GLenum const& type, GLint const& size)
         : m_name(name), m_type(type), m_size(size) {}
 
 // Methods
-GLuint Attribute::getIndex(GLuint const& program) const {
+GLuint VertexAttribute::getIndex(GLuint const& program) const {
     // Known index
     if (m_location != GL_INVALID_INDEX) {
         return m_location;
@@ -37,12 +37,12 @@ GLuint Attribute::getIndex(GLuint const& program) const {
     return index;
 }
 
-void Attribute::prepare(GLuint const& program) {
+void VertexAttribute::prepare(GLuint const& program) {
     // Get index
     m_index = getIndex(program);
 }
 
-void Attribute::enable(GLsizei const& stride, GLsizeiptr const& offset, bool normalized) {
+void VertexAttribute::enable(GLsizei const& stride, GLsizeiptr const& offset, bool normalized) {
     // Enable attribute !
     glVertexAttribPointer(m_index, m_size, m_type, normalized ? GL_TRUE : GL_FALSE, stride, (void*) offset);
     glEnableVertexAttribArray(m_index);
@@ -50,34 +50,34 @@ void Attribute::enable(GLsizei const& stride, GLsizeiptr const& offset, bool nor
 
 // JNI
 extern "C" JNIEXPORT
-jlong JNICALL METH_NAME(Attribute, create__III)(JNIEnv*, jclass, jint location, jint type, jint size) {
-    auto pt = std::make_shared<Attribute>(location, type, size);
+jlong JNICALL METH_NAME(VertexAttribute, create__III)(JNIEnv*, jclass, jint location, jint type, jint size) {
+    auto pt = std::make_shared<VertexAttribute>(location, type, size);
     pt->register_jni(true);
 
     return pt->get_jhandle();
 }
 
 extern "C" JNIEXPORT
-jlong JNICALL METH_NAME(Attribute, create__Ljava_lang_String_2II)(JNIEnv* env, jclass, jstring jname, jint type, jint size) {
+jlong JNICALL METH_NAME(VertexAttribute, create__Ljava_lang_String_2II)(JNIEnv* env, jclass, jstring jname, jint type, jint size) {
     auto name = jni::fromJava<std::string>(env, jname);
 
-    auto pt = std::make_shared<Attribute>(name, type, size);
+    auto pt = std::make_shared<VertexAttribute>(name, type, size);
     pt->register_jni(true);
 
     return pt->get_jhandle();
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(Attribute, prepare)(JNIEnv* env, jobject jthis, jobject jprogram) {
-    auto pt = jni::fromJava<Attribute>(env, jthis);
+void JNICALL METH_NAME(VertexAttribute, prepare)(JNIEnv* env, jobject jthis, jobject jprogram) {
+    auto pt = jni::fromJava<VertexAttribute>(env, jthis);
     auto program = jni::fromJava<Program>(env, jprogram);
 
     pt->prepare(program->program());
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(Attribute, enable)(JNIEnv* env, jobject jthis, jint stride, jint offset, jboolean normalized) {
-    auto pt = jni::fromJava<Attribute>(env, jthis);
+void JNICALL METH_NAME(VertexAttribute, enable)(JNIEnv* env, jobject jthis, jint stride, jint offset, jboolean normalized) {
+    auto pt = jni::fromJava<VertexAttribute>(env, jthis);
 
     pt->enable(stride, offset, normalized);
 }

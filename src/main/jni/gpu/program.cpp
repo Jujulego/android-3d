@@ -19,7 +19,7 @@ void Program::addShader(std::shared_ptr<Shader> const& shader) {
     m_shaders.push_back(shader);
 }
 
-void Program::addAttribute(std::shared_ptr<Attribute> const& attribute) {
+void Program::addAttribute(std::shared_ptr<VertexAttribute> const& attribute) {
     m_attributes.push_back(attribute);
 }
 
@@ -118,9 +118,9 @@ void JNICALL METH_NAME(Program, addShader)(JNIEnv* env, jobject jthis, jobject j
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(Program, addAttribute)(JNIEnv* env, jobject jthis, jobject jattr) {
+void JNICALL METH_NAME(Program, addVertexAttribute)(JNIEnv* env, jobject jthis, jobject jattr) {
     auto pt = jni::fromJava<Program>(env, jthis);
-    auto attr = jni::fromJava<Attribute>(env, jattr);
+    auto attr = jni::fromJava<VertexAttribute>(env, jattr);
 
     pt->addAttribute(attr);
 }
