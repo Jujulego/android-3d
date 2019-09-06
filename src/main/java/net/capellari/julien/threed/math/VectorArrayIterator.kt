@@ -3,7 +3,7 @@ package net.capellari.julien.threed.math
 class VectorArrayIterator<V: Vector<*,*>>(val array: VectorArray<V>, private var index: Int) : MutableListIterator<V> {
     // Methods
     override fun hasPrevious() = index > 0
-    override fun hasNext()     = index < array.size - 1
+    override fun hasNext()     = index < array.size
 
     override fun previous() = array[--index]
     override fun next()     = array[index++]
