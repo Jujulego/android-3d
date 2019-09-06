@@ -7,6 +7,7 @@
 #include <string>
 
 #include "convert.h"
+#include "envref.h"
 #include "meta.h"
 
 // Macros
@@ -23,7 +24,7 @@ namespace jni {
     // Base
     template<class R> struct _method {
         // Attributs
-        JNIEnv* m_env;
+        envref m_env;
         jobject m_jthis;
         jmethodID m_jmth;
 

@@ -5,13 +5,14 @@
 
 #include <jni.h>
 
+#include "envref.h"
 #include "meta.h"
 
 namespace jni {
     // Templates
     template<class T> struct localref {
         // Attributs
-        JNIEnv* m_env;
+        envref m_env;
         typename std::enable_if<is_jobject<T>::value,T>::type m_ref;
 
         // Constructeur
@@ -23,6 +24,6 @@ namespace jni {
         }
 
         // Opérateurs
-        operator T () { return m_ref; }
+        operator T () const { return m_ref; }
     };
 }

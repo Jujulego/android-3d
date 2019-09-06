@@ -7,6 +7,7 @@
 #include <string>
 
 #include "convert.h"
+#include "envref.h"
 #include "localref.h"
 
 // Macros
@@ -27,7 +28,7 @@ namespace jni {
     // Base
     template<class R> struct _field {
         // Attributs
-        JNIEnv* m_env;
+        envref m_env;
         jobject m_jthis;
         jfieldID m_jfld;
 
