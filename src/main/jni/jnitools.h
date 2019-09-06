@@ -8,6 +8,7 @@
 #include "jnitools/array.h"
 #include "jnitools/class.h"
 #include "jnitools/convert.h"
+#include "jnitools/envref.h"
 #include "jnitools/field.h"
 #include "jnitools/localref.h"
 #include "jnitools/meta.h"

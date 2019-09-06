@@ -230,7 +230,7 @@ math::Vector<I,DEG> operator * (I const& k, math::Vector<I,DEG> const& v) {
         jni::array<type ## Array> jarr(env, data.size());                                       \
         std::copy(data.begin(), data.end(), jarr.begin());                                      \
                                                                                                 \
-        return jarr;                                                                            \
+        return (type ## Array) env->NewLocalRef(jarr);                                          \
     }
 
 #define VEC_GETCOORD(cls, type)                                                                 \

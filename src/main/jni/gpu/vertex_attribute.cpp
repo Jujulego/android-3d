@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include <android/log.h>
 #include <GLES3/gl32.h>
 
 #include "jnitools.h"
@@ -11,6 +12,8 @@
 #include "vertex_attribute.h"
 #include "macros.h"
 #include "program.h"
+
+#define LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "gpu::VertexAttribute", __VA_ARGS__)
 
 using namespace gpu;
 

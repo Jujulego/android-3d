@@ -28,9 +28,12 @@ include_directories(src/main/jni)
 #include_directories(libs/include)
 
 add_library(android3d SHARED
+        src/main/jni/utils.cpp
+
         # - jnitools
         src/main/jni/jnitools/class.cpp
         src/main/jni/jnitools/convert.cpp
+        src/main/jni/jnitools/envref.cpp
         src/main/jni/jnitools/outils.cpp
 
         # - math
@@ -46,6 +49,9 @@ add_library(android3d SHARED
         src/main/jni/gpu/shader.cpp
         src/main/jni/gpu/vertex_array.cpp
         src/main/jni/gpu/vertex_attribute.cpp
+
+        # - threed
+        src/main/jni/threed/mesh.cpp
 )
 
 target_link_libraries(android3d ${log-lib} ${gles-lib}) # assimp)

@@ -3,12 +3,15 @@
 //
 #include <memory>
 
+#include <android/log.h>
 #include <GLES3/gl32.h>
 
 #include "jnitools.h"
 
 #include "macros.h"
 #include "vertex_array.h"
+
+#define LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "gpu::VertexArray", __VA_ARGS__)
 
 using namespace gpu;
 

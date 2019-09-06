@@ -356,28 +356,28 @@ math::Matrix<I,DEG,DEG>& operator *= (math::Matrix<I,DEG,DEG>& m1, math::Matrix<
 
 #define MAT_GETDATA(cls, type)                                                                  \
     extern "C" JNIEXPORT                                                                        \
-    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                 \
+    type ## Array JNICALL METH_NAME(cls, getDataA)(JNIEnv* env, jobject jthis) {                \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
                                                                                                 \
         auto data = pt->data();                                                                 \
         jni::array<type ## Array> jarr(env, data.size());                                       \
         std::copy(data.begin(), data.end(), jarr.begin());                                      \
                                                                                                 \
-        return jarr;                                                                            \
+        return (type ## Array) env->NewLocalRef(jarr);                                          \
     }
 
 #define MAT_GETFACTOR(cls, type)                                                                \
     extern "C" JNIEXPORT                                                                        \
     type JNICALL METH_NAME(cls, getFactor)(JNIEnv* env, jobject jthis, jint l, jint c) {        \
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        return (*pt)[math::P(l,c)];                                                            \
+        return (*pt)[math::P(l,c)];                                                             \
     }
 
 #define MAT_SETFACTOR(cls, type)                                                                \
     extern "C" JNIEXPORT                                                                        \
     void JNICALL METH_NAME(cls, setFactor)(JNIEnv* env, jobject jthis, jint l, jint c, type v) {\
         auto pt = jni::fromJava<cls>(env, jthis);                                               \
-        (*pt)[math::P(l,c)] = v;                                                               \
+        (*pt)[math::P(l,c)] = v;                                                                \
     }
 
 #define MAT_EQUAL(cls, type)                                                                    \

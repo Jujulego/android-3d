@@ -4,7 +4,6 @@
 #include <memory>
 
 #include <android/log.h>
-#include <GLES3/gl3.h>
 #include <GLES3/gl32.h>
 
 #include "buffer.h"
@@ -41,10 +40,8 @@ void Buffer::regenerate() {
 }
 
 void Buffer::bind(GLenum const& target) {
-    if (m_target == GL_INVALID_ENUM) {
-        glBindBuffer(target, m_buffer);
-        m_target = target;
-    }
+    glBindBuffer(target, m_buffer);
+    m_target = target;
 }
 
 void Buffer::setData(Bufferable const& data, GLenum const& usage) {
@@ -53,9 +50,9 @@ void Buffer::setData(Bufferable const& data, GLenum const& usage) {
     }
 }
 
-void Buffer::setData(jni::array<jintArray> const& data, GLenum const& usage) {
+void Buffer::setData(void const* data, GLsizeiptr size, GLenum const& usage) {
     if (m_target != GL_INVALID_ENUM) {
-        glBufferData(m_target, data.size() * sizeof(jint), data.data(), usage);
+        glBufferData(m_target, size, data, usage);
     }
 }
 
@@ -114,7 +111,7 @@ void JNICALL METH_NAME(Buffer, setJData___3II)(JNIEnv* env, jobject jthis, jintA
     auto pt = jni::fromJava<Buffer>(env, jthis);
     auto data = jni::array<jintArray>(env, jdata);
 
-    pt->setData(data, usage);
+    pt->setData(data.data(), data.size() * sizeof(jint), usage);
 }
 
 extern "C" JNIEXPORT

@@ -6,6 +6,7 @@
 #include <GLES3/gl32.h>
 
 #include "jnitools.h"
+#include "utils.h"
 
 namespace gpu {
     // Interfaces
@@ -52,7 +53,7 @@ namespace gpu {
 
         void bind(GLenum const& target);
         void setData(Bufferable const& data, GLenum const& usage);
-        void setData(jni::array<jintArray> const& data, GLenum const& usage);
+        void setData(void const* data, GLsizeiptr size, GLenum const& usage);
         void setDataArray(BufferableArray const& data, GLenum const& usage);
         void unbind();
     };
