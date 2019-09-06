@@ -46,6 +46,16 @@
                                                                                         \
         operator type ## Array () const { return m_ref; }                               \
                                                                                         \
+        array& operator = (array const& obj) {                                          \
+            m_env->Release##jname##ArrayElements(m_ref, m_data, 0);                     \
+                                                                                        \
+            m_env = obj.m_env;                                                          \
+            m_ref = obj.m_ref;                                                          \
+            m_data = m_env->Get##jname##ArrayElements(m_ref, nullptr);                  \
+                                                                                        \
+            return *this;                                                               \
+        }                                                                               \
+                                                                                        \
         type&       operator [] (size_t i)       { return m_data[i]; }                  \
         type const& operator [] (size_t i) const { return m_data[i]; }                  \
                                                                                         \
