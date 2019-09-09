@@ -47,6 +47,7 @@ add_library(android3d SHARED
         src/main/jni/gpu/error.cpp
         src/main/jni/gpu/program.cpp
         src/main/jni/gpu/shader.cpp
+        src/main/jni/gpu/uniform.cpp
         src/main/jni/gpu/vertex_array.cpp
         src/main/jni/gpu/vertex_attribute.cpp
 

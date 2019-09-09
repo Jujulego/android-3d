@@ -14,6 +14,9 @@ class Program: JNIClass(create()) {
     external fun addShader(shader: Shader)
     external fun addVertexAttribute(attribute: VertexAttribute)
 
+    fun addUniform(name: String) = Uniform(naddUniform(name))
+    private external fun naddUniform(name: String): Long
+
     external fun compile()
     external fun use()
     external fun destroy()

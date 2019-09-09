@@ -71,14 +71,6 @@ jlong JNICALL METH_NAME(VertexAttribute, create__Ljava_lang_String_2II)(JNIEnv* 
 }
 
 extern "C" JNIEXPORT
-void JNICALL METH_NAME(VertexAttribute, prepare)(JNIEnv* env, jobject jthis, jobject jprogram) {
-    auto pt = jni::fromJava<VertexAttribute>(env, jthis);
-    auto program = jni::fromJava<Program>(env, jprogram);
-
-    pt->prepare(program->program());
-}
-
-extern "C" JNIEXPORT
 void JNICALL METH_NAME(VertexAttribute, enable)(JNIEnv* env, jobject jthis, jint stride, jint offset, jboolean normalized) {
     auto pt = jni::fromJava<VertexAttribute>(env, jthis);
 

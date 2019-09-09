@@ -7,5 +7,6 @@
 #include "gpu/error.h"
 #include "gpu/program.h"
 #include "gpu/shader.h"
+#include "gpu/uniform.h"
 #include "gpu/vertex_array.h"
 #include "gpu/vertex_attribute.h"

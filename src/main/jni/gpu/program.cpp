@@ -19,7 +19,15 @@ void Program::addShader(std::shared_ptr<Shader> const& shader) {
     m_shaders.push_back(shader);
 }
 
-void Program::addAttribute(std::shared_ptr<VertexAttribute> const& attribute) {
+std::shared_ptr<Uniform> Program::addUniform(std::string const& name) {
+    auto uniform = std::make_shared<Uniform>(name, this);
+    uniform->register_jni();
+
+    m_uniforms.push_back(uniform);
+    return uniform;
+}
+
+void Program::addVertexAttribute(std::shared_ptr<VertexAttribute> const& attribute) {
     m_attributes.push_back(attribute);
 }
 
@@ -66,6 +74,13 @@ void Program::compile() {
     while (sit != m_shaders.end()) {
         (*sit)->destroy();
         ++sit;
+    }
+
+    // Prepare uniforms
+    auto uit = m_uniforms.begin();
+    while (uit != m_uniforms.end()) {
+        (*uit)->prepare();
+        ++uit;
     }
 
     // Prepare attributes
@@ -118,11 +133,22 @@ void JNICALL METH_NAME(Program, addShader)(JNIEnv* env, jobject jthis, jobject j
 }
 
 extern "C" JNIEXPORT
+jlong JNICALL METH_NAME(Program, naddUniform)(JNIEnv* env, jobject jthis, jstring jname) {
+    auto pt = jni::fromJava<Program>(env, jthis);
+    auto name = jni::fromJava<std::string>(env, jname);
+
+    auto uniform = pt->addUniform(name);
+    uniform->acquire();
+
+    return uniform->get_jhandle();
+}
+
+extern "C" JNIEXPORT
 void JNICALL METH_NAME(Program, addVertexAttribute)(JNIEnv* env, jobject jthis, jobject jattr) {
     auto pt = jni::fromJava<Program>(env, jthis);
     auto attr = jni::fromJava<VertexAttribute>(env, jattr);
 
-    pt->addAttribute(attr);
+    pt->addVertexAttribute(attr);
 }
 
 extern "C" JNIEXPORT

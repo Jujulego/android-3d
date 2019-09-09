@@ -15,6 +15,5 @@ class VertexAttribute: JNIClass {
     constructor(name: String, type: Type, size: Int): super(create(name, type.gl, size))
 
     // Methods
-    external fun prepare(program: Program)
     external fun enable(stride: Int, offset: Int = 0, normalized: Boolean = false)
 }
