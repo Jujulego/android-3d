@@ -25,6 +25,28 @@ GLUM_TPL(2, 4)
 GLUM_TPL(3, 4)
 GLUM_TPL(4, 4)
 
+// Utils
+Mat4f matrix::frustum(float left, float right, float bottom, float top, float near, float far) {
+    // Compute ratios
+    float rw = 1.0f / (right - left);
+    float rh = 1.0f / (top - bottom);
+    float rd = 1.0f / (near - far);
+
+    // Construct matrix
+    Mat4f m;
+    m[P(0,0)] = 2.0f * (near * rw);
+    m[P(1,1)] = 2.0f * (near * rh);
+
+    m[P(0,2)] = (right + left) * rw;
+    m[P(1,2)] = (top + bottom) * rh;
+    m[P(2,2)] = (far + near) * rd;
+    m[P(2,3)] = 2.0f * (far * near * rd);
+
+    m[P(3,2)] = -1.0f;
+
+    return m;
+}
+
 // JNI
 MAT_JNI(Mat2i, Vec2i, jint)
 MAT_JNI(Mat3i, Vec3i, jint)
@@ -105,6 +127,14 @@ long JNICALL METH_NAME(Mat4f, nlookAt)(JNIEnv* env, jclass, jobject jeye, jobjec
     auto ptup = jni::fromJava<Vec3f>(env, jup);
 
     auto pt = std::make_shared<Mat4f>(matrix::lookAt(*pteye, *ptcenter, *ptup));
+    pt->register_jni(true);
+
+    return pt->get_jhandle();
+}
+
+extern "C" JNIEXPORT
+long JNICALL METH_NAME(Mat4f, nfrustum)(JNIEnv* env, jclass, jfloat left, jfloat right, jfloat bottom, jfloat top, jfloat near, jfloat far) {
+    auto pt = std::make_shared<Mat4f>(matrix::frustum(left, right, bottom, top, near, far));
     pt->register_jni(true);
 
     return pt->get_jhandle();

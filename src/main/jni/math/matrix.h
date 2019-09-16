@@ -278,6 +278,8 @@ namespace math {
 
             return translate(m, -eye);
         }
+
+        Mat4f frustum(float left, float right, float bottom, float top, float near, float far);
     }
 }
 
