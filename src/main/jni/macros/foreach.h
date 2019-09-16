@@ -3,9 +3,11 @@
 //
 #pragma once
 
+#include "bit.h"
 #include "cat.h"
 #include "check.h"
 #include "eval.h"
+#include "is_paren.h"
 #include "not.h"
 #include "utils.h"
 #include "when.h"
@@ -13,7 +15,7 @@
 /**
  * Test if is after last item
  */
-#define IS_AFTER_LAST(x, ...) CHECK(PRIMITIVE_CAT(IS_AFTER_LAST_, x))
+#define IS_AFTER_LAST(x, ...) AND(CHECK(PRIMITIVE_CAT(IS_AFTER_LAST_, x)), NOT(IS_PAREN(x)))
 #define IS_AFTER_LAST_ PROBE(~)
 
 /**

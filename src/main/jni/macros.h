@@ -4,9 +4,11 @@
 //
 #pragma once
 
+#include "macros/eq.h"
 #include "macros/foreach.h"
 #include "macros/if.h"
 #include "macros/not.h"
+#include "macros/tuple.h"
 #include "macros/repeat.h"
 #include "macros/when.h"
 #include "macros/while.h"
