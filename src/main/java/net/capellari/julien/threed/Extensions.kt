@@ -32,6 +32,3 @@ inline fun <reified T: Number, reified L: Dimension, reified C: Dimension, reifi
 
     return res
 }
-
-// GPU
-fun<T: Uniformable> Program.addUniform(name: String, default: T) = Uniform(addUniform(name), default)
