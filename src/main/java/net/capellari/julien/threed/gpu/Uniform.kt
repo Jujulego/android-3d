@@ -10,4 +10,16 @@ class Uniform internal constructor(handle: Long): JNIClass(handle) {
 
     // Constructor
     constructor(name: String, program: Program): this(create(name, program))
+
+    // Methods
+    fun setValue(data: Uniformable) {
+        if (data is NativeUniformable) {
+            setNValue(data)
+        } else {
+            setJValue(data)
+        }
+    }
+
+    private external fun setNValue(data: NativeUniformable)
+    private external fun setJValue(data: Uniformable)
 }

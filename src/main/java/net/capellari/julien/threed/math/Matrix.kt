@@ -1,6 +1,8 @@
 package net.capellari.julien.threed.math
 
-interface Matrix<T: Number, L: Dimension, C: Dimension> {
+import net.capellari.julien.threed.gpu.NativeUniformable
+
+interface Matrix<T: Number, L: Dimension, C: Dimension>: NativeUniformable {
     // Propriétés
     val size: MatSize<L,C>
 

@@ -47,3 +47,11 @@ jlong JNICALL METH_NAME(Uniform, create)(JNIEnv* env, jclass, jstring jname, job
 
     return pt->get_jhandle();
 }
+
+extern "C" JNIEXPORT
+void JNICALL METH_NAME(Uniform, setNValue)(JNIEnv* env, jobject jthis, jobject jdata) {
+    auto pt = jni::fromJava<Uniform>(env, jthis);
+    auto data = jni::fromJava<Uniformable>(env, jdata);
+
+    pt->setValue(*data);
+}
