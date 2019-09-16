@@ -1,5 +1,7 @@
 package net.capellari.julien.threed
 
+import net.capellari.julien.threed.gpu.Program
+import net.capellari.julien.threed.gpu.Uniformable
 import net.capellari.julien.threed.math.Dimension
 import net.capellari.julien.threed.math.Matrix
 import net.capellari.julien.threed.math.Vector
@@ -30,3 +32,6 @@ inline fun <reified T: Number, reified L: Dimension, reified C: Dimension, reifi
 
     return res
 }
+
+// GPU
+fun<T: Uniformable> Program.addUniform(name: String, default: T) = Uniform(addUniform(name), default)
