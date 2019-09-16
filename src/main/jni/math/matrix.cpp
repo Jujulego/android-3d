@@ -8,6 +8,23 @@
 
 using namespace math;
 
+// OpenGL call
+#define GLUM_NAME(L, C) CAT(CAT(glUniformMatrix, IF(EQ(L, C))(CAT(CAT(C, x), L), L)), fv)
+#define GLUM_TPL(L, C)                                      \
+    template<> void glUniformMatrix<float,L,C>(GLint location, GLsizei count, GLboolean transpose, GLfloat const* value) { \
+        GLUM_NAME(L, C)(location, count, transpose, value); \
+    }
+
+GLUM_TPL(2, 2)
+GLUM_TPL(3, 2)
+GLUM_TPL(4, 2)
+GLUM_TPL(2, 3)
+GLUM_TPL(3, 3)
+GLUM_TPL(4, 3)
+GLUM_TPL(2, 4)
+GLUM_TPL(3, 4)
+GLUM_TPL(4, 4)
+
 // JNI
 MAT_JNI(Mat2i, Vec2i, jint)
 MAT_JNI(Mat3i, Vec3i, jint)

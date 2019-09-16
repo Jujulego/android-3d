@@ -6,19 +6,26 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <functional>
 #include <type_traits>
 
 #include "jnitools.h"
+#include "gpu/uniform.h"
+#undef METH_NAME
+
 #include "macros.h"
 #include "vector.h"
 #include "outils.h"
+
+// Template
+template<class I,size_t LIG,size_t COL> void glUniformMatrix(GLint, GLsizei, GLboolean, I const*) {}
 
 namespace math {
     // Alias
     using P = std::pair<size_t,size_t>;
 
     // Classe
-    template<class I,size_t LIG,size_t COL> class Matrix: public jni::JNIClass {
+    template<class I,size_t LIG,size_t COL> class Matrix: public jni::JNIClass, public gpu::Uniformable {
         static_assert(LIG >= 2, "LIG should be at least 2");
         static_assert(COL >= 2, "COL should be at least 2");
         static_assert(std::is_arithmetic<I>::value, "I must be an arithmetic type");
@@ -49,7 +56,7 @@ namespace math {
             }
         }
 
-        // Attributs
+        // Operators
         I&       operator [] (P const& p)       { return m_data[to_index(p.first, p.second)]; }
         I const& operator [] (P const& p) const { return m_data[to_index(p.first, p.second)]; }
 
@@ -151,6 +158,10 @@ namespace math {
 
         std::array<I,LIG*COL> const& data() const {
             return m_data;
+        }
+
+        void toUniform(GLint const& location) const override {
+            glUniformMatrix<I,LIG,COL>(location, 1, GL_FALSE, m_data.data());
         }
     };
 

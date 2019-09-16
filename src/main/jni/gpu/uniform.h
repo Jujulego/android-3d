@@ -14,6 +14,15 @@ namespace gpu {
     // Names
     class Program;
 
+    // Interface
+    struct Uniformable {
+        // Destructor
+        virtual ~Uniformable() = default;
+
+        // Methods
+        virtual void toUniform(GLint const& location) const = 0;
+    };
+
     // Class
     class Uniform: public jni::JNIClass {
     private:
@@ -21,7 +30,7 @@ namespace gpu {
         std::string m_name;
         Program const* m_program;
 
-        GLuint m_index = GL_INVALID_INDEX;
+        GLint m_index = GL_INVALID_INDEX;
 
     public:
         // Constructor
@@ -29,5 +38,6 @@ namespace gpu {
 
         // Methods
         void prepare();
+        void setValue(Uniformable const& value);
     };
 }

@@ -6,6 +6,8 @@
 #include <GLES3/gl3.h>
 
 #include "jnitools.h"
+#include "math/matrix.h"
+#undef METH_NAME
 
 #include "macros.h"
 #include "program.h"
@@ -24,6 +26,14 @@ void Uniform::prepare() {
     if (m_index == GL_INVALID_INDEX) {
         throw ProgramError("Uniform " + m_name + " not found");
     }
+}
+
+void Uniform::setValue(Uniformable const& value) {
+    // Check as index
+    if (m_index == GL_INVALID_INDEX) return;
+
+    // Set value
+    value.toUniform(m_index);
 }
 
 // JNI
