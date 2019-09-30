@@ -5,7 +5,7 @@ import net.capellari.julien.threed.gpu.Uniformable
 
 open class Program {
     // Attributes
-    protected lateinit var program: Program
+    protected val program = Program()
     private var uniforms = mutableListOf<Uniform<*>>()
 
     // Methods

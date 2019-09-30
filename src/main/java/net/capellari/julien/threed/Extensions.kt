@@ -1,7 +1,5 @@
 package net.capellari.julien.threed
 
-import net.capellari.julien.threed.gpu.Program
-import net.capellari.julien.threed.gpu.Uniformable
 import net.capellari.julien.threed.math.Dimension
 import net.capellari.julien.threed.math.Matrix
 import net.capellari.julien.threed.math.Vector
