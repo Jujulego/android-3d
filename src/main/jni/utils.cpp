@@ -1,8 +1,6 @@
 //
 // Created by julien on 11/12/2018.
 //
-#pragma once
-
 #include <string>
 
 #include "utils.h"

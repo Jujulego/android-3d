@@ -1,9 +1,8 @@
 package net.capellari.julien.threed
 
+import net.capellari.julien.threed.gpu.*
 import net.capellari.julien.threed.gpu.Program
-import net.capellari.julien.threed.gpu.Type
-import net.capellari.julien.threed.gpu.Uniformable
-import net.capellari.julien.threed.gpu.VertexAttribute
+import org.intellij.lang.annotations.Language
 
 open class Program {
     // Attributes
@@ -21,6 +20,11 @@ open class Program {
 
     // - events
     open fun onUpdateScreen(width: Float, height: Float) {}
+
+    // - shader
+    fun vertexShader(@Language("GLSL") source: String)  = program.addShader(ShaderType.VERTEX, source)
+    fun geometryShader(@Language("GLSL") source: String) = program.addShader(ShaderType.GEOMETRY, source)
+    fun fragmentShader(@Language("GLSL") source: String) = program.addShader(ShaderType.FRAGMENT, source)
 
     // - uniforms
     fun<T: Uniformable> uniform(default: T) = UniformLoader { default }
