@@ -14,7 +14,7 @@ class UniformProperty<T: Uniformable>(val uniform: Uniform<T>): ReadWritePropert
 
 class UniformLoader<T: Uniformable>(val default: () -> T) {
     // Operators
-    operator fun provideDelegate(thisRef: Program, prop: KProperty<*>): ReadWriteProperty<Program,T> {
-        return thisRef.buildUniform(prop.name, default)
+    operator fun provideDelegate(thisRef: Program, property: KProperty<*>): ReadWriteProperty<Program,T> {
+        return thisRef.buildUniform(property.name, default)
     }
 }

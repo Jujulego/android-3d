@@ -1,12 +1,16 @@
 package net.capellari.julien.threed
 
 import net.capellari.julien.threed.gpu.Program
+import net.capellari.julien.threed.gpu.Type
 import net.capellari.julien.threed.gpu.Uniformable
+import net.capellari.julien.threed.gpu.VertexAttribute
 
 open class Program {
     // Attributes
     protected val program = Program()
+
     private var uniforms = mutableListOf<Uniform<*>>()
+    private var vertexAttributes = mutableListOf<VertexAttribute>()
 
     // Methods
     fun use() {
@@ -37,6 +41,21 @@ open class Program {
 
     private fun syncUniforms() {
         uniforms.forEach { it.sync() }
+    }
+
+    // - vertex attributes
+    inline fun<reified T: Any> vertexAttribute() = VertexAttributeLoader(gpuType<T>(), gpuSize<T>())
+    inline fun<reified T: Any> vertexAttribute(name: String) = buildVertexAttribute(name, gpuType<T>(), gpuSize<T>())
+
+    fun buildVertexAttribute(name: String, type: Type, size: Int): VertexAttributeProperty {
+        val vattr = VertexAttribute(name, type, size)
+
+        vertexAttributes.add(vattr)
+        return VertexAttributeProperty(vattr)
+    }
+
+    protected fun linkVertexAttributes() {
+        vertexAttributes.forEach { program.addVertexAttribute(it) }
     }
 }
 
