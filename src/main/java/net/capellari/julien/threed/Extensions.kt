@@ -35,8 +35,7 @@ inline fun <reified T: Number, reified L: Dimension, reified C: Dimension, reifi
 }
 
 // GPU
-inline fun <reified T> gpuType(): Type
-        = when (T::class) {
+inline fun <reified T> gpuType() = when (T::class) {
     Int::class -> Type.INT
     Float::class -> Type.FLOAT
 
@@ -46,8 +45,7 @@ inline fun <reified T> gpuType(): Type
     }
 }
 
-inline fun <reified T> gpuSize(): Int
-        = when (T::class) {
+inline fun <reified T> gpuSize() = when (T::class) {
     Int::class, Float::class -> 1
 
     else -> {

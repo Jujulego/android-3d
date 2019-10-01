@@ -49,8 +49,15 @@ open class Program {
 
     // - vertex attributes
     inline fun<reified T: Any> vertexAttribute() = VertexAttributeLoader(gpuType<T>(), gpuSize<T>())
+    inline fun<reified T: Any> vertexAttribute(index: Int) = buildVertexAttribute(index, gpuType<T>(), gpuSize<T>())
     inline fun<reified T: Any> vertexAttribute(name: String) = buildVertexAttribute(name, gpuType<T>(), gpuSize<T>())
 
+    fun buildVertexAttribute(index: Int, type: Type, size: Int): VertexAttributeProperty {
+        val vattr = VertexAttribute(index, type, size)
+
+        vertexAttributes.add(vattr)
+        return VertexAttributeProperty(vattr)
+    }
     fun buildVertexAttribute(name: String, type: Type, size: Int): VertexAttributeProperty {
         val vattr = VertexAttribute(name, type, size)
 
