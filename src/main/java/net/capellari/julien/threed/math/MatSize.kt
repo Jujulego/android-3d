@@ -1,7 +1,7 @@
 package net.capellari.julien.threed.math
 
 // Classes
-class MatSize<L: Dimension, C: Dimension>(c: L, l: C) {
+class MatSize<L: Dimension, C: Dimension>(l: L, c: C) {
     // Attributs
     val lig = l.size
     val col = c.size

@@ -1,5 +1,6 @@
 package net.capellari.julien.threed
 
+import androidx.annotation.CallSuper
 import net.capellari.julien.threed.gpu.*
 import net.capellari.julien.threed.gpu.Program
 import org.intellij.lang.annotations.Language
@@ -12,6 +13,14 @@ open class Program {
     private var vertexAttributes = mutableListOf<VertexAttribute>()
 
     // Methods
+    @CallSuper
+    open fun compile() {
+        linkVertexAttributes()
+        linkUniforms()
+
+        program.compile()
+    }
+
     fun use() {
         program.use()
 
